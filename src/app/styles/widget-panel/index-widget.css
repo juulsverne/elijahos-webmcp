@@ -1,0 +1,81 @@
+/* ── Index ────────────────────────────────────────────────────────── */
+/* The knowledge base drawn as itself (desktop twin of the mobile home
+   card). The canvas is the card's background, not a slot inside it — the
+   panel column is too tight to give a visual any presence otherwise. Text
+   floats above, protected by the diagonal scrim below. */
+.index-widget {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  /* Grows a little on tall screens, gives height back on short ones — the
+     Wobbles stage and Pulse's flexing log absorb the rest of the slack. */
+  height: clamp(96px, 14dvh, 124px);
+  min-height: 96px;
+}
+.index-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+/* Legibility scrim. A full-bleed visual puts moving pixels directly behind
+   the type, so the text half of the card is darkened on a diagonal: the
+   drawing stays clear on the upper right, the reading stays clear on the
+   lower left. */
+.index-widget::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    104deg,
+    var(--surface-deep-soft) 0%,
+    var(--surface-deep-muted) 38%,
+    transparent 68%
+  );
+}
+.index-widget .index-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+.index-widget .index-value {
+  font-family: var(--font-mono);
+  font-size: clamp(20px, 4.4dvh, 26px);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--fg-1);
+  font-variant-numeric: tabular-nums;
+}
+.index-widget .index-unit {
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.index-widget .index-foot {
+  margin-top: auto;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: var(--fg-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The tightest screens keep the sidebar scroll-free by dropping the most
+   decorative card first — same threshold the music widget compacts at. */
+@media (max-height: 620px) {
+  .index-widget {
+    display: none;
+  }
+}

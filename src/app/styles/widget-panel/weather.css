@@ -1,0 +1,164 @@
+/* ── Weather ──────────────────────────────────────────────────────── */
+.weather-widget {
+  cursor: pointer;
+  user-select: none;
+  flex: 0 0 auto;
+  padding: clamp(11px, 2dvh, 15px) clamp(11px, 1.8dvh, 14px);
+  /* Lets the ambient tint (::before, z-index -1) sit above the card's own
+     background but below the text. */
+  isolation: isolate;
+  overflow: hidden;
+  transition: border-color 160ms ease, transform 160ms ease;
+  /* Condition-driven accent, set via data-kind (mirrors WeatherIconKind).
+     Everything colored in this widget — icon, glow, ambient tint — reads
+     from this one variable. Default covers "unknown" / not-yet-loaded. */
+  --weather-accent: var(--fg-2);
+  --weather-tint: color-mix(in srgb, var(--weather-accent) 13%, transparent);
+}
+.weather-widget[data-kind="sun"],
+.weather-widget[data-kind="storm"] {
+  --weather-accent: var(--accent-gold);
+}
+.weather-widget[data-kind="moon"] {
+  /* Silvery moonlight — pale ice, not full blue. */
+  --weather-accent: color-mix(in srgb, var(--fg-1) 55%, var(--accent-blue));
+}
+.weather-widget[data-kind="rain"] {
+  --weather-accent: var(--accent-blue);
+}
+.weather-widget[data-kind="snow"] {
+  --weather-accent: color-mix(in srgb, var(--fg-1) 70%, var(--accent-blue));
+}
+.weather-widget[data-kind="cloud"],
+.weather-widget[data-kind="fog"] {
+  --weather-accent: var(--fg-2);
+}
+/* Ambient tint blooming from the icon corner. */
+.weather-widget::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at 16% 55%, var(--weather-tint) 0%, transparent 65%);
+  opacity: 0.7;
+  animation: weather-tint-breathe 8s ease-in-out infinite;
+  transition: opacity 200ms ease;
+}
+@keyframes weather-tint-breathe {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 0.9; }
+}
+.weather-widget:hover {
+  border-color: var(--glass-border-strong);
+}
+.weather-widget:active {
+  transform: scale(0.985);
+}
+.weather-cursor-tip {
+  position: fixed;
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--fg-1);
+  background: var(--surface-panel-popover-strong);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(calc(-100% - 12px), 12px);
+  box-shadow: 0 8px 24px var(--shadow-color-md);
+  z-index: calc(var(--widget-panel-z) + 20);
+}
+.weather-widget .widget-card-head {
+  margin-bottom: clamp(10px, 2dvh, 14px);
+}
+.weather-widget .weather-country { color: var(--fg-3); }
+.weather-widget .weather-row {
+  display: grid;
+  grid-template-columns: clamp(26px, 5dvh, 32px) max-content minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(10px, 2.2dvh, 15px);
+}
+.weather-widget .weather-icon {
+  width: clamp(26px, 5dvh, 32px);
+  height: clamp(26px, 5dvh, 32px);
+  color: var(--weather-accent);
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--weather-accent) 45%, transparent));
+  /* Gentle drift lives on the wrapper; the hover pop scales the svg so the
+     two transforms never fight. */
+  animation: weather-icon-drift 5s ease-in-out infinite;
+}
+@keyframes weather-icon-drift {
+  0%, 100% { transform: translateY(1px); }
+  50%      { transform: translateY(-1px); }
+}
+.weather-widget .weather-icon-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: transform 200ms var(--spring-pop);
+}
+.weather-widget:hover .weather-icon-svg {
+  transform: scale(1.08);
+}
+.weather-widget .weather-temp {
+  font-size: clamp(22px, 4.8dvh, 27px);
+  font-weight: 600;
+  color: var(--fg-1);
+  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  /* Re-keyed per unit in the component; the °C/°F toggle replays this. */
+  animation: weather-temp-pop 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes weather-temp-pop {
+  from {
+    opacity: 0.4;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.weather-widget .weather-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: var(--fg-3);
+  min-width: 0;
+}
+.weather-widget .weather-cond {
+  font-size: clamp(12px, 2.6dvh, 14px);
+  line-height: 1.3;
+  color: var(--fg-2);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-widget,
+  .weather-widget::before,
+  .weather-widget .weather-icon-svg {
+    transition: none;
+  }
+  .weather-widget::before,
+  .weather-widget .weather-icon {
+    animation: none;
+  }
+  .weather-widget:active {
+    transform: none;
+  }
+  .weather-widget:hover .weather-icon-svg {
+    transform: none;
+  }
+  .weather-widget .weather-temp {
+    animation: none;
+  }
+}

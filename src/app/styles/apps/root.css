@@ -1,0 +1,54 @@
+/* /root/.real window — both denied placeholder and unlocked candid pitch. */
+.root-app {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--fg-2);
+}
+.root-app-denied {
+  align-items: flex-start;
+  gap: 10px;
+}
+.root-app-deny-line {
+  margin: 0;
+  color: var(--fg-1);
+  font-size: var(--fs-sm);
+}
+.root-app-hint {
+  color: var(--fg-3);
+  font-style: italic;
+  margin: 0;
+}
+.root-app-head {
+  margin-bottom: 18px;
+}
+.root-app-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 6cqi, var(--fs-display));
+  color: var(--fg-1);
+  margin: 6px 0 0;
+  line-height: 1;
+}
+.root-app-pitch {
+  color: var(--fg-1);
+  margin-bottom: 22px;
+}
+.root-app-pitch p {
+  margin: 0 0 8px 0;
+}
+.root-app-error {
+  color: var(--accent-gold);
+  margin: 0 0 12px;
+}
+.root-app-line {
+  white-space: pre-wrap;
+}
+.root-app-actions {
+  margin-top: auto;
+  padding-top: 14px;
+}

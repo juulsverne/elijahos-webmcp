@@ -1,0 +1,160 @@
+/* Launchpad overlay. Sits above all chrome; backdrop dims and blurs
+   everything behind it. Animation uses the --launchpad-in / --launchpad-out
+   tokens so timing changes live in tokens.css. */
+
+.launchpad-root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+}
+
+.launchpad-backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--launchpad-bg);
+  backdrop-filter: blur(var(--launchpad-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--launchpad-blur)) saturate(160%);
+  opacity: 0;
+  transition: opacity var(--launchpad-out) ease;
+}
+
+.launchpad-root.is-open .launchpad-backdrop {
+  opacity: 1;
+  transition-duration: var(--launchpad-in);
+}
+
+.launchpad-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 36px 40px;
+  max-width: min(900px, 92vw);
+  transform: scale(0.92);
+  filter: blur(8px);
+  opacity: 0;
+  transition:
+    transform var(--launchpad-out) cubic-bezier(0.2, 0.8, 0.3, 1.1),
+    filter var(--launchpad-out) ease,
+    opacity var(--launchpad-out) ease;
+}
+
+.launchpad-root.is-open .launchpad-frame {
+  transform: scale(1);
+  filter: blur(0);
+  opacity: 1;
+  transition-duration: var(--launchpad-in);
+}
+
+.launchpad-caption {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.launchpad-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 112px);
+  gap: 22px 18px;
+  justify-content: center;
+}
+
+.launchpad-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  background: transparent;
+  border: none;
+  color: var(--fg-1);
+  cursor: pointer;
+  font: inherit;
+  border-radius: 14px;
+  outline: none;
+  transition: transform 160ms cubic-bezier(0.2, 0.8, 0.3, 1.4);
+}
+
+.launchpad-tile:hover,
+.launchpad-tile:focus-visible {
+  transform: translateY(-3px) scale(1.04);
+}
+
+/* Press squash; the bouncy 160ms rest transition above is the release. */
+.launchpad-tile:active {
+  transform: translateY(-1px) scale(0.96);
+  transition-duration: 80ms;
+}
+
+/* Entrance cascade: each tile rises into place a beat after the previous
+   one (`--lp-i` is set inline by Launchpad.tsx). `backwards` keeps a tile
+   invisible until its delay elapses. Exit stays the fast uniform frame
+   fade — the cascade only plays while .is-open is present. */
+.launchpad-root.is-open .launchpad-tile {
+  animation: lpTileIn 300ms var(--spring-settle) backwards;
+  animation-delay: calc(var(--lp-i, 0) * 14ms);
+}
+@keyframes lpTileIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.launchpad-tile:focus-visible .launchpad-tile-glyph {
+  border-color: var(--glass-border-strong);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-pink) 50%, transparent);
+}
+
+.launchpad-tile-glyph {
+  width: 80px;
+  height: 80px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  font-size: 36px;
+  background: var(--launchpad-tile-bg);
+  border: 1px solid var(--glass-border);
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.launchpad-tile:hover .launchpad-tile-glyph {
+  background: var(--launchpad-tile-bg-hover);
+  border-color: var(--glass-border-strong);
+}
+
+.launchpad-tile-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--fg-2);
+  letter-spacing: 0.02em;
+}
+
+/* When the overlay is open, the dock and topbar must not eat clicks
+   that the user expects to dismiss the backdrop. */
+body[data-launchpad-open="true"] .dock,
+body[data-launchpad-open="true"] .topbar {
+  pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  .launchpad-grid {
+    grid-template-columns: repeat(3, 100px);
+    gap: 18px 14px;
+  }
+  .launchpad-tile-glyph {
+    width: 72px;
+    height: 72px;
+    font-size: 30px;
+  }
+}

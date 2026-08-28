@@ -1,0 +1,16 @@
+export const THEME_COLORS = {
+  bgDeep: "#050308",
+  bgMid: "#0a0612",
+  bgWarm: "#2a1547",
+  fg1: "#f0e8ff",
+  fgInverse: "#050308",
+  fg2: "rgba(240,232,255,0.7)",
+  fg3: "rgba(240,232,255,0.45)",
+  accentPink: "#ff6dc9",
+  accentBlue: "#56c8ff",
+  accentGold: "#ffc864",
+  accentViolet: "#b870ff",
+  trafficClose: "#ff5f56",
+  trafficMinimize: "#ffbd2e",
+  trafficMaximize: "#27c93f",
+} as const;

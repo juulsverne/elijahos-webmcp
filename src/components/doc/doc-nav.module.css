@@ -1,0 +1,134 @@
+/* Document nav on `/`. Fixed inside the viewport and above the OS shell's
+   stacking context, because `body { overflow: hidden }` means anything placed
+   after .lc-root is unreachable — and unreachable links are hidden-link abuse.
+
+   Styled to read as one more control in the topbar rather than a chip floating
+   over the wallpaper: same glass, same mono type, same pill as the bar's
+   "⊞ widgets" button, seated on the bar's centre line. It cannot actually live
+   inside .topbar — that component is dynamic(ssr:false), so its subtree is
+   absent from the initial HTML — hence the fixed overlay plus the reserved
+   --docnav-slot in the bar's right padding (see tokens.css).
+
+   Collapsed by default so it stays out of the OS's way. Native <details>, so it
+   opens and navigates with JavaScript disabled. */
+
+.nav {
+  /* One source for the chip's height: the rule below centres the chip in the
+     topbar band from it, and the dropdown hangs from it. Kept off .summary so
+     opening the disclosure never shifts the chip. */
+  --chip-h: 26px;
+
+  position: fixed;
+  /* Centred in the topbar band: the bar starts at --topbar-offset and stands
+     --topbar-h tall, so half the leftover height seats the chip on its middle
+     line. Right edge aligns with the bar's inner inset, inside the slot the
+     bar's padding reserves. */
+  top: calc(var(--topbar-offset) + (var(--topbar-h) - var(--chip-h)) / 2);
+  right: calc(var(--topbar-offset) + var(--topbar-pad-x));
+  /* Above the dock and below the boot screen; the relationship is centralized
+     in tokens.css so the no-script fallback can explicitly sit above boot. */
+  z-index: var(--z-doc-nav);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.04em;
+  color: var(--fg-3);
+}
+
+/* Mirrors .widget-toggle in widget-panel/panel.css — the neighbouring control
+   in the same bar. The default disclosure triangle goes: nothing else in the
+   bar carries one, and the glyph already reads as "menu". */
+.summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--chip-h);
+  padding: 0 10px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-pill);
+  color: var(--fg-3);
+  cursor: pointer;
+  list-style: none;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:hover,
+.nav[open] .summary,
+.nav:focus-within .summary {
+  color: var(--fg-1);
+  border-color: var(--glass-border-strong);
+}
+
+.glyph {
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* Shared by the disclosure and the no-script panel — both render the same
+   <DocumentLinks />, so anything specific to the dropdown belongs on the
+   .nav .list rule below, not here. */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Inside the disclosure it hangs off the chip like a menu-bar dropdown,
+   right-aligned so it opens inward and can never run off the viewport edge. */
+.nav .list {
+  position: absolute;
+  top: calc(var(--chip-h) + 8px);
+  right: 0;
+  min-width: 190px;
+  padding: 6px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-sm);
+  backdrop-filter: blur(20px);
+}
+
+/* The no-script panel is already its own opaque box, so the list just sits in
+   its flow under the heading. */
+.noScriptNav .list {
+  margin-top: 8px;
+}
+
+.list a {
+  display: block;
+  padding: 6px 8px;
+  border-radius: var(--r-sm);
+  color: var(--fg-3);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.list a:hover,
+.list a:focus-visible {
+  color: var(--accent-violet);
+  background: var(--glass-bg-lift);
+}
+
+/* The boot overlay only exits through React effects. With scripting disabled,
+   this explicit fallback remains above it so the human-visible document links
+   are genuinely usable rather than merely present in source. */
+.noScriptNav {
+  position: fixed;
+  top: max(var(--doc-nav-top), calc(env(safe-area-inset-top) + var(--doc-nav-top)));
+  left: max(12px, env(safe-area-inset-left));
+  z-index: var(--z-doc-nav-noscript);
+  max-width: calc(100vw - 24px);
+  padding: 10px 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-sm);
+  background: var(--bg-deep);
+  color: var(--fg-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+}

@@ -1,0 +1,58 @@
+/* Interactive /zsh terminal. The window host is a flex column already, so
+   .terminal-app fills it and owns its own scroll. Click anywhere inside
+   refocuses the input — the component wires that up explicitly. */
+.terminal-app {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 14px 18px;
+  background: var(--surface-deep);
+  color: var(--fg-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  overflow-y: auto;
+  cursor: text;
+}
+
+.terminal-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.terminal-line-input {
+  color: var(--fg-1);
+}
+.terminal-line-output {
+  color: var(--fg-2);
+}
+.terminal-line-system {
+  color: var(--fg-3);
+}
+
+.terminal-input-row {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  margin-top: 2px;
+}
+
+.terminal-prompt {
+  color: var(--accent-violet);
+  white-space: nowrap;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.terminal-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--fg-1);
+  font: inherit;
+  padding: 0;
+  caret-color: var(--accent-gold);
+}
+.terminal-input::placeholder {
+  color: var(--fg-3);
+}

@@ -1,0 +1,223 @@
+/* -- Changelog app (release notes feed) --------------------------------- */
+
+.changelog-app {
+  padding: 24px;
+  min-height: 100%;
+  box-sizing: border-box;
+  color: var(--fg-2);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.changelog-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.changelog-title {
+  margin: 0;
+  font-size: clamp(2rem, 12cqi, var(--fs-display));
+  line-height: 0.95;
+  color: var(--fg-1);
+  font-family: var(--font-serif);
+  font-style: italic;
+  text-wrap: balance;
+}
+
+.changelog-tagline {
+  margin: 0;
+  color: var(--fg-3);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  max-width: 54ch;
+}
+
+/* Feed ------------------------------------------------------------------ */
+
+.changelog-feed {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.changelog-entry {
+  position: relative;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  background: var(--glass-bg-subtle);
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* The newest entry gets a little more presence — a violet-tinted surface,
+   matching how lab.css promotes its latest experiment. */
+.changelog-entry:first-child {
+  border-color: color-mix(in srgb, var(--accent-violet) 26%, var(--glass-border));
+  background: color-mix(in srgb, var(--accent-violet) 5%, var(--glass-bg-subtle));
+}
+
+.changelog-entry-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.changelog-entry-date {
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.changelog-version {
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--glass-border-strong);
+  background: var(--glass-bg-muted);
+  color: var(--fg-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+}
+
+.changelog-entry-title {
+  margin: 0;
+  color: var(--fg-1);
+  font-size: var(--fs-xl);
+  line-height: 1.05;
+  font-family: var(--font-serif);
+  font-style: italic;
+  text-wrap: balance;
+}
+
+.changelog-entry-summary {
+  margin: 0;
+  color: var(--fg-2);
+  line-height: 1.55;
+  font-size: var(--fs-md);
+  max-width: 60ch;
+}
+
+/* Changes --------------------------------------------------------------- */
+
+.changelog-changes {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.changelog-change {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.changelog-change-text {
+  flex: 1 1 240px;
+  min-width: 0;
+  color: var(--fg-2);
+  line-height: 1.5;
+  font-size: var(--fs-base);
+}
+
+/* Tag chip — mirrors the .status-pill language (mono, uppercase, dot+label).
+   A fixed min-width keeps the chips in a tidy left-aligned column. */
+.changelog-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  min-width: 92px;
+  padding: 3px 9px 3px 7px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--glass-border-strong);
+  background: var(--glass-bg-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-1);
+}
+
+.changelog-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fg-3);
+}
+
+.changelog-chip--added .changelog-chip-dot {
+  background: var(--accent-blue);
+  box-shadow: 0 0 6px var(--accent-blue);
+}
+
+.changelog-chip--improved .changelog-chip-dot {
+  background: var(--accent-violet);
+  box-shadow: 0 0 6px var(--accent-violet);
+}
+
+.changelog-chip--fixed .changelog-chip-dot {
+  background: var(--accent-gold);
+  box-shadow: 0 0 6px var(--accent-gold);
+}
+
+.changelog-chip--deprecated .changelog-chip-dot {
+  background: var(--accent-pink);
+  box-shadow: 0 0 6px var(--accent-pink);
+}
+
+.changelog-chip--removed .changelog-chip-dot {
+  background: var(--fg-3);
+}
+
+/* Open-app deep link — pulls the visitor into the app a change is about. */
+.changelog-open {
+  flex-shrink: 0;
+  margin-left: auto;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-pill);
+  padding: 3px 10px;
+  background: none;
+  color: var(--accent-blue);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+
+.changelog-open:hover {
+  border-color: var(--glass-border-strong);
+  background: var(--glass-bg-lift);
+}
+
+.changelog-open:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+@container (max-width: 520px) {
+  .changelog-change {
+    gap: 8px;
+  }
+
+  .changelog-chip {
+    min-width: 0;
+  }
+
+  .changelog-open {
+    margin-left: 0;
+  }
+}

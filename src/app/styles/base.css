@@ -1,0 +1,101 @@
+﻿/* â”€â”€ Root + background layers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.lc-root {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100svh;
+  width: 100vw;
+  position: relative;
+  /* `clip` clips the oversized decorative layers (.lc-iridescent bleeds past
+     the bottom edge) WITHOUT making the root a scroll container. With plain
+     `hidden` the root stays programmatically scrollable, so opening a mobile
+     app moves focus into the full-screen frame and the browser's focus-scroll
+     drags the whole shell — including the app bar — off the top. `clip` makes
+     that impossible. `hidden` kept as a fallback for browsers without `clip`. */
+  overflow: hidden;
+  overflow: clip;
+}
+
+.lc-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 30% 20%,
+    var(--bg-warm) 0%,
+    var(--bg-mid) 60%,
+    var(--bg-deep) 100%
+  );
+  z-index: 0;
+}
+
+.lc-iridescent {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 20% 30%, var(--ambient-pink), transparent 40%),
+    radial-gradient(circle at 80% 70%, var(--ambient-blue), transparent 40%),
+    radial-gradient(circle at 50% 50%, var(--ambient-gold), transparent 50%);
+  filter: blur(45px);
+  animation: lcFloat 22s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes lcFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50%      { transform: translate(-3%, 3%) rotate(20deg); }
+}
+
+/* Phones render the bloom as a static image. The floating animation is a
+   permanent compositing tax there — a 45px blur over a 140%-viewport layer
+   repainting forever under every other animation — and at rest the still
+   frame is visually identical. Desktop keeps the drift. Keep the width in
+   sync with MOBILE_BREAKPOINT in src/lib/layout.ts. */
+@media (max-width: 767px) {
+  .lc-iridescent {
+    animation: none;
+  }
+}
+
+.lc-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+.particle-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  cursor: default;
+  touch-action: none;
+}
+
+.particle-canvas.is-interactive {
+  cursor: pointer;
+}
+
+.particle-canvas.is-dragging {
+  cursor: grabbing;
+}
+
+/* ── Global reduced-motion killswitch ──────────────────────────────
+   Honors the OS "reduce motion" setting across every animation/transition
+   on the page. The WebGL particle field is gated separately in JS (it runs
+   a rAF loop, not a CSS animation), but this neutralizes the perpetual
+   .lc-iridescent float, .lc-grain, and every component transition for
+   vestibular-sensitive visitors. Per-component reduced-motion rules still
+   layer on top of this. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

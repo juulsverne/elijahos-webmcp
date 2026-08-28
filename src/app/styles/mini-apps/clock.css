@@ -1,0 +1,422 @@
+/* -- Clock app ----------------------------------------------------------- */
+
+.clock-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: clamp(14px, 4cqi, 24px) clamp(16px, 4cqi, 26px) clamp(18px, 5cqi, 28px);
+  gap: clamp(14px, 3cqi, 22px);
+  box-sizing: border-box;
+  color: var(--fg-1);
+  overflow: hidden;
+}
+
+.clock-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Segmented control. Three equal-width grid columns so the sliding thumb
+   can move in steps of exactly 100% of its own width. Padding, gap (none),
+   font-size, and the overall min-width all scale with cqi so the control
+   tracks window size like the rest of the clock. */
+.clock-tabs {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-self: flex-start;
+  min-width: clamp(220px, 56cqi, 360px);
+  padding: clamp(2px, 0.6cqi, 4px);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--glass-border);
+  background: var(--surface-deep-light);
+}
+
+/* Sliding thumb. Sits behind the tab buttons via z-index, fills exactly
+   one third of the inner track, and translates by 100% of its own width
+   when the active mode changes. The cubic-bezier matches the easing the
+   Wobbles widget uses for its slide track so the OS feels coherent. */
+.clock-tabs::before {
+  content: "";
+  position: absolute;
+  top: clamp(2px, 0.6cqi, 4px);
+  bottom: clamp(2px, 0.6cqi, 4px);
+  left: clamp(2px, 0.6cqi, 4px);
+  /* Inner track width is 100% minus the two padding insets. Divide by 3
+     to get one tab's worth. */
+  width: calc((100% - clamp(4px, 1.2cqi, 8px)) / 3);
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--accent-pink) 22%, var(--glass-bg));
+  transform: translateX(0);
+  transition: transform 280ms cubic-bezier(0.32, 0.72, 0.24, 1),
+              background 200ms ease;
+  z-index: 0;
+}
+.clock-tabs[data-active="clock"]::before { transform: translateX(0); }
+.clock-tabs[data-active="stopwatch"]::before { transform: translateX(100%); }
+.clock-tabs[data-active="timer"]::before { transform: translateX(200%); }
+
+.clock-tab {
+  position: relative;
+  z-index: 1;
+  padding: clamp(5px, 1.4cqi, 9px) clamp(8px, 2.4cqi, 16px);
+  border: none;
+  background: transparent;
+  color: var(--fg-2);
+  font: inherit;
+  font-size: clamp(11px, 1.7cqi, 13px);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: color 200ms ease;
+}
+
+.clock-tab:hover {
+  color: var(--fg-1);
+}
+
+.clock-tab.is-active {
+  color: var(--fg-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clock-tabs::before {
+    transition: background 200ms ease;
+  }
+}
+
+.clock-mode-clock,
+.clock-mode-stopwatch,
+.clock-mode-timer {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 3.5cqi, 22px);
+  min-height: 0;
+  width: 100%;
+}
+
+/* The "face" the readout sits in. Layered glass cut from the same cloth as the
+   window chrome and the Wobbles vitals slide: a sheen + warm-violet/blue accent
+   bleed over translucent glass (so the window's frosted body shows through),
+   an inset highlight, a faint grid (::before) and an angled accent hairline
+   (::after). The flat near-black slab this replaced read as a foreign LCD. */
+.clock-face {
+  position: relative;
+  container-type: inline-size;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2.5cqi, 14px);
+  padding: clamp(20px, 6cqi, 36px) clamp(18px, 5cqi, 32px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(135deg, var(--glass-sheen-start), var(--glass-sheen-end)),
+    linear-gradient(
+      155deg,
+      color-mix(in srgb, var(--accent-violet) 14%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      24deg,
+      color-mix(in srgb, var(--accent-blue) 8%, transparent),
+      transparent 64%
+    ),
+    var(--glass-bg-muted);
+  box-shadow: 0 0 0 1px var(--glass-bg-lift) inset;
+  overflow: hidden;
+  transition: border-color 280ms ease, box-shadow 280ms ease;
+}
+
+/* Faint grid — same vocabulary as the Wobbles vitals slide. Masked diagonally
+   so it fades out toward the bottom-right rather than tiling edge to edge. */
+.clock-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--fg-1) 3%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--fg-1) 2.5%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 26px 26px;
+  mask-image: linear-gradient(135deg, var(--bg-deep), transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Angled accent hairline in the corner — the clock's signature flourish. */
+.clock-face::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 12%;
+  width: 110px;
+  height: 70%;
+  border-left: 1px solid color-mix(in srgb, var(--accent-violet) 26%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--accent-blue) 20%, transparent);
+  transform: rotate(14deg);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Keep the readout above the decorative grid/hairline layers. */
+.clock-face-status,
+.clock-face .clock-time,
+.clock-date {
+  position: relative;
+  z-index: 1;
+}
+
+/* Running / done states now glow softly, the way focused windows do, instead
+   of only nudging the border color. */
+.clock-face.is-running {
+  border-color: color-mix(in srgb, var(--accent-pink) 40%, var(--glass-border));
+  box-shadow:
+    0 0 0 1px var(--glass-bg-lift) inset,
+    0 0 52px -16px var(--accent-pink-glow);
+}
+.clock-face.is-done {
+  border-color: color-mix(in srgb, var(--accent-gold) 50%, var(--glass-border));
+  box-shadow:
+    0 0 0 1px var(--glass-bg-lift) inset,
+    0 0 52px -14px color-mix(in srgb, var(--accent-gold) 60%, transparent);
+}
+
+/* Status row above the digits ("Running" / "Paused" / "Ready" / "Done")
+   with a small dot that pulses when the timer or stopwatch is live. */
+.clock-face-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.clock-face-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fg-3);
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+.clock-face.is-running .clock-face-status {
+  color: var(--accent-pink);
+}
+.clock-face.is-running .clock-face-dot {
+  background: var(--accent-pink);
+  box-shadow: 0 0 10px var(--accent-pink);
+  animation: clock-pulse 1.6s ease-in-out infinite;
+}
+.clock-face.is-done .clock-face-status {
+  color: var(--accent-gold);
+}
+.clock-face.is-done .clock-face-dot {
+  background: var(--accent-gold);
+  box-shadow: 0 0 10px var(--accent-gold);
+}
+
+@keyframes clock-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.9); }
+}
+
+/* Time digits scale with the .clock-face container (cqi) so they grow
+   when the user makes the window bigger and shrink when they make it
+   smaller. Mono with extra weight + tracking to feel like a clock face
+   rather than terminal text. */
+.clock-time {
+  max-width: 100%;
+  font-size: clamp(2.4rem, 20cqi, 5rem);
+  font-weight: 500;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--fg-1);
+  transition: color 200ms ease;
+}
+
+.clock-time--mono {
+  font-family: var(--font-mono);
+}
+
+/* Wall-clock readout — the serif-italic hero treatment, echoing the About
+   title ("Hi, I'm Elijah.") and the Wobbles name. Inherits the base's
+   tabular-nums so the centered readout doesn't rock side to side as digit
+   widths change each second. The stopwatch/timer keep mono tabular. */
+.clock-time--serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.clock-time.is-flashing {
+  color: var(--accent-gold);
+}
+
+.clock-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--fg-2);
+}
+
+.clock-weekday {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-2);
+}
+
+.clock-day {
+  font-size: var(--fs-md);
+  color: var(--fg-2);
+}
+
+.clock-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.clock-controls .btn {
+  min-width: 88px;
+  justify-content: center;
+  padding: 9px 18px;
+}
+
+/* Lap list mirrors the OS's mono-key / value-readout pattern from the
+   Wobbles vitals card and the System Pulse process list. */
+.clock-laps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-height: clamp(80px, 18cqi, 140px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+}
+.clock-laps li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--glass-border);
+}
+.clock-laps li:last-child {
+  border-bottom: none;
+}
+.clock-lap-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.clock-lap-time {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--fg-1);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Timer config row holds two themed Stepper widgets side by side. */
+.clock-timer-config {
+  display: flex;
+  gap: clamp(10px, 3cqi, 18px);
+  justify-content: center;
+}
+
+/* Themed numeric stepper. Replaces the native number-input spinner with
+   on-brand circular buttons. Matches the OS chrome's pill/glass language. */
+.clock-stepper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.clock-stepper-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.clock-stepper-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+}
+.clock-stepper-btn {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: color-mix(in srgb, var(--fg-1) 6%, transparent);
+  color: var(--fg-1);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 140ms ease, transform 140ms ease, color 140ms ease;
+}
+.clock-stepper-btn:hover {
+  background: color-mix(in srgb, var(--accent-pink) 28%, transparent);
+  color: var(--fg-1);
+}
+.clock-stepper-btn:active {
+  transform: scale(0.92);
+}
+.clock-stepper-input {
+  width: 44px;
+  padding: 4px 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  color: var(--fg-1);
+  background: transparent;
+  border: none;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+/* Hide native spinner on Webkit so the input reads clean alongside our
+   custom +/- buttons. */
+.clock-stepper-input::-webkit-outer-spin-button,
+.clock-stepper-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

@@ -1,0 +1,206 @@
+/* -- Projects app (uniform clickable cards) ----------------------------- */
+
+.projects-app {
+  padding: 24px;
+  min-height: 100%;
+  box-sizing: border-box;
+  color: var(--fg-2);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.projects-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Matches .about-title sizing so /projects and /about share a typographic
+   chassis. No gradient flourish here so each window keeps its own mark. */
+.projects-title {
+  margin: 0;
+  font-size: clamp(2.25rem, 14cqi, var(--fs-display));
+  line-height: 0.95;
+  color: var(--fg-1);
+  text-wrap: balance;
+}
+
+.projects-subtitle {
+  margin: 0;
+  color: var(--fg-3);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+}
+
+/* Card list -------------------------------------------------------------- */
+
+.project-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.project-card {
+  position: relative;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  background: var(--glass-bg-subtle);
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.project-card:hover {
+  border-color: var(--glass-border-strong);
+  background: var(--glass-bg-lift);
+}
+
+/* Subtle accent stripe on the left edge gives each card per-project
+   identity without making the layout uneven. --card-accent is set by the
+   .accent-* modifier; the fallback keeps the stripe visible if a project
+   skips the accent field. */
+.project-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--card-accent, var(--accent-blue));
+  opacity: 0.7;
+}
+
+.project-card.accent-pink   { --card-accent: var(--accent-pink); }
+.project-card.accent-blue   { --card-accent: var(--accent-blue); }
+.project-card.accent-gold   { --card-accent: var(--accent-gold); }
+.project-card.accent-violet { --card-accent: var(--accent-violet); }
+
+.project-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.project-card-glyph {
+  font-size: 28px;
+  line-height: 1;
+  color: var(--card-accent, var(--fg-1));
+  opacity: 0.9;
+  font-family: var(--font-serif);
+  font-style: italic;
+  flex-shrink: 0;
+}
+
+.project-card-name {
+  margin: 0;
+  flex: 1;
+  color: var(--fg-1);
+  font-size: var(--fs-xl);
+  line-height: 1.05;
+}
+
+.project-card-head .status-pill {
+  flex-shrink: 0;
+}
+
+.project-card-kicker {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.project-card-desc {
+  margin: 4px 0 0;
+  color: var(--fg-2);
+  line-height: 1.55;
+}
+
+.project-card .app-stack {
+  margin-top: 4px;
+}
+
+.project-card-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+/* Status pill ------------------------------------------------------------ */
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 8px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--glass-border-strong);
+  background: var(--surface-deep-card);
+  backdrop-filter: blur(6px);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-1);
+}
+
+.status-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fg-3);
+}
+
+.status-pill--live .status-pill-dot {
+  background: var(--accent-blue);
+  box-shadow: 0 0 6px var(--accent-blue);
+}
+
+.status-pill--in-flight .status-pill-dot {
+  background: var(--accent-gold);
+  box-shadow: 0 0 6px var(--accent-gold);
+}
+
+.status-pill--planned .status-pill-dot {
+  background: var(--accent-violet);
+  box-shadow: 0 0 6px var(--accent-violet);
+}
+
+.status-pill--shipped .status-pill-dot {
+  background: var(--fg-2);
+}
+
+.status-pill--archived .status-pill-dot {
+  background: var(--fg-3);
+}
+
+/* Tight windows: keep the head row from squashing the title against the
+   status pill. */
+@container (max-width: 420px) {
+  .project-card {
+    padding: 16px 18px 18px;
+  }
+  .project-card-head {
+    flex-wrap: wrap;
+  }
+  .project-card-name {
+    font-size: var(--fs-lg);
+    line-height: 1.15;
+  }
+  .project-card-glyph {
+    font-size: 24px;
+  }
+  .project-card-kicker {
+    flex-direction: column;
+    gap: 2px;
+  }
+}

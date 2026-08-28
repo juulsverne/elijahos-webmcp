@@ -1,0 +1,90 @@
+/* Topbar */
+.topbar {
+  position: absolute;
+  top: var(--topbar-offset);
+  left: var(--topbar-offset);
+  right: var(--topbar-offset);
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  /* Right inset gives up --docnav-slot to the document-nav chip, which is
+     fixed over this band rather than laid out inside it (see tokens.css). */
+  padding: 0 calc(var(--topbar-pad-x) + var(--docnav-slot)) 0 var(--topbar-pad-x);
+  gap: 18px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  z-index: 50;
+  font-size: var(--fs-base);
+}
+
+/* Boot handoff choreography — the topbar leads (dock follows 80ms later,
+   see dock.css). Keyed on the same data-phase flip so a reboot replays it. */
+.lc-root[data-phase="desktop"] .topbar {
+  animation: topbarDrop 420ms var(--spring-settle) backwards;
+}
+@keyframes topbarDrop {
+  from {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.topbar-name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+.topbar-role,
+.topbar-status,
+.topbar-time {
+  font-size: var(--fs-sm);
+}
+.topbar-status {
+  color: var(--accent-pink);
+}
+.topbar-spacer {
+  flex: 1;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-pink);
+  box-shadow: 0 0 6px var(--accent-pink);
+}
+
+@media (max-width: 520px) {
+  /* Set on :root, not .topbar — the doc-nav chip is fixed outside the bar's
+     subtree and has to read the same inset to stay aligned with it. */
+  :root {
+    --topbar-pad-x: 10px;
+  }
+
+  .topbar {
+    gap: 8px;
+  }
+
+  .topbar-role,
+  .topbar > .dim {
+    display: none;
+  }
+
+  .topbar-status {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .topbar-time {
+    display: none;
+  }
+}

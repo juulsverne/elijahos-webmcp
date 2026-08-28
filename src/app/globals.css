@@ -1,0 +1,17 @@
+﻿@import "tailwindcss";
+@import "./styles/tokens.css";
+@import "./styles/base.css";
+@import "./styles/window.css";
+@import "./styles/topbar.css";
+@import "./styles/dock.css";
+@import "./styles/launchpad.css";
+@import "./styles/context-menu.css";
+@import "./styles/controls.css";
+@import "./styles/error-screen.css";
+@import "./styles/apps.css";
+@import "./styles/mini-apps.css";
+@import "./styles/case-study.css";
+@import "./styles/boot.css";
+@import "./styles/utilities.css";
+@import "./styles/widget-panel.css";
+@import "./styles/mobile.css";

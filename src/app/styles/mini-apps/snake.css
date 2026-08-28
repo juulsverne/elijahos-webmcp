@@ -1,0 +1,179 @@
+/* -- Snake app ----------------------------------------------------------- */
+
+.snake-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px;
+  gap: 12px;
+  box-sizing: border-box;
+  color: var(--fg-1);
+}
+
+.snake-bar {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--fg-2);
+}
+
+.snake-bar strong {
+  color: var(--fg-1);
+}
+
+.snake-stage {
+  position: relative;
+  flex: 1 1 auto;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+.snake-canvas {
+  display: block;
+  background: var(--surface-deep);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  /* Hand swipe gestures to the touch-steering listeners instead of letting the
+     browser scroll/zoom the board. No effect on desktop (mouse/keyboard). */
+  touch-action: none;
+}
+
+.snake-over {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--surface-snake-panel);
+  backdrop-filter: blur(6px);
+  border-radius: var(--r-md);
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+.snake-over-title {
+  font-size: var(--fs-xl);
+  color: var(--accent-pink);
+}
+
+.snake-over-score {
+  color: var(--fg-1);
+  font-size: var(--fs-lg);
+}
+
+.snake-over-hint {
+  color: var(--fg-3);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.snake-hint {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  text-align: center;
+}
+
+@keyframes snake-flash {
+  0%   { color: var(--accent-gold); }
+  100% { color: var(--fg-1); }
+}
+
+.snake-score-flash {
+  animation: snake-flash 0.4s ease-out forwards;
+}
+
+.snake-over-input {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-sm);
+  color: var(--fg-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  padding: 6px 10px;
+  width: 160px;
+  outline: none;
+  text-align: center;
+}
+
+.snake-over-input:focus {
+  border-color: var(--accent-pink);
+}
+
+.snake-over-submit {
+  background: var(--accent-pink);
+  border: none;
+  border-radius: var(--r-sm);
+  color: var(--bg-deep);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 6px 18px;
+  text-transform: uppercase;
+}
+
+.snake-over-submit:hover {
+  opacity: 0.85;
+}
+
+.snake-leaderboard {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  width: 200px;
+}
+
+.snake-leaderboard th {
+  color: var(--fg-3);
+  font-weight: 400;
+  padding: 2px 8px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.snake-leaderboard td {
+  color: var(--fg-1);
+  padding: 3px 8px;
+}
+
+.snake-leaderboard tr.highlighted td {
+  background: color-mix(in srgb, var(--accent-pink) 18%, transparent);
+  color: var(--accent-pink);
+}
+
+/* Empty-state cell in the leaderboard. Replaces the inline style that
+   used to live in SnakeApp.tsx so the colour token stays in CSS. */
+.snake-leaderboard-empty {
+  text-align: center;
+  color: var(--fg-3);
+}
+
+.snake-play-again {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-sm);
+  color: var(--fg-1);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  padding: 6px 18px;
+  text-transform: uppercase;
+}
+
+.snake-play-again:hover {
+  border-color: var(--accent-pink);
+  color: var(--accent-pink);
+}

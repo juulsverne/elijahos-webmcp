@@ -1,0 +1,93 @@
+﻿/* â”€â”€ Boot screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.boot-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-boot);
+  display: grid;
+  place-items: center;
+  background: radial-gradient(
+    ellipse at 30% 20%,
+    var(--bg-warm) 0%,
+    var(--bg-mid) 60%,
+    var(--bg-deep) 100%
+  );
+  transition: opacity 0.42s ease;
+}
+.boot-wrap.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+.boot-panel {
+  text-align: center;
+  width: min(500px, calc(100vw - 48px));
+}
+
+.boot-orb {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  margin: 0 auto 30px;
+}
+.boot-orb-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--accent-pink),
+    var(--accent-blue),
+    var(--accent-gold),
+    var(--accent-pink)
+  );
+  filter: blur(20px);
+  opacity: 0.7;
+  animation: lcSpin 3s linear infinite;
+}
+.boot-orb-inner {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: var(--surface-panel-popover);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-serif);
+  font-size: 38px;
+  color: var(--fg-1);
+  font-style: italic;
+  border: 1px solid var(--glass-border);
+}
+.boot-title {
+  font-size: 38px;
+  color: var(--fg-1);
+  margin: 0 0 4px;
+  font-weight: 400;
+}
+.boot-subtitle {
+  font-size: var(--fs-sm);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin: 0 0 36px;
+}
+.boot-progress {
+  height: 1px;
+  background: var(--track-bg);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.boot-progress-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent-pink), var(--accent-blue), var(--accent-gold));
+  /* Full-width fill slid left by (1 - --v) inside the clipped track —
+     compositor-only, and the gradient stays fixed to the track width
+     instead of re-stretching as the bar grows. */
+  transform: translateX(calc(var(--v, 0) * 100% - 100%));
+  transition: transform 0.18s ease-out;
+}
+.boot-percent {
+  margin-top: 12px;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.2em;
+}
+@keyframes lcSpin { to { transform: rotate(360deg); } }

@@ -1,0 +1,411 @@
+/* -- Case-study window ---------------------------------------------------
+   Sister surface to the Projects app. Reuses the same chassis (glass panel,
+   --r-md radius, accent stripe, status pills) so the two windows feel like
+   the same OS. Anything specific to the case-study window or its diagram
+   lives here so apps.css doesn't grow further.
+*/
+
+.case-study-app {
+  position: relative;
+  padding: 28px 32px 32px;
+  min-height: 100%;
+  box-sizing: border-box;
+  color: var(--fg-2);
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  /* Set --card-accent from the modifier so the accent stripe and glyph
+     pick up the project's color, same pattern as .project-card. */
+}
+
+.case-study-app.accent-pink   { --card-accent: var(--accent-pink); }
+.case-study-app.accent-blue   { --card-accent: var(--accent-blue); }
+.case-study-app.accent-gold   { --card-accent: var(--accent-gold); }
+.case-study-app.accent-violet { --card-accent: var(--accent-violet); }
+
+/* Header ----------------------------------------------------------------- */
+
+.case-study-head {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  column-gap: 18px;
+  align-items: start;
+  padding: 4px 0 26px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Same accent stripe as project cards — vertical bar tucked against the
+   left edge of the window for per-case-study identity. */
+.case-study-head::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 8px;
+  bottom: 24px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--card-accent, var(--accent-blue));
+  opacity: 0.7;
+}
+
+.case-study-glyph {
+  font-size: 44px;
+  line-height: 1;
+  color: var(--card-accent, var(--fg-1));
+  opacity: 0.9;
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+.case-study-head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.case-study-title {
+  margin: 4px 0 2px;
+  font-size: clamp(2.25rem, 12cqi, var(--fs-display));
+  line-height: 0.95;
+  color: var(--fg-1);
+  text-wrap: balance;
+}
+
+.case-study-kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.case-study-desc {
+  margin: 6px 0 0;
+  color: var(--fg-2);
+  font-size: var(--fs-md);
+  line-height: 1.55;
+  max-width: 56ch;
+}
+
+.case-study-head .status-pill {
+  align-self: start;
+  margin-top: 4px;
+}
+
+/* Body sections ---------------------------------------------------------- */
+
+.case-study-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Mono kicker style — same vocabulary as .app-kicker, sized as a section
+   header so each section reads as a labeled block, not a competing title. */
+.case-study-heading {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.case-study-body {
+  margin: 0;
+  color: var(--fg-2);
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  max-width: 62ch;
+}
+
+/* Architecture diagram --------------------------------------------------- */
+
+.arch-diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  margin: 8px 0 4px;
+}
+
+.arch-layer {
+  position: relative;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  background: var(--glass-bg);
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  backdrop-filter: blur(6px);
+}
+
+/* Faint per-layer accent at the top edge to give the stack rhythm without
+   competing with the connector animation. */
+.arch-layer::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-blue) 30%,
+    var(--accent-blue) 70%,
+    transparent 100%
+  );
+  opacity: 0.3;
+  border-radius: var(--r-md) var(--r-md) 0 0;
+}
+
+.arch-layer-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.arch-layer-kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.arch-layer-heading {
+  margin: 0;
+  color: var(--fg-1);
+  font-size: var(--fs-lg);
+  line-height: 1.1;
+}
+
+.arch-layer-nodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 8px;
+}
+
+/* Fixed two-column grid so the status pill always sits top-right and the
+   label/detail stack underneath it — regardless of how long the detail line
+   is. A flex-wrap row used to let the pill drift inline on short nodes and
+   wrap below on long ones, which read as inconsistent across the diagram. */
+.arch-node {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  column-gap: 10px;
+  row-gap: 5px;
+  padding: 10px 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  background: var(--glass-bg-whisper);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.arch-node:hover {
+  border-color: var(--glass-border-strong);
+  background: var(--glass-bg-muted);
+}
+
+.arch-node-label {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  color: var(--fg-1);
+  font-size: var(--fs-sm);
+  line-height: 1.3;
+}
+
+.arch-node-detail {
+  grid-column: 1;
+  grid-row: 2;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+}
+
+.arch-node .status-pill {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+}
+
+/* Connector — animated marching-ants arrow between adjacent layers. The
+   stroke-dashoffset keyframe makes the dashes flow downward, signaling
+   "data is moving through this path right now". */
+.arch-connector {
+  width: 14px;
+  height: 32px;
+  display: block;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.arch-connector .arch-line {
+  fill: none;
+  stroke: var(--accent-blue);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 6;
+  animation: arch-flow 1.4s linear infinite;
+  opacity: 0.75;
+  filter: drop-shadow(0 0 3px var(--accent-blue));
+}
+
+.arch-connector .arch-line-cap {
+  fill: none;
+  stroke: var(--accent-blue);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 3px var(--accent-blue));
+}
+
+@keyframes arch-flow {
+  to { stroke-dashoffset: -10; }
+}
+
+/* Respect users who'd rather not see motion. */
+@media (prefers-reduced-motion: reduce) {
+  .arch-connector .arch-line {
+    animation: none;
+    stroke-dasharray: none;
+  }
+}
+
+/* Decisions -------------------------------------------------------------- */
+
+.case-study-decisions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 12px;
+}
+
+.decision-vignette {
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  background: var(--glass-bg-subtle);
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.decision-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 6px;
+}
+
+.decision-label:first-child {
+  margin-top: 0;
+}
+
+.decision-considered {
+  margin: 0;
+  color: var(--fg-2);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+
+.decision-picked {
+  margin: 0;
+  color: var(--fg-1);
+  font-size: var(--fs-lg);
+  line-height: 1.2;
+}
+
+.decision-reason {
+  margin: 8px 0 0;
+  color: var(--fg-2);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+
+/* Stack table ------------------------------------------------------------ */
+
+.case-study-stack {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--glass-border);
+}
+
+.stack-row {
+  display: grid;
+  grid-template-columns: minmax(160px, auto) minmax(160px, 1fr) 2fr;
+  gap: 16px;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--glass-border);
+  align-items: baseline;
+}
+
+.stack-row strong {
+  color: var(--fg-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+.stack-row .stack-what {
+  color: var(--fg-2);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+}
+
+.stack-row .stack-why {
+  color: var(--fg-3);
+  font-size: var(--fs-sm);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Tight windows ---------------------------------------------------------- */
+
+@container (max-width: 560px) {
+  .case-study-app {
+    padding: 22px 22px 26px;
+  }
+  .case-study-head {
+    grid-template-columns: auto 1fr;
+    column-gap: 14px;
+  }
+  .case-study-head .status-pill {
+    grid-column: 2 / 3;
+    justify-self: start;
+    margin-top: 6px;
+  }
+  .case-study-glyph {
+    font-size: 36px;
+  }
+  .stack-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    padding: 10px 4px;
+  }
+}
+
+@container (max-width: 380px) {
+  .case-study-app {
+    padding-inline: 16px;
+  }
+  .arch-layer {
+    padding: 14px;
+  }
+  .arch-node {
+    column-gap: 8px;
+  }
+}

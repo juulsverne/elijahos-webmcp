@@ -1,0 +1,137 @@
+/* -- About app ------------------------------------------------------------ */
+.about-app {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  /* Content fills the window width (no line-length cap) so it uses the whole
+     window instead of a narrow column. Every element is left-anchored to the
+     same padding edge, so the title, sections, and buttons all line up. */
+  min-height: 100%;
+  box-sizing: border-box;
+}
+.about-title {
+  font-size: clamp(2.25rem, 14cqi, var(--fs-display));
+  line-height: 0.95;
+  color: var(--fg-1);
+  margin-bottom: 10px;
+  text-wrap: balance;
+}
+.about-role {
+  margin: 0 0 8px;
+  color: var(--accent-blue);
+  font-size: var(--fs-lg);
+  font-weight: 650;
+}
+.about-tagline {
+  font-size: var(--fs-lg);
+  color: var(--fg-2);
+  line-height: 1.55;
+  margin: 0 0 18px;
+}
+.about-bio {
+  font-size: var(--fs-md);
+  color: var(--fg-2);
+  line-height: 1.65;
+  margin: 0;
+}
+/* Divider + gap between consecutive sections. Adjacent-sibling selector means
+   the first section (the intro) never gets a hairline above it — only the gaps
+   between sections do. Keeps every section visually identical (consistent), so
+   a recruiter can scan straight to BACKGROUND / HOW I WORK / etc. */
+.about-bio + .about-bio {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--glass-border-faint);
+}
+/* Mono section label above each bio block — leans into the OS metaphor by
+   reading as system metadata, not a magazine section header. A short accent
+   tick precedes the label to anchor the section start. */
+.about-bio-kicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--fg-2);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 12px;
+}
+.about-bio-kicker::before {
+  content: "";
+  width: 14px;
+  height: 1px;
+  background: var(--accent-violet);
+  flex: 0 0 auto;
+}
+.about-bio p {
+  margin: 0;
+}
+.about-bio p + p {
+  margin-top: 10px;
+}
+/* Inline emphasis driven by the **foo** markers in elijah.ts. Accent-violet
+   because pink/blue/gold are already used by the title's gradient period —
+   violet stays uniquely strategic. */
+.bio-em {
+  color: var(--accent-violet);
+  font-weight: 600;
+}
+/* Puzzle-tagged words — driven by the ||foo|| markers in elijah.ts. Gold
+   reads as "system-tagged" and visually distinct from the violet emphasis,
+   without introducing a new color token. */
+.bio-puzzle {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+.about-actions {
+  display: flex;
+  gap: 18px;
+  margin-top: auto;
+  padding-top: 28px;
+  flex-wrap: wrap;
+}
+
+/* Phone frames and narrow windows: the free wrap left ragged rows of
+   intrinsic-width pills (reported from device). A two-column grid of equal,
+   centered buttons reads as one deliberate console — primary top-left, the
+   three ghost links filling the square. Type steps down one token and the
+   inline padding relaxes so "View résumé →" clears a 320px phone. */
+@container (max-width: 480px) {
+  .about-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .about-actions .btn {
+    justify-content: center;
+    padding-inline: 10px;
+    font-size: var(--fs-base);
+    white-space: nowrap;
+  }
+}
+
+@container (max-width: 360px) {
+  .about-app {
+    padding: 22px;
+  }
+
+  .about-title {
+    font-size: clamp(2rem, 13cqi, 2.75rem);
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+
+  .about-tagline {
+    font-size: var(--fs-md);
+    margin-bottom: 20px;
+  }
+
+  /* Tighten section rhythm on narrow screens — the measure cap is moot here
+     (the column already fills the width), so the win is just vertical air. */
+  .about-bio + .about-bio {
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+}

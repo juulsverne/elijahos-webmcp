@@ -1,0 +1,6 @@
+/* Right-side widget panel — aggregator. Split per-widget so nothing here
+   exceeds one concern; edit the file that owns the widget. */
+@import "./widget-panel/panel.css";
+@import "./widget-panel/index-widget.css";
+@import "./widget-panel/system-pulse.css";
+@import "./widget-panel/weather.css";

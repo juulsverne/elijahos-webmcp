@@ -1,0 +1,70 @@
+.error-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  background: radial-gradient(120% 120% at 30% 20%, var(--bg-warm) 0%, var(--bg-deep) 60%);
+  color: var(--fg-1);
+  font-family: var(--font-sans);
+}
+
+.error-screen-body {
+  margin: 0;
+}
+
+.error-screen-panel {
+  max-width: 460px;
+}
+
+.error-screen-kicker {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.error-screen-code {
+  margin: 12px 0 4px;
+  font-family: var(--font-mono);
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.error-screen-title {
+  margin: 16px 0 8px;
+  font-family: var(--font-serif);
+  font-size: 32px;
+  line-height: 1.05;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.error-screen-message {
+  margin: 0;
+  color: var(--fg-2);
+  line-height: 1.5;
+}
+
+.error-screen-action {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 10px 22px;
+  border-radius: 100px;
+  border: 1px solid var(--glass-border-strong);
+  background: var(--glass-bg);
+  color: var(--fg-1);
+  font-family: inherit;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.error-screen-action:hover {
+  border-color: var(--glass-border-bright);
+  background: var(--mobile-tile-bg-active);
+}

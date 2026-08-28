@@ -1,0 +1,155 @@
+/* -- Shared app chrome ---------------------------------------------------
+   Generic card/grid/typography primitives reused by multiple app bodies.
+   Keep this file domain-neutral — anything that names a specific app
+   belongs in its own file. */
+.portfolio-app {
+  padding: 24px;
+  min-height: 100%;
+  box-sizing: border-box;
+  color: var(--fg-2);
+}
+
+.app-header {
+  margin-bottom: 20px;
+}
+
+.app-header h1 {
+  margin: 6px 0 8px;
+  color: var(--fg-1);
+  font-size: var(--fs-xl);
+  line-height: 1.05;
+}
+
+.app-header p,
+.app-section p,
+.app-card p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.app-kicker,
+.app-year {
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+}
+
+.project-list,
+.pillar-grid,
+.contact-list,
+.timeline {
+  display: grid;
+  gap: 12px;
+}
+
+.app-card,
+.case-metrics > div,
+.timeline-row {
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  background: var(--glass-bg-muted);
+}
+
+.app-card {
+  padding: 16px;
+}
+
+.app-card-head,
+.timeline-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.app-card h2,
+.app-section h2 {
+  margin: 8px 0;
+  color: var(--fg-1);
+  font-size: var(--fs-lg);
+}
+
+.app-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.app-stack span {
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-pill);
+  padding: 4px 8px;
+  color: var(--fg-2);
+  font-size: var(--fs-xs);
+}
+
+.app-result {
+  margin-top: 12px;
+  color: var(--fg-1);
+  font-weight: 600;
+}
+
+.app-card-action {
+  margin-top: 14px;
+}
+
+.app-section {
+  margin-top: 20px;
+}
+
+.case-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.case-metrics > div {
+  padding: 14px;
+}
+
+.case-metrics span,
+.timeline-row > span {
+  display: block;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+}
+
+.case-metrics strong,
+.timeline-row strong,
+.pillar-grid strong {
+  color: var(--fg-1);
+}
+
+.pillar-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pillar-grid .app-card {
+  display: grid;
+  gap: 8px;
+}
+
+.timeline-row {
+  padding: 14px;
+  align-items: flex-start;
+}
+
+.timeline-row p {
+  margin: 4px 0 0;
+}
+
+@container (max-width: 520px) {
+  .case-metrics,
+  .pillar-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-card-head,
+  .timeline-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

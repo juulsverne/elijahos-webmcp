@@ -1,0 +1,126 @@
+/* Shared shell for the server-rendered document routes. Lives under the root
+   layout (tokens + fonts inherited) but outside the OS shell.
+
+   `height: 100dvh; overflow-y: auto` is load-bearing, not cosmetic: tokens.css
+   sets `body { overflow: hidden }` globally, so a document that relies on the
+   document scroller is simply clipped at the fold. This element owns its own
+   scrollport instead. Tokens only, no color literals. */
+
+.page {
+  box-sizing: border-box;
+  height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  color: var(--fg-2);
+  background: radial-gradient(135% 120% at 15% 6%, var(--bg-warm) 0%, var(--bg-deep) 58%);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 40px 16px;
+  padding-bottom: max(64px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--fg-2);
+}
+
+.brandDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-violet);
+  box-shadow: 0 0 10px var(--accent-violet);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--fs-xl);
+  line-height: 1.15;
+  color: var(--fg-1);
+}
+
+.lede {
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--fg-2);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.crumbs a {
+  color: var(--fg-3);
+  text-decoration: none;
+}
+
+.crumbs a:hover {
+  color: var(--fg-2);
+}
+
+.docNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+  padding-top: 18px;
+  border-top: 1px solid var(--glass-border);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+}
+
+.docNav a {
+  color: var(--fg-3);
+  text-decoration: none;
+}
+
+.docNav a:hover {
+  color: var(--accent-violet);
+}

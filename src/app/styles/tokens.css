@@ -1,0 +1,614 @@
+﻿/* â”€â”€ Liquid Compute Â· Portfolio.OS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Design tokens. Mutable at runtime via the Tweaks panel.
+*/
+:root {
+  --bg-deep: #050308;
+  --bg-mid: #0a0612;
+  --bg-warm: #2a1547;
+
+  --fg-1: #f0e8ff;
+  --fg-2: rgba(240, 232, 255, 0.7);
+  /* Tertiary text carries the smallest type in the system (9–10px mono
+     kickers/footers), so it must clear WCAG AA on its own: 0.55 ≈ 5.3:1 on
+     the glass cards and 5.9:1 on --bg-deep. Do not drop below 0.5 — that is
+     the 4.5:1 floor against the deep background alone. */
+  --fg-3: rgba(240, 232, 255, 0.55);
+  --fg-inverse: #050308;
+
+  --accent-pink: #ff6dc9;
+  --accent-blue: #56c8ff;
+  --accent-gold: #ffc864;
+  --accent-violet: #b870ff;
+  --accent-violet-shadow: rgba(184, 112, 255, 0.24);
+  --accent-violet-shadow-strong: rgba(184, 112, 255, 0.32);
+
+  /* Leverage Map surface tokens. These track the active theme (they're pure
+     var() aliases, so every data-theme recolor flows through) — the app sits
+     on the same glass surface as every other window; only its accents keep
+     the instrument semantics (blue = leverage, gold = protected human call),
+     which the app enforces locally by remapping --accent-violet. */
+  --lm-bg-deep: var(--bg-deep);
+  --lm-bg-mid: var(--bg-mid);
+  --lm-bg-raised: var(--bg-warm);
+  --lm-fg-1: var(--fg-1);
+  --lm-fg-2: var(--fg-2);
+  --lm-fg-3: var(--fg-3);
+  --lm-hairline: var(--glass-border);
+  --lm-hairline-strong: var(--glass-border-strong);
+
+  --traffic-close: #ff5f56;
+  --traffic-minimize: #ffbd2e;
+  --traffic-maximize: #27c93f;
+
+  --glass-bg: rgba(255, 255, 255, 0.10);
+  --glass-bg-whisper: rgba(255, 255, 255, 0.03);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.04);
+  --glass-bg-muted: rgba(255, 255, 255, 0.05);
+  --glass-bg-lift: rgba(255, 255, 255, 0.06);
+  --glass-bg-raised: rgba(255, 255, 255, 0.08);
+  --glass-bg-hover: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-strong: rgba(255, 255, 255, 0.18);
+  --glass-border-bright: rgba(255, 255, 255, 0.3);
+
+  /* Slightly brighter glass â€” used for inline progress tracks and similar
+     "embedded surface" backgrounds where --glass-bg reads too dark. */
+  --track-bg: rgba(255, 255, 255, 0.12);
+
+  --surface-deep: rgba(0, 0, 0, 0.32);
+  --surface-deep-soft: rgba(0, 0, 0, 0.25);
+  --surface-deep-muted: rgba(0, 0, 0, 0.22);
+  --surface-deep-strong: rgba(0, 0, 0, 0.45);
+  --surface-panel-popover: rgba(20, 12, 30, 0.85);
+  --surface-panel-popover-strong: rgba(20, 12, 30, 0.88);
+  --surface-dock: rgba(10, 6, 18, 0.35);
+  --surface-window: rgba(12, 9, 20, 0.46);
+  --surface-window-focused: rgba(16, 10, 24, 0.42);
+  --surface-snake-panel: rgba(8, 4, 18, 0.62);
+  --surface-deep-light: rgba(0, 0, 0, 0.28);
+  --surface-deep-mid: rgba(0, 0, 0, 0.3);
+  --surface-deep-card: rgba(0, 0, 0, 0.38);
+  --shadow-color-md: rgba(0, 0, 0, 0.4);
+  --shadow-color-sm: rgba(0, 0, 0, 0.35);
+  --shadow-color-lg: rgba(0, 0, 0, 0.5);
+  --shadow-color-xl: rgba(0, 0, 0, 0.6);
+  --glass-sheen-start: rgba(255, 255, 255, 0.115);
+  --glass-sheen-end: rgba(255, 255, 255, 0.045);
+  --glass-sheen-focus-start: rgba(255, 255, 255, 0.13);
+  --glass-sheen-focus-end: rgba(255, 255, 255, 0.055);
+  --glass-border-faint: rgba(255, 255, 255, 0.07);
+  --accent-pink-soft: rgba(255, 109, 201, 0.18);
+  --accent-pink-faint: rgba(255, 109, 201, 0.08);
+  --accent-pink-glow: rgba(255, 109, 201, 0.24);
+  --accent-blue-faint: rgba(86, 200, 255, 0.04);
+  --accent-violet-glow: rgba(180, 140, 255, 0.4);
+  --accent-violet-glow-soft: rgba(180, 140, 255, 0.35);
+  --ambient-pink: rgba(255, 100, 200, 0.5);
+  --ambient-blue: rgba(80, 220, 255, 0.45);
+  --ambient-gold: rgba(255, 200, 100, 0.3);
+
+  --r-window: 18px;
+  --r-md: 12px;
+  --r-sm: 8px;
+  --r-pill: 100px;
+
+  /* Cross-surface relationships for the crawlable document disclosure.
+     These replace duplicated literals in the boot and document-nav styles. */
+  --doc-nav-top: 64px;
+  --z-doc-nav: 70;
+  --z-boot: 1000;
+  --z-doc-nav-noscript: 1100;
+
+  /* Topbar geometry â€” duplicated in src/lib/layout.ts so JS clamping math
+     can stay in sync. Edit in both places. */
+  --topbar-h: 42px;
+  --topbar-offset: 12px;
+  /* The bar's inner inset, and the slot its right edge gives up to the
+     document-nav chip (doc-nav.module.css). The chip is a fixed, server-
+     rendered element — it can't sit in the topbar's flex row, because the
+     topbar is client-only (ssr:false) and the chip's links must be in the
+     initial HTML. Both files read these two values, so the chip and the bar's
+     own content can never end up stacked on each other. */
+  --topbar-pad-x: 16px;
+  --docnav-slot: 84px;
+
+  /* Widget panel geometry â€” mirror of src/lib/layout.ts constants
+     (WIDGET_PANEL_WIDTH, WIDGET_PANEL_Z, WIDGET_PANEL_TRANSITION_MS).
+     Edit both files together. */
+  --widget-panel-w: 260px;
+  --widget-panel-z: 8;
+  --widget-panel-tr: 220ms;
+
+  /* Typography scale. Use these tokens (or the matching Tailwind text-fs-*
+     utilities below) instead of literal pixel values in components. */
+  --fs-xs: 10px;
+  --fs-sm: 11px;
+  --fs-base: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 32px;
+  --fs-display: 64px;
+
+  /* Canvas-rendered surfaces (Snake game grid, particle scene overlays).
+     These are sampled via getComputedStyle from .tsx; do not inline hex. */
+  --canvas-grid-stroke: rgba(240, 232, 255, 0.03);
+  --canvas-eye: var(--fg-1);
+
+  /* Mobile shell geometry. The shell is a phone-style layout swapped in at
+     viewports <= 767px (see MOBILE_BREAKPOINT in src/lib/layout.ts). Keep
+     these tokens in sync with styles/mobile.css. */
+  --mobile-appbar-h: 56px;          /* top bar of the full-screen app frame */
+  --mobile-pad-x: 20px;             /* horizontal page padding */
+  --mobile-grid-gap: 16px;          /* gap between app tiles (on the 4/8 scale) */
+  --mobile-tile-r: 18px;            /* tile corner radius */
+  --mobile-tile-h: 80px;            /* tile height (icon + gap + label) — also the
+                                       home grid's row-track size, so the grid can
+                                       auto-fill as many rows as the screen fits */
+
+  /* Mobile spacing scale — a single 4/8pt rhythm for the whole phone shell.
+     Rule: space WITHIN a group < space BETWEEN groups (use sp-2/sp-3 inside a
+     card, sp-5/sp-6 between page sections). Everything snaps to these. */
+  --m-sp-1: 4px;
+  --m-sp-2: 8px;
+  --m-sp-3: 12px;
+  --m-sp-4: 16px;
+  --m-sp-5: 24px;
+  --m-sp-6: 32px;
+
+  /* The single interactive accent for the mobile widgets (play button, art
+     block, progress, FPS bar, live dots). One token = one-line recolor.
+     Periwinkle — a soft, desaturated blue-violet pulled from the purple base so
+     the accent harmonizes with the background instead of popping (the prior
+     violet read too purple, azure too blue). */
+  --m-accent: #7f8be0;
+
+  /* Mobile surface ramp — elevation comes from lightness + hairlines, not glow.
+     One neutral glass shared by every widget card so they read as one system;
+     the hero (Now Playing) steps up to surface-2. Ambient color lives in the
+     background blooms, not in per-card chrome. The single interactive accent
+     is --m-accent. */
+  --m-card-fill: rgba(255, 255, 255, 0.05);   /* base card glass */
+  --m-card-fill-hero: rgba(255, 255, 255, 0.08); /* raised hero card */
+  --m-hairline: rgba(255, 255, 255, 0.10);    /* card border */
+  --m-specular: rgba(255, 255, 255, 0.14);    /* top-lit inner highlight */
+  --m-specular-strong: rgba(255, 255, 255, 0.16);
+  --m-specular-bright: rgba(255, 255, 255, 0.18);
+  --m-sheen-faint: rgba(255, 255, 255, 0.02);
+  --m-sheen-barely: rgba(255, 255, 255, 0.015);
+  --mobile-tile-bg: rgba(255, 255, 255, 0.07);
+  --mobile-tile-bg-active: rgba(255, 255, 255, 0.14);
+
+  /* Opaque "world" background shared by the full-screen surfaces that overlay
+     the home screen (the app frame and the all-apps drawer). Mirrors the site's
+     own background so opening an app or the drawer keeps you in the same purple
+     world instead of dropping onto a flat near-black panel: warm radial base
+     (echoes `.lc-bg`) under pink/blue/violet blooms (echo `.lc-iridescent`).
+     The base layer is opaque so whatever sits behind is fully hidden. */
+  --mobile-world-bg:
+    /* Edge fades first (topmost layers): converge the very top/bottom edges
+       to the solid --bg-deep that iOS Safari paints in the status-bar /
+       home-indicator bands outside the page (see html/body below), so the
+       surface appears to continue into the OS chrome instead of seaming.
+
+       TWO stacked fades per edge, not one: a single linear fade reads as a
+       step at the chrome boundary — the eye catches the sudden onset of
+       slope, so the first strip of page glows purple against the solid band
+       (reported from device). Two linear gradients multiply into an eased
+       curve: near-solid black that lets go gently. This is exactly why the
+       home screen reads smooth — its wallpaper stacks the 96px page-edge
+       fade (.lc-root::after) on the 170px top scrim / 300px bottom scrim. */
+    /* The solid holds (56px top / 96px bottom) pin true --bg-deep through
+       the zone the OS chrome sits against — status bar ≈54px, Safari's
+       bottom bar ≈96px — so the melt visibly begins on-screen, below/above
+       the seam, never at it. */
+    linear-gradient(180deg, var(--bg-deep) 56px, transparent 208px),
+    linear-gradient(180deg, var(--bg-deep) 56px, transparent 368px),
+    linear-gradient(0deg, var(--bg-deep) 96px, transparent 288px),
+    linear-gradient(0deg, var(--bg-deep) 96px, transparent 472px),
+    linear-gradient(180deg, var(--glass-bg-lift), transparent 22%),
+    radial-gradient(
+      circle at 18% 12%,
+      color-mix(in srgb, var(--accent-pink) 26%, transparent),
+      transparent 46%
+    ),
+    radial-gradient(
+      circle at 84% 86%,
+      color-mix(in srgb, var(--accent-blue) 18%, transparent),
+      transparent 48%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--accent-violet) 16%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse at 30% 18%,
+      var(--bg-warm) 0%,
+      var(--bg-mid) 62%,
+      var(--bg-deep) 100%
+    );
+
+  /* Bottom dock (locked tray of primary apps). Floats with frosted glass +
+     breathing-room margins from the screen edges so it reads as a discrete
+     surface, not part of the grid. */
+  /* Tray height = top pad 13 + icon 54 + gap 8 + label 11 + bottom pad 14. */
+  --mobile-dock-h: 100px;
+  --mobile-dock-inset: 12px;       /* gap from screen edges (left/right) */
+  /* Sits above the home indicator. The shell root already pads
+     env(safe-area-inset-bottom), so on a notched phone this stacks to the
+     design's ~50px; on a non-notched screen it's the whole gap. */
+  --mobile-dock-gap-bottom: 16px;
+  --mobile-dock-pad-x: 4px;        /* tray inner padding — the morph pill's slot math reads this */
+  --mobile-dock-gap: 0px;          /* slots are equal flex columns — ditto */
+  /* Button height = icon + gap + one label line. The morph pill's top-offset
+     math reads this to stay centered on the icon cell. */
+  --mobile-dock-btn-h: 73px;
+
+  /* Home-screen widget cards. Two sizes — full-width "medium" and the small
+     half-width pair (Pulse + Weather). Numbers chosen so two `small` cards
+     plus the grid gap = one `medium`, giving the layout an iOS-cohesive feel. */
+  --mobile-widget-r: 20px;
+  --mobile-widget-pad: 16px;
+  --mobile-widget-gap: 12px;
+  --mobile-widget-bg: rgba(255, 255, 255, 0.06);
+  --mobile-widget-bg-strong: rgba(255, 255, 255, 0.09);
+  --mobile-widget-h-md: 132px;     /* medium card (full-width Now Playing) */
+  --mobile-widget-h-sm: 120px;     /* small cards (Pulse / Weather pair)  */
+
+  /* Dock separator and Launchpad overlay tokens. */
+  --dock-sep: var(--glass-bg);
+  --launchpad-bg: rgba(8, 10, 18, 0.88);
+  --launchpad-blur: 32px;
+  /* Tile base sits one step below glass on purpose so the icon reads first. */
+  --launchpad-tile-bg: rgba(255, 255, 255, 0.06);
+  --launchpad-tile-bg-hover: var(--glass-bg);
+  --launchpad-in: 180ms;
+  --launchpad-out: 140ms;
+
+  /* Motion curves for the mobile shell. settle = gentle overshoot for
+     surfaces sliding into place (dock pill travel); pop = bouncier overshoot
+     for press-release feedback on tiles/buttons. Shared as tokens because
+     multiple selectors reference the same physical "material". */
+  --spring-settle: cubic-bezier(0.3, 1.25, 0.4, 1);
+  --spring-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Liquid Depth — shared material language for the mobile shell.
+     Elevation is a three-tier shadow scale (rest = grid tiles, raised =
+     widget cards, float = dock/overlay chrome) plus one specular top edge
+     shared by every glass surface ("light catches the rim"). Shadow colors
+     reuse the existing theme-able tokens so themes recolor these for free. */
+  --glass-specular: inset 0 1px 0 var(--m-specular);
+  --m-shadow-rest: 0 8px 18px var(--shadow-color-sm);
+  --m-shadow-raised: 0 10px 26px var(--surface-deep-card);
+  --m-shadow-float: 0 16px 40px var(--shadow-color-lg);
+  /* One step below --m-card-fill (0.05): the small glance cards (Pulse /
+     Weather) sit visually deeper than the hero so hierarchy reads at a glance. */
+  --m-card-fill-deep: rgba(255, 255, 255, 0.04);
+
+  /* Diameter of the press-glow radiance in the mobile environment layer. */
+  --mobile-env-glow-size: 320px;
+
+  /* ── Mobile home: "Editorial" status console ──────────────────────────
+     The phone home screen is a widget console, not an app grid (every app
+     lives behind ▦ in the dock). These tokens own that surface. Colors all
+     resolve through the palette above, so the four themes recolor it free.
+
+     Geometry is authored against a 390×844 reference phone; the shell scales
+     the column and lets the widget stack scroll on shorter screens rather
+     than shrinking cards below their legible minimum. */
+  --mh-pad-x: 18px;               /* page gutter (tighter than --mobile-pad-x) */
+  --mh-gap: 13px;                 /* widget grid gap, both axes */
+  --mh-card-r: 22px;              /* widget card radius */
+  --mh-card-pad: 16px;            /* small-card padding */
+  --mh-card-min-h: 150px;         /* small-card (pulse / weather) min height */
+  --mh-dock-r: 30px;              /* dock tray radius */
+  --mh-dock-icon: 54px;           /* dock icon cell */
+  --mh-dock-icon-r: 17px;
+  --mh-ring: 94px;                /* player progress ring diameter */
+  --mh-masthead-fs: 48px;         /* serif brand line (fluid-clamped in mobile.css) */
+
+  /* Card materials. Base = the three glance cards; hero = the player, one
+     step brighter with a violet bloom so it leads the hierarchy. Both are a
+     white sheen gradient over a dark tint, matching the desktop window
+     material so the phone reads as the same OS. */
+  --mh-card-tint: rgba(12, 9, 20, 0.45);
+  --mh-card-tint-hero: rgba(12, 9, 20, 0.5);
+  --mh-card-bg:
+    linear-gradient(135deg, var(--glass-bg), var(--glass-bg-subtle)),
+    var(--mh-card-tint);
+  --mh-card-bg-hero:
+    linear-gradient(135deg, var(--glass-sheen-start), var(--glass-sheen-end)),
+    var(--mh-card-tint-hero);
+  --mh-card-border: var(--glass-border);
+  --mh-card-border-hero: rgba(255, 255, 255, 0.12);
+  --mh-card-blur: blur(24px);
+  --mh-card-blur-hero: blur(28px) saturate(125%);
+  --mh-card-shadow:
+    inset 0 1px 0 var(--m-specular-strong),
+    0 14px 34px -18px var(--shadow-color-xl);
+  --mh-card-shadow-hero:
+    inset 0 0 0 1px var(--glass-bg-lift),
+    0 18px 44px -18px var(--shadow-color-xl),
+    0 0 60px -18px var(--accent-violet-glow);
+
+  /* Chrome surfaces pinned to the bottom (ask bar + dock). Darker and more
+     saturated than the cards so they read as fixed furniture over a moving
+     wallpaper rather than another floating card. */
+  --mh-chrome-bg: rgba(10, 6, 18, 0.5);
+  --mh-chrome-bg-dock: rgba(10, 6, 18, 0.45);
+  --mh-chrome-blur: blur(30px) saturate(160%);
+  --mh-chrome-blur-dock: blur(30px) saturate(180%);
+  --mh-chrome-shadow:
+    inset 0 1px 0 var(--m-specular),
+    0 16px 44px var(--shadow-color-lg);
+
+  /* Wallpaper: drifting blooms + the canvas wireframe blob + a bottom scrim
+     that buys contrast for the ask bar and dock. */
+  --mh-scrim-h: 300px;
+  --mh-scrim: linear-gradient(to top, rgba(5, 3, 8, 0.86), transparent);
+  /* Top scrim: iOS paints the status-bar band outside the page with the
+     document's background-color (--bg-deep). Without a fade the blooms run
+     bright color straight into that band and seam hard; this dissolves the
+     wallpaper up into the same color so the page appears to continue into
+     the OS chrome. var(--bg-deep) keeps it correct across themes. */
+  --mh-scrim-top-h: 170px;
+  --mh-scrim-top: linear-gradient(to bottom, var(--bg-deep), transparent);
+  --mh-bloom-blur: 48px;
+  --mh-bloom-dur: 24s;
+
+  /* Blob stroke colors as bare "r, g, b" triplets — MobileBlob.tsx samples
+     these with getComputedStyle and composes rgba() per stroke at varying
+     alpha, which a hex or rgba() token can't express. Mirror of --fg-1 /
+     --accent-pink / --accent-blue; themes below re-point them. */
+  --mh-blob-fg: 240, 232, 255;
+  --mh-blob-warm: 255, 109, 201;
+  --mh-blob-cool: 86, 200, 255;
+
+  /* Entrance stagger — one 420ms rise, offset per block top-to-bottom. */
+  --mh-rise-dur: 420ms;
+}
+
+/* ── Appearance themes ────────────────────────────────────────────────
+   Activated by the `theme <name>` zsh command, which sets
+   `data-theme="<name>"` on <html>. Each block re-points the color tokens
+   above; because the whole UI reads from tokens, a theme is a pure recolor
+   with no per-component overrides. Color literals live here (the only file
+   the UI-contract check allows them in). `default` is the base :root palette.
+   The :root[data-theme=…] selectors outrank the bare :root defaults. */
+
+/* mono — desaturated greyscale, dark */
+:root[data-theme="mono"] {
+  --bg-deep: #070707;
+  --bg-mid: #101010;
+  --bg-warm: #1e1e1e;
+
+  --fg-1: #f2f2f2;
+  --fg-2: rgba(242, 242, 242, 0.7);
+  --fg-3: rgba(242, 242, 242, 0.55);
+  --fg-inverse: #070707;
+
+  --accent-pink: #ededed;
+  --accent-blue: #c8c8c8;
+  --accent-gold: #f5f5f5;
+  --accent-violet: #dcdcdc;
+  --accent-violet-shadow: rgba(220, 220, 220, 0.24);
+  --accent-violet-shadow-strong: rgba(220, 220, 220, 0.32);
+
+  --accent-pink-soft: rgba(237, 237, 237, 0.18);
+  --accent-pink-faint: rgba(237, 237, 237, 0.08);
+  --accent-pink-glow: rgba(237, 237, 237, 0.24);
+  --accent-blue-faint: rgba(200, 200, 200, 0.05);
+  --accent-violet-glow: rgba(230, 230, 230, 0.4);
+  --accent-violet-glow-soft: rgba(230, 230, 230, 0.32);
+
+  --ambient-pink: rgba(255, 255, 255, 0.32);
+  --ambient-blue: rgba(255, 255, 255, 0.22);
+  --ambient-gold: rgba(255, 255, 255, 0.16);
+
+  --m-accent: #cfcfcf;
+
+  --mh-blob-fg: 242, 242, 242;
+  --mh-blob-warm: 237, 237, 237;
+  --mh-blob-cool: 200, 200, 200;
+
+  /* Bottom scrim tinted to THIS theme's deep — the :root literal carries the
+     default theme's purple-black and would cast against the neutral base. */
+  --mh-scrim: linear-gradient(to top, rgba(7, 7, 7, 0.86), transparent);
+}
+
+/* phosphor — green CRT terminal, dark */
+:root[data-theme="phosphor"] {
+  --bg-deep: #020a04;
+  --bg-mid: #04160c;
+  --bg-warm: #073018;
+
+  --fg-1: #b9ffce;
+  --fg-2: rgba(185, 255, 206, 0.72);
+  --fg-3: rgba(185, 255, 206, 0.55);
+  --fg-inverse: #020a04;
+
+  --accent-pink: #4dffae;
+  --accent-blue: #44e6b0;
+  --accent-gold: #9dff66;
+  --accent-violet: #6bffc1;
+  --accent-violet-shadow: rgba(107, 255, 193, 0.24);
+  --accent-violet-shadow-strong: rgba(107, 255, 193, 0.34);
+
+  --accent-pink-soft: rgba(77, 255, 174, 0.18);
+  --accent-pink-faint: rgba(77, 255, 174, 0.08);
+  --accent-pink-glow: rgba(77, 255, 174, 0.26);
+  --accent-blue-faint: rgba(68, 230, 176, 0.05);
+  --accent-violet-glow: rgba(107, 255, 193, 0.42);
+  --accent-violet-glow-soft: rgba(107, 255, 193, 0.34);
+
+  --ambient-pink: rgba(80, 255, 160, 0.42);
+  --ambient-blue: rgba(60, 220, 160, 0.38);
+  --ambient-gold: rgba(150, 255, 90, 0.28);
+
+  --canvas-grid-stroke: rgba(185, 255, 206, 0.05);
+  --m-accent: #4dffae;
+
+  --mh-blob-fg: 185, 255, 206;
+  --mh-blob-warm: 77, 255, 174;
+  --mh-blob-cool: 68, 230, 176;
+
+  /* Bottom scrim tinted to THIS theme's deep — see the mono note above. */
+  --mh-scrim: linear-gradient(to top, rgba(2, 10, 4, 0.86), transparent);
+}
+
+/* paper — light theme */
+:root[data-theme="paper"] {
+  --bg-deep: #e7e2d7;
+  --bg-mid: #f1ede4;
+  --bg-warm: #fbf9f4;
+
+  --fg-1: #1b1722;
+  --fg-2: rgba(27, 23, 34, 0.72);
+  --fg-3: rgba(27, 23, 34, 0.68);
+  --fg-inverse: #fbf9f4;
+
+  --accent-pink: #d12f8d;
+  --accent-blue: #1f7fbf;
+  --accent-gold: #b9791a;
+  --accent-violet: #8b3fd6;
+  --accent-violet-shadow: rgba(139, 63, 214, 0.22);
+  --accent-violet-shadow-strong: rgba(139, 63, 214, 0.3);
+
+  --accent-pink-soft: rgba(209, 47, 141, 0.16);
+  --accent-pink-faint: rgba(209, 47, 141, 0.08);
+  --accent-pink-glow: rgba(209, 47, 141, 0.22);
+  --accent-blue-faint: rgba(31, 127, 191, 0.06);
+  --accent-violet-glow: rgba(139, 63, 214, 0.34);
+  --accent-violet-glow-soft: rgba(139, 63, 214, 0.28);
+
+  /* Glass flips from white-on-dark to dark-on-light so panels read at all. */
+  --glass-bg: rgba(20, 16, 28, 0.06);
+  --glass-bg-whisper: rgba(20, 16, 28, 0.02);
+  --glass-bg-subtle: rgba(20, 16, 28, 0.03);
+  --glass-bg-muted: rgba(20, 16, 28, 0.04);
+  --glass-bg-lift: rgba(20, 16, 28, 0.05);
+  --glass-bg-raised: rgba(20, 16, 28, 0.07);
+  --glass-bg-hover: rgba(20, 16, 28, 0.1);
+  --glass-border: rgba(20, 16, 28, 0.12);
+  --glass-border-strong: rgba(20, 16, 28, 0.2);
+  --glass-border-bright: rgba(20, 16, 28, 0.3);
+  --glass-border-faint: rgba(20, 16, 28, 0.08);
+  --track-bg: rgba(20, 16, 28, 0.1);
+
+  /* Window / chrome surfaces become light frosted panels. */
+  --surface-window: rgba(255, 255, 255, 0.58);
+  --surface-window-focused: rgba(255, 255, 255, 0.68);
+  --surface-dock: rgba(255, 255, 255, 0.5);
+  --surface-panel-popover: rgba(250, 248, 243, 0.92);
+  --surface-panel-popover-strong: rgba(250, 248, 243, 0.95);
+  --surface-snake-panel: rgba(255, 255, 255, 0.62);
+  --surface-deep-card: rgba(255, 255, 255, 0.5);
+
+  /* Inset "deep" surfaces become subtle dark tints on the light base. */
+  --surface-deep: rgba(20, 16, 28, 0.06);
+  --surface-deep-soft: rgba(20, 16, 28, 0.05);
+  --surface-deep-muted: rgba(20, 16, 28, 0.04);
+  --surface-deep-strong: rgba(20, 16, 28, 0.1);
+  --surface-deep-light: rgba(20, 16, 28, 0.05);
+  --surface-deep-mid: rgba(20, 16, 28, 0.06);
+
+  /* Sheen highlights stay white but barely-there so light glass keeps gloss. */
+  --glass-sheen-start: rgba(255, 255, 255, 0.5);
+  --glass-sheen-end: rgba(255, 255, 255, 0.15);
+  --glass-sheen-focus-start: rgba(255, 255, 255, 0.55);
+  --glass-sheen-focus-end: rgba(255, 255, 255, 0.2);
+
+  --ambient-pink: rgba(255, 120, 200, 0.22);
+  --ambient-blue: rgba(80, 180, 255, 0.2);
+  --ambient-gold: rgba(255, 190, 90, 0.16);
+
+  --canvas-grid-stroke: rgba(27, 23, 34, 0.06);
+  --canvas-eye: var(--fg-1);
+
+  /* Mobile home console: card tints and bottom chrome flip from dark glass to
+     light frosted panels, and the bottom scrim fades to the light base — the
+     dark defaults would read as ink blots on this theme. */
+  --mh-card-tint: rgba(255, 255, 255, 0.55);
+  --mh-card-tint-hero: rgba(255, 255, 255, 0.66);
+  --mh-card-border-hero: rgba(20, 16, 28, 0.16);
+  --mh-chrome-bg: rgba(255, 255, 255, 0.6);
+  --mh-chrome-bg-dock: rgba(255, 255, 255, 0.55);
+  --mh-scrim: linear-gradient(to top, rgba(231, 226, 215, 0.86), transparent);
+  /* Blob strokes invert to ink on the light base. */
+  --mh-blob-fg: 27, 23, 34;
+  --mh-blob-warm: 209, 47, 141;
+  --mh-blob-cool: 31, 127, 191;
+
+  /* Overlays / launchpad flip to a light frosted wash. */
+  --launchpad-bg: rgba(244, 241, 234, 0.9);
+  --launchpad-tile-bg: rgba(20, 16, 28, 0.05);
+  --launchpad-tile-bg-hover: rgba(20, 16, 28, 0.09);
+  --dock-sep: rgba(20, 16, 28, 0.12);
+}
+
+/* Expose tokens to Tailwind 4's utility pipeline so we can use
+   classes like text-fg-1, bg-bg-deep, border-glass-border, etc. */
+@theme inline {
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-mid: var(--bg-mid);
+  --color-bg-warm: var(--bg-warm);
+
+  --color-fg-1: var(--fg-1);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+
+  --color-accent-pink: var(--accent-pink);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-violet: var(--accent-violet);
+
+  --color-glass-bg: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
+  --color-glass-border-strong: var(--glass-border-strong);
+  --color-track-bg: var(--track-bg);
+
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, Menlo, monospace;
+
+  --radius-window: var(--r-window);
+  --radius-md: var(--r-md);
+  --radius-sm: var(--r-sm);
+  --radius-pill: var(--r-pill);
+
+  /* Typography scale exposed as Tailwind utilities (text-fs-xs â€¦ text-fs-display). */
+  --text-fs-xs: var(--fs-xs);
+  --text-fs-sm: var(--fs-sm);
+  --text-fs-base: var(--fs-base);
+  --text-fs-md: var(--fs-md);
+  --text-fs-lg: var(--fs-lg);
+  --text-fs-xl: var(--fs-xl);
+  --text-fs-display: var(--fs-display);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  /* iOS Safari fills the status-bar / home-indicator safe areas with the
+     document's computed background-COLOR; background-images (this gradient)
+     never propagate there. Without a solid color layer the canvas is
+     transparent and Safari paints those bands white. */
+  background-color: var(--bg-deep);
+  background-image: radial-gradient(
+    ellipse at 30% 20%,
+    var(--bg-warm) 0%,
+    var(--bg-mid) 60%,
+    var(--bg-deep) 100%
+  );
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--fg-1);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

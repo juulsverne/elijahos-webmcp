@@ -1,0 +1,5 @@
+/* Mini-app styles — aggregator. One file per app so additions don't
+   bloat a single sheet. */
+@import "./mini-apps/calculator.css";
+@import "./mini-apps/clock.css";
+@import "./mini-apps/snake.css";

@@ -1,0 +1,291 @@
+{
+  "total": 37,
+  "clusters": [
+    {
+      "id": "about",
+      "chunks": 16,
+      "weight": 1
+    },
+    {
+      "id": "projects",
+      "chunks": 4,
+      "weight": 0.25
+    },
+    {
+      "id": "resume",
+      "chunks": 5,
+      "weight": 0.3125
+    },
+    {
+      "id": "contact",
+      "chunks": 4,
+      "weight": 0.25
+    },
+    {
+      "id": "core",
+      "chunks": 8,
+      "weight": 0.5
+    }
+  ],
+  "points": [
+    {
+      "id": "bio-1",
+      "c": 0,
+      "x": 0.351,
+      "y": 0.929,
+      "z": 0.632
+    },
+    {
+      "id": "bio-2",
+      "c": 0,
+      "x": 0.648,
+      "y": -0.306,
+      "z": -0.134
+    },
+    {
+      "id": "bio-3",
+      "c": 0,
+      "x": -0.118,
+      "y": 0.46,
+      "z": -0.9
+    },
+    {
+      "id": "bio-4",
+      "c": 0,
+      "x": 0.179,
+      "y": -0.9,
+      "z": -0.655
+    },
+    {
+      "id": "bio-5",
+      "c": 0,
+      "x": -0.587,
+      "y": -0.134,
+      "z": 0.58
+    },
+    {
+      "id": "bio-6",
+      "c": 0,
+      "x": -0.29,
+      "y": 0.632,
+      "z": -0.186
+    },
+    {
+      "id": "pillar-Enterprise AI Systems",
+      "c": 0,
+      "x": -0.509,
+      "y": 0.051,
+      "z": 0.444
+    },
+    {
+      "id": "pillar-Agent Operations",
+      "c": 0,
+      "x": 0.483,
+      "y": 0.4,
+      "z": 0.315
+    },
+    {
+      "id": "pillar-AI Operating Models",
+      "c": 0,
+      "x": -0.408,
+      "y": 0.877,
+      "z": 0.72
+    },
+    {
+      "id": "pillar-Finance & Operations",
+      "c": 0,
+      "x": -0.791,
+      "y": -0.596,
+      "z": 0.46
+    },
+    {
+      "id": "answer-role-fit-ai-transformation-engineer",
+      "c": 0,
+      "x": -0.629,
+      "y": -0.884,
+      "z": 0.978
+    },
+    {
+      "id": "answer-differentiator",
+      "c": 0,
+      "x": 0.078,
+      "y": -0.24,
+      "z": -0.977
+    },
+    {
+      "id": "answer-career-finance-to-ai-transition",
+      "c": 0,
+      "x": -0.716,
+      "y": -0.149,
+      "z": 0.95
+    },
+    {
+      "id": "answer-ai-roi-operating-philosophy",
+      "c": 0,
+      "x": -0.78,
+      "y": -0.214,
+      "z": -0.957
+    },
+    {
+      "id": "answer-workflow-automation-method",
+      "c": 0,
+      "x": -0.481,
+      "y": -0.611,
+      "z": 0.509
+    },
+    {
+      "id": "answer-availability",
+      "c": 0,
+      "x": 0.16,
+      "y": -0.044,
+      "z": -0.16
+    },
+    {
+      "id": "project-vibe-modeling",
+      "c": 1,
+      "x": 0.418,
+      "y": 0.348,
+      "z": -0.565
+    },
+    {
+      "id": "project-glyph",
+      "c": 1,
+      "x": -0.179,
+      "y": -0.162,
+      "z": 0.287
+    },
+    {
+      "id": "project-finance-ai-workshop",
+      "c": 1,
+      "x": 0.903,
+      "y": -0.251,
+      "z": -0.188
+    },
+    {
+      "id": "project-elijahos",
+      "c": 1,
+      "x": -0.534,
+      "y": 0.837,
+      "z": 0.411
+    },
+    {
+      "id": "experience-0-AI Transformation Engineer",
+      "c": 2,
+      "x": -0.775,
+      "y": -0.722,
+      "z": -0.306
+    },
+    {
+      "id": "experience-1-Financial Analyst",
+      "c": 2,
+      "x": 0.364,
+      "y": -0.945,
+      "z": 0.867
+    },
+    {
+      "id": "experience-2-Financial Analyst",
+      "c": 2,
+      "x": -0.705,
+      "y": -0.845,
+      "z": 0.947
+    },
+    {
+      "id": "experience-3-Project Manager",
+      "c": 2,
+      "x": -0.337,
+      "y": 0.136,
+      "z": 0.794
+    },
+    {
+      "id": "education-0-University of Illinois at Urbana-Champaign",
+      "c": 2,
+      "x": 0.013,
+      "y": -0.513,
+      "z": -0.55
+    },
+    {
+      "id": "contact-emailUser",
+      "c": 3,
+      "x": -0.349,
+      "y": 0.653,
+      "z": -0.526
+    },
+    {
+      "id": "contact-emailDomain",
+      "c": 3,
+      "x": -0.94,
+      "y": -0.304,
+      "z": 0.425
+    },
+    {
+      "id": "contact-github",
+      "c": 3,
+      "x": 0.045,
+      "y": 0.987,
+      "z": 0.359
+    },
+    {
+      "id": "contact-linkedin",
+      "c": 3,
+      "x": 0.219,
+      "y": 0.649,
+      "z": -0.837
+    },
+    {
+      "id": "identity-name",
+      "c": 4,
+      "x": 0.968,
+      "y": -0.588,
+      "z": -0.289
+    },
+    {
+      "id": "identity-role",
+      "c": 4,
+      "x": -0.002,
+      "y": 0.031,
+      "z": 0.428
+    },
+    {
+      "id": "identity-location",
+      "c": 4,
+      "x": 0.152,
+      "y": 0.808,
+      "z": 0.718
+    },
+    {
+      "id": "comparison-1",
+      "c": 4,
+      "x": 0.628,
+      "y": 0.27,
+      "z": 0.932
+    },
+    {
+      "id": "comparison-2",
+      "c": 4,
+      "x": 0.331,
+      "y": 0.567,
+      "z": -0.303
+    },
+    {
+      "id": "comparison-3",
+      "c": 4,
+      "x": -0.904,
+      "y": -0.199,
+      "z": 0.463
+    },
+    {
+      "id": "comparison-4",
+      "c": 4,
+      "x": 0.8,
+      "y": -0.027,
+      "z": -0.897
+    },
+    {
+      "id": "comparison-5",
+      "c": 4,
+      "x": -0.435,
+      "y": -0.793,
+      "z": -0.131
+    }
+  ]
+}

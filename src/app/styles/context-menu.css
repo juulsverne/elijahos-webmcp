@@ -1,0 +1,167 @@
+.desktop-menu {
+  position: fixed;
+  z-index: 900;
+  min-width: 238px;
+  padding: 8px;
+  color: var(--fg-1);
+  background:
+    linear-gradient(
+      135deg,
+      var(--glass-sheen-start),
+      var(--glass-sheen-end)
+    ),
+    var(--surface-window);
+  backdrop-filter: blur(28px) saturate(125%) brightness(0.94);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-window);
+  box-shadow:
+    0 0 0 1px var(--glass-bg-lift) inset,
+    0 24px 60px var(--shadow-color-lg),
+    0 0 80px -20px var(--accent-violet-glow);
+  transform-origin: top left;
+  animation: desktopMenuIn 120ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.desktop-menu-title {
+  padding: 6px 10px 8px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  color: var(--fg-2);
+  user-select: none;
+}
+
+.desktop-menu-item {
+  width: 100%;
+  min-height: 32px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--fg-2);
+  font: inherit;
+  font-size: var(--fs-sm);
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.14s ease,
+    border-color 0.14s ease,
+    color 0.14s ease;
+}
+
+.desktop-menu-item:hover,
+.desktop-menu-item:focus-visible {
+  color: var(--fg-1);
+  background: var(--glass-sheen-start);
+  border-color: var(--glass-border);
+  outline: none;
+}
+
+.desktop-menu-item:disabled {
+  color: var(--fg-3);
+  cursor: default;
+  opacity: 0.55;
+}
+
+.desktop-menu-item:disabled:hover {
+  background: transparent;
+  border-color: transparent;
+}
+
+.desktop-menu-icon {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1;
+  color: var(--accent-blue);
+  background: var(--glass-bg-lift);
+  border: 1px solid var(--glass-border-faint);
+  border-radius: 6px;
+}
+
+.desktop-menu-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.desktop-menu-shortcut {
+  justify-self: end;
+  padding-left: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+
+.desktop-menu-separator {
+  height: 1px;
+  margin: 6px 4px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--glass-sheen-focus-start),
+    transparent
+  );
+}
+
+/* ── "Open App ▸" submenu ─────────────────────────────────────────── */
+.desktop-submenu-wrap {
+  position: relative;
+}
+
+.desktop-menu-chevron {
+  justify-self: end;
+  padding-left: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1;
+  color: var(--fg-3);
+}
+
+/* Nested panel. Reuses the glass .desktop-menu look but anchors absolutely to
+   the trigger row instead of the viewport. The compound selector outranks
+   `.desktop-menu { position: fixed }` so the override is order-independent. */
+.desktop-menu.desktop-submenu {
+  position: absolute;
+  top: -9px; /* cancel the parent's 8px padding + 1px border so rows align */
+  min-width: 200px;
+  z-index: 901;
+}
+
+.desktop-submenu--right {
+  left: 100%;
+  margin-left: 6px;
+}
+
+.desktop-submenu--left {
+  right: 100%;
+  margin-right: 6px;
+}
+
+/* ── Footer reboot action ─────────────────────────────────────────── */
+/* A preceding separator sets it apart as a system action; the warm icon tint
+   signals "power/restart" so it doesn't read as just another launch. */
+.desktop-menu-reboot .desktop-menu-icon {
+  color: var(--accent-gold);
+}
+
+@keyframes desktopMenuIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

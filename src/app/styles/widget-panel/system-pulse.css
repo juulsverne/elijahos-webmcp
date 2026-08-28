@@ -1,0 +1,273 @@
+/* ── System Pulse ─────────────────────────────────────────────────── */
+/* Pulse stretches to absorb leftover panel height — its log grows to fill,
+   so you actually see more activity on tall screens. It must also be able to
+   *shrink* on short viewports: with shrink disabled the card would overflow
+   the panel's hidden box and get its rounded bottom clipped. min-height:0
+   lets the column shrink below its content, handing the slack to the log
+   (which scrolls internally) so the whole card — corners and all — stays
+   inside the panel. */
+.pulse-widget {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+/* SVG bolt in the head — sized to sit on the 9px uppercase label and tinted
+   via currentColor so it inherits the head's --fg-3. */
+.pulse-widget .pulse-head-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.pulse-widget .pulse-head-icon {
+  width: 10px;
+  height: 10px;
+}
+.pulse-widget .pulse-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(4px, 1dvh, 6px);
+  margin-bottom: clamp(6px, 1.6dvh, 10px);
+}
+.pulse-widget .pulse-cell {
+  background: var(--glass-bg-whisper);
+  border-radius: 6px;
+  padding: clamp(4px, 1.1dvh, 6px) 8px;
+}
+.pulse-widget .pulse-cell-label {
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+  text-transform: uppercase;
+}
+.pulse-widget .pulse-cell-value {
+  font-size: clamp(12px, 2.5dvh, 14px);
+  font-weight: 600;
+  color: var(--fg-1);
+}
+.pulse-widget .pulse-cell.fps .pulse-cell-value { color: var(--accent-violet); }
+.pulse-widget .pulse-cell.heap .pulse-cell-value { color: var(--accent-blue); }
+.pulse-widget .pulse-cell.cores .pulse-cell-value { color: var(--fg-2); }
+.pulse-widget .pulse-cell.net .pulse-cell-value { color: var(--accent-pink); }
+.pulse-widget .pulse-bar {
+  height: 2px;
+  border-radius: 1px;
+  background: var(--glass-bg-lift);
+  margin-top: 2px;
+  overflow: hidden;
+}
+.pulse-widget .pulse-bar-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: 1px;
+  /* Full-width fill slid left by (1 - --v) inside the clipped track — the
+     meter republishes continuously, and translateX stays on the compositor
+     where a width write would re-layout the panel every sample. */
+  transform: translateX(calc(var(--v, 0) * 100% - 100%));
+  transition: transform 320ms ease-out;
+}
+.pulse-widget .pulse-bar-fill--violet { background: var(--accent-violet); }
+.pulse-widget .pulse-bar-fill--blue { background: var(--accent-blue); }
+.pulse-widget .pulse-cell-sublabel { margin-top: 2px; }
+.pulse-widget .pulse-proc--empty { opacity: 0.5; }
+.pulse-widget .pulse-log-empty { opacity: 0.5; }
+.pulse-widget .pulse-section-label {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  margin-bottom: clamp(3px, 0.8dvh, 4px);
+}
+.pulse-widget .pulse-procs-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pulse-widget .pulse-kill-all {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: pointer;
+  transition: color 0.14s ease, background 0.14s ease, border-color 0.14s ease;
+}
+.pulse-widget .pulse-kill-all:hover {
+  color: var(--accent-pink);
+  background: color-mix(in srgb, var(--accent-pink) 18%, transparent);
+  border-color: color-mix(in srgb, var(--accent-pink) 50%, transparent);
+}
+.pulse-widget .pulse-procs {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2px, 0.7dvh, 3px);
+  margin-bottom: clamp(6px, 1.6dvh, 10px);
+}
+.pulse-widget .pulse-proc-more {
+  padding: 3px 6px;
+  font-size: 9px;
+  color: var(--fg-3);
+  letter-spacing: 0.05em;
+  font-style: italic;
+}
+.pulse-widget .pulse-proc {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  width: 100%;
+  padding: 0;
+  border-radius: 4px;
+  color: var(--fg-2);
+  font-family: inherit;
+}
+.pulse-widget .pulse-proc.is-focused {
+  background: color-mix(in srgb, var(--accent-violet) 12%, transparent);
+  color: var(--fg-1);
+}
+.pulse-widget .pulse-proc:hover {
+  background: var(--glass-bg-subtle);
+}
+.pulse-widget .pulse-proc-main {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: clamp(2px, 0.7dvh, 3px) 6px;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  min-width: 0;
+}
+.pulse-widget .pulse-proc-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pulse-widget .pulse-proc-label > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pulse-widget .pulse-proc-icon {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  color: var(--fg-3);
+}
+.pulse-widget .pulse-proc-mem {
+  font-size: 9px;
+  color: var(--accent-violet);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+.pulse-widget .pulse-proc-kill {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  background: var(--glass-bg-lift);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  color: var(--fg-2);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  margin-right: 4px;
+  transition: color 0.14s ease, background 0.14s ease, border-color 0.14s ease, transform 0.14s ease;
+  font-family: inherit;
+}
+.pulse-widget .pulse-proc:hover .pulse-proc-kill {
+  color: var(--fg-1);
+  background: var(--glass-bg);
+  border-color: var(--glass-border-strong);
+}
+.pulse-widget .pulse-proc-kill:hover {
+  color: var(--accent-pink) !important;
+  background: color-mix(in srgb, var(--accent-pink) 22%, transparent) !important;
+  border-color: color-mix(in srgb, var(--accent-pink) 60%, transparent) !important;
+  transform: scale(1.08);
+}
+.pulse-widget .pulse-log {
+  background: var(--surface-deep);
+  border-radius: 6px;
+  padding: clamp(5px, 1.2dvh, 8px);
+  font-size: 9px;
+  line-height: 1.6;
+  /* Grows to fill remaining space inside the pulse widget; the 80px flex
+     basis keeps ~5 lines visible when there's room. min-height:0 lets it
+     shrink (scrolling internally) on short viewports instead of pushing the
+     card's rounded bottom past the panel edge where it'd be clipped. */
+  flex: 1 1 clamp(34px, 9dvh, 80px);
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid var(--glass-bg-subtle);
+  color: var(--fg-2);
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border-strong) transparent;
+}
+.pulse-widget .pulse-log::-webkit-scrollbar {
+  width: 4px;
+}
+.pulse-widget .pulse-log::-webkit-scrollbar-thumb {
+  background: var(--glass-border-strong);
+  border-radius: 4px;
+}
+.pulse-widget .pulse-log::-webkit-scrollbar-track {
+  background: transparent;
+}
+.pulse-widget .pulse-log .log-tag-info { color: var(--accent-blue); }
+.pulse-widget .pulse-log .log-tag-boot { color: var(--accent-violet); }
+.pulse-widget .pulse-log .log-tag-warn { color: var(--accent-gold); }
+.pulse-widget .pulse-log .log-tag-net  { color: var(--accent-pink); }
+.pulse-widget .pulse-log-clue {
+  margin-bottom: 2px;
+}
+
+@media (max-height: 620px) {
+  .pulse-widget .pulse-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .pulse-widget .pulse-cell {
+    padding-inline: 6px;
+  }
+
+  .pulse-widget .pulse-cell-label {
+    font-size: 7px;
+  }
+
+  .pulse-widget .pulse-cell-value {
+    font-size: 12px;
+  }
+
+  .pulse-widget .pulse-cell-sublabel,
+  .pulse-widget .pulse-bar {
+    display: none;
+  }
+
+  .pulse-widget .pulse-kill-all {
+    display: none;
+  }
+
+  .pulse-widget .pulse-log {
+    flex-basis: 38px;
+    font-size: 8px;
+    line-height: 1.35;
+  }
+}

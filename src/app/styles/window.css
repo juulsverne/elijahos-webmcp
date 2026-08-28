@@ -1,0 +1,225 @@
+﻿/* â”€â”€ Window chrome â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* NOTE on backdrop-filter: do not add manual -webkit- prefixes anywhere
+   in this file. Tailwind 4 / Lightning CSS handles vendor prefixing
+   automatically based on browserslist targets, and adding manual prefixes
+   causes it to strip BOTH declarations (see prior commit). */
+.win {
+  position: absolute;
+  /* Frosted glass with a neutral base. The darker wash and gentler
+     saturation keep stacked windows from compounding into hot magenta. */
+  background:
+    linear-gradient(
+      135deg,
+      var(--glass-sheen-start),
+      var(--glass-sheen-end)
+    ),
+    var(--surface-window);
+  backdrop-filter: blur(28px) saturate(125%) brightness(0.94);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-window);
+  box-shadow:
+    0 0 0 1px var(--glass-bg-lift) inset,
+    0 24px 60px var(--shadow-color-lg),
+    0 0 80px -20px var(--accent-violet-glow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Top-left origin keeps the minimize math in Window.tsx straightforward â€”
+     translate(tx,ty) scale(s) shrinks toward the window's top-left. */
+  transform-origin: top left;
+  transition:
+    transform 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s ease;
+  /* Default values for the minimize-to-dock translate target. Window.tsx
+     overrides these via inline style.setProperty('--mini-x', '<n>px') just
+     before flipping `.is-minimized` on. Declared here so the var() in the
+     minimized rule below never needs a fallback (Lightning CSS strips px
+     from the fallback "0px" â†’ "0", which makes translate() invalid). */
+  --mini-x: 0px;
+  --mini-y: 0px;
+}
+
+/* Minimize-to-dock animation. The `--mini-x` / `--mini-y` custom properties
+   are written onto the element by Window.tsx before this class is applied,
+   so the transition has its real end values the moment the class flips.
+   When the class is removed (window restored from dock), the transition
+   plays in reverse for free. */
+.win.is-minimized {
+  transform: translate(var(--mini-x), var(--mini-y)) scale(0.1);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Maximize / restore animation. Window.tsx adds `is-rect-anim` for ~360ms
+   around the toggle so the rect change tweens smoothly. We do NOT leave
+   these transitions on permanently â€” drag and resize update left/top/width/
+   height every pointer move, and a global transition would visibly lag. */
+.win.is-rect-anim {
+  transition:
+    left 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    top 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    width 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    height 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s ease;
+}
+
+/* Held by the titlebar: the shadow deepens so the window reads as lifted
+   off the desk, and settles again on release (box-shadow already tweens
+   via the base .win transition). Transform is deliberately untouched —
+   the drag math positions via left/top and must stay pixel-honest. */
+.win.is-dragging {
+  box-shadow:
+    0 0 0 1px var(--glass-bg-hover) inset,
+    0 40px 100px var(--shadow-color-xl),
+    0 0 120px -24px var(--accent-pink-glow);
+}
+
+.win.is-focused {
+  background:
+    linear-gradient(
+      135deg,
+      var(--glass-sheen-focus-start),
+      var(--glass-sheen-focus-end)
+    ),
+    var(--surface-window-focused);
+  box-shadow:
+    0 0 0 1px var(--glass-bg-hover) inset,
+    0 30px 80px var(--shadow-color-xl),
+    0 0 100px -28px var(--accent-pink-glow);
+}
+
+.win-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--glass-bg-lift);
+  cursor: grab;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.win-bar:active { cursor: grabbing; }
+
+.win-bar .traffic { display: flex; gap: 6px; }
+.win-bar .traffic span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--glass-border);
+  border: 1px solid var(--glass-bg-raised);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 8px;
+  color: transparent;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    transform 220ms var(--spring-pop);
+}
+.win-bar .traffic span:hover {
+  transform: scale(1.25);
+}
+.win-bar .traffic span:active {
+  transform: scale(0.85);
+  transition:
+    background 0.15s,
+    color 0.15s,
+    transform 60ms ease;
+}
+.win-bar .traffic:hover span { color: color-mix(in srgb, var(--fg-inverse) 50%, transparent); }
+.win-bar .traffic span:nth-child(1) { background: var(--traffic-close); }
+.win-bar .traffic span:nth-child(2) { background: var(--traffic-minimize); }
+.win-bar .traffic span:nth-child(3) { background: var(--traffic-maximize); }
+
+.win-bar .title-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-2);
+  letter-spacing: 0.06em;
+}
+
+.win-body {
+  flex: 1;
+  overflow: auto;
+  padding: 0;
+  min-height: 0;
+  container-type: inline-size;
+}
+.win-body::-webkit-scrollbar { width: 6px; }
+.win-body::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 3px;
+}
+
+/* Resize handles. Invisible strips inside each window edge that change
+   the cursor and forward pointer events to the shared resize handler.
+   All eight share .win-resize; direction-specific classes set position.
+   Positioned INSIDE the .win box because the parent uses overflow: hidden
+   to clip the rounded corners â€” negative offsets would be hidden.
+   z-index sits above the title bar so corner handles win over drag. */
+.win-resize {
+  position: absolute;
+  z-index: 10;
+  user-select: none;
+  touch-action: none;
+}
+.win-resize-n  { top: 0; left: 14px; right: 14px; height: 5px; cursor: ns-resize; }
+.win-resize-s  { bottom: 0; left: 14px; right: 14px; height: 5px; cursor: ns-resize; }
+.win-resize-w  { left: 0; top: 14px; bottom: 14px; width: 5px; cursor: ew-resize; }
+.win-resize-e  { right: 0; top: 14px; bottom: 14px; width: 5px; cursor: ew-resize; }
+/* Corner handles â€” kept small (10Ã—10) so the NW corner doesn't clash
+   with the traffic-light cluster which starts at yâ‰ˆ12. */
+.win-resize-nw { left: 0; top: 0; width: 10px; height: 10px; cursor: nwse-resize; }
+.win-resize-ne { right: 0; top: 0; width: 10px; height: 10px; cursor: nesw-resize; }
+.win-resize-sw { left: 0; bottom: 0; width: 10px; height: 10px; cursor: nesw-resize; }
+.win-resize-se { right: 0; bottom: 0; width: 14px; height: 14px; cursor: nwse-resize; }
+
+/* Window enter â€” README Â§"Animations":
+   opacity 0â†’1, scale 0.96â†’1.0, 280ms cubic-bezier(0.2, 0.8, 0.2, 1). */
+.win-enter {
+  opacity: 0;
+  transform: scale(0.96);
+  transform-origin: top left;
+  animation: winIn 280ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Aero snap preview. A translucent ghost shown at the snap target while a
+   window is dragged into a viewport edge band (top -> maximize, left/right ->
+   half). Geometry is set inline from the store's snapHint.rect; it never
+   overlaps the topbar/dock (the maximize insets keep it clear). z-index 49
+   mirrors WINDOW_Z_MAX in layout.ts -- above every window, below chrome (50).
+   pointer-events:none so the drag underneath is never blocked. */
+.snap-preview {
+  position: fixed;
+  z-index: 49;
+  pointer-events: none;
+  border-radius: var(--r-window);
+  border: 1.5px solid var(--accent-pink);
+  background: color-mix(in srgb, var(--accent-pink) 14%, transparent);
+  box-shadow:
+    0 0 0 1px var(--glass-bg-hover) inset,
+    0 0 60px -10px var(--accent-pink-glow);
+  backdrop-filter: blur(2px);
+  animation: snapPreviewIn 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition:
+    left 160ms cubic-bezier(0.4, 0, 0.2, 1),
+    top 160ms cubic-bezier(0.4, 0, 0.2, 1),
+    width 160ms cubic-bezier(0.4, 0, 0.2, 1),
+    height 160ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes snapPreviewIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes winIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

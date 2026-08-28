@@ -1,0 +1,182 @@
+/* Right-side widget panel — slide-in drawer from the desktop edge.
+   Width / z / duration are mirrored in src/lib/layout.ts (single source).
+   Edit both files together. */
+
+.widget-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: var(--fs-sm);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  color: var(--fg-2);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.widget-toggle:hover {
+  color: var(--fg-1);
+  border-color: color-mix(in srgb, var(--accent-blue) 40%, var(--glass-border-strong));
+}
+.widget-toggle.is-open {
+  color: var(--accent-blue);
+  border-color: color-mix(in srgb, var(--accent-blue) 50%, transparent);
+  background: color-mix(in srgb, var(--accent-blue) 12%, transparent);
+  box-shadow: 0 0 14px -4px color-mix(in srgb, var(--accent-blue) 50%, transparent);
+}
+.widget-toggle-glyph {
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* The panel itself — fixed to the right edge, slides in via translateX.
+   Top sits just below the topbar with a matching 10px gap (mirrors
+   TOPBAR_SAFE_Y in src/lib/layout.ts). Bottom uses the same offset as
+   the topbar's top, so the panel breathes symmetrically. The panel extends
+   all the way down; the dock stays stationary (fixed furniture — see the
+   comment in dock.css) and floats above the panel's corner on narrow
+   windows via its higher z-index. */
+.widget-panel {
+  --widget-panel-gap: clamp(6px, 1.25dvh, 10px);
+  --widget-panel-pad: clamp(8px, 1.5dvh, 12px);
+  position: fixed;
+  top: calc(var(--topbar-offset) + var(--topbar-h) + 10px);
+  right: var(--topbar-offset);
+  bottom: var(--topbar-offset);
+  width: var(--widget-panel-w);
+  z-index: var(--widget-panel-z);
+  display: flex;
+  flex-direction: column;
+  gap: var(--widget-panel-gap);
+  padding: var(--widget-panel-pad);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  /* The panel is fixed chrome, not a scroll surface. Widgets compact by
+     viewport height, and long event text stays inside the Pulse log. */
+  overflow-x: hidden;
+  overflow-y: hidden;
+  overscroll-behavior: contain;
+  transform: translateX(calc(100% + var(--topbar-offset) + 8px));
+  transition: transform var(--widget-panel-tr) ease-out;
+}
+.widget-panel.is-open {
+  transform: translateX(0);
+}
+
+.widget-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.widget-panel::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .widget-panel {
+    transition: none;
+  }
+}
+
+/* Generic widget card — every widget body sits inside this. */
+.widget-card {
+  position: relative;
+  background: var(--track-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 10px;
+  font-family: var(--font-mono);
+  color: var(--fg-1);
+  /* Flex children can negotiate height on short displays without making the
+     sidebar itself scroll. */
+  min-height: 0;
+}
+
+/* Hover tip floating above the widget — mirrors the .dock-tip pattern
+   exactly (mono, glass, slight slide-in) so the OS chrome reads as one
+   coherent design language. Renders only when a child .widget-tip is
+   present, so widgets without click actions stay quiet. Above-positioning
+   stays inside the panel's overflow-x clip box; only Weather and Wobbles
+   carry a tip and neither is the topmost widget, so the tip never escapes. */
+.widget-tip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--fg-1);
+  background: var(--surface-panel-popover);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.14s ease, transform 0.18s cubic-bezier(0.2, 0.8, 0.3, 1.4);
+  box-shadow: 0 8px 24px var(--shadow-color-md);
+  z-index: 60;
+}
+.widget-card:hover > .widget-tip,
+.widget-card:focus-within > .widget-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .widget-tip {
+    transition: opacity 0.14s ease;
+    transform: translate(-50%, 0);
+  }
+}
+.widget-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--fg-3);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.widget-card-head .live-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent-blue);
+}
+.widget-card-head .live-dot::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  box-shadow: 0 0 5px var(--accent-blue);
+  animation: widget-pulse 2s ease-in-out infinite;
+}
+
+.widget-head-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.widget-head-icon {
+  width: 1em;
+  height: 1em;
+  display: block;
+  flex-shrink: 0;
+}
+
+@keyframes widget-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

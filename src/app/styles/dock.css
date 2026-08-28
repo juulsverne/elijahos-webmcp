@@ -1,0 +1,257 @@
+/* Dock */
+.dock {
+  /* Shared bump geometry — Dock.tsx reads these three vars to build the
+     glass silhouette path, so the CSS layers and the JS path math can never
+     drift apart. */
+  --dock-radius: 18px;
+  /* How far the glass/stroke layers extend above the pill — headroom the
+     bump (and the glyph's overshoot) can rise into. */
+  --dock-bump-reach: 30px;
+  /* Crest height of the glass bump above the pill's top edge. */
+  --dock-bump-rise: 16px;
+  /* How much the magnified button grows beyond its 44px resting height. */
+  --dock-mag-growth: 14px;
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  /* Bottom-anchored so the magnified button rises upward from the shelf. */
+  align-items: flex-end;
+  /* Pinned to the resting size (the +2px is the height the old 1px border
+     used to contribute — kept so the pill's proportions don't shift). The
+     flex container must not track its tallest child, or the whole pill
+     would swell on hover. */
+  height: calc(44px + 2 * 8px + 2px);
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--dock-radius);
+  z-index: 50;
+  /* The glass and border are painted by .dock-glass/.dock-stroke below —
+     they need a silhouette that can bulge, which a border-box can't do.
+     Only the drop shadow stays here (it hugs the resting pill; the bump is
+     small enough that its missing shadow is unreadable under a 40px blur). */
+  box-shadow: 0 12px 40px var(--shadow-color-md);
+}
+
+/* The dock stays put when the right-edge widget panel opens — fixed
+   furniture, like the macOS Dock. On narrow windows the panel's bottom-left
+   corner can pass behind it; the dock's z-index (50, vs the panel's 8)
+   keeps the dock floating above the glass, which reads as layering, not
+   collision. (It used to re-center in the remaining space, which made the
+   whole dock lurch sideways every time the panel toggled.) */
+
+/* The dock's glass is not painted by .dock itself: it lives on this layer,
+   clipped to a silhouette that Dock.tsx rebuilds per animation frame — a
+   rounded pill whose top edge grows a bell-curve bump above whichever
+   button the cursor (or keyboard focus) is on. That's what lets the hovered
+   icon rise without being sheared by a straight pill edge: the background
+   itself swells around it, magnifying-glass style. The clip-path here is
+   the pre-hydration fallback and is exactly the resting pill. */
+.dock-glass {
+  position: absolute;
+  inset: calc(-1 * var(--dock-bump-reach)) 0 0 0;
+  background: var(--surface-dock);
+  backdrop-filter: blur(30px) saturate(180%);
+  clip-path: inset(var(--dock-bump-reach) 0 0 0 round var(--dock-radius));
+  pointer-events: none;
+}
+/* Same silhouette, drawn as a 1px stroke: the pill's hairline border has to
+   follow the bump, and CSS borders can't bend around a clip-path, so an SVG
+   path traces it (Dock.tsx keeps its `d` in sync with the glass clip). */
+.dock-stroke {
+  position: absolute;
+  left: 0;
+  top: calc(-1 * var(--dock-bump-reach));
+  /* Explicit size: an SVG is a replaced element, so unlike .dock-glass it
+     would keep its 300×150 intrinsic size instead of stretching between
+     opposing inset offsets. */
+  width: 100%;
+  height: calc(100% + var(--dock-bump-reach));
+  overflow: visible;
+  fill: none;
+  stroke: var(--glass-border);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+/* Magnification is strictly one slot deep: only the hovered (or keyboard-
+   focused) button flips --dock-mag to 1 — no proximity falloff, neighbors
+   never twitch. The var drives the button's height (rising out of the
+   bottom-anchored shelf, up into the glass bump) and the glyph's scale and
+   lift. Widths never change, so nothing shifts sideways. There is no hover
+   background tile anymore — that translucent rectangle is what used to poke
+   out of the pill and get cut off; the bump + pop is the hover affordance. */
+.dock-btn {
+  --dock-mag: 0;
+  --dock-glyph-scale: calc(1 + var(--dock-mag) * 0.3);
+  --dock-glyph-rise: calc(var(--dock-mag) * -6px);
+  width: 44px;
+  height: calc(44px + var(--dock-mag) * var(--dock-mag-growth));
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  font-size: 18px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--fg-1);
+  cursor: pointer;
+  position: relative;
+  transform-origin: 50% 100%;
+  transition:
+    height 260ms var(--spring-pop),
+    transform 260ms var(--spring-pop);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .dock-btn:hover {
+    --dock-mag: 1;
+  }
+}
+/* Keyboard focus gets the full magnified state without needing a pointer
+   (Dock.tsx raises the glass bump from the focus event). */
+.dock-btn:focus-visible {
+  --dock-mag: 1;
+}
+/* Press physics: fast squash into the dock shelf, springy release (the
+   rest-state transition above is the release curve). */
+.dock-btn:active {
+  transform: scale(0.86);
+  transition: transform 70ms ease;
+}
+.dock-btn-glyph {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 100%;
+  transform: translateY(var(--dock-glyph-rise)) scale(var(--dock-glyph-scale));
+  transition: transform 260ms var(--spring-pop);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dock-btn,
+  .dock-btn-glyph {
+    transition-duration: 0s;
+  }
+}
+.dock-btn.is-open::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-pink);
+  box-shadow: 0 0 6px var(--accent-pink);
+  animation: dockDotIn 300ms var(--spring-pop);
+}
+@keyframes dockDotIn {
+  from { transform: translateX(-50%) scale(0); }
+  to   { transform: translateX(-50%) scale(1); }
+}
+
+/* Launch bounce — Dock.tsx toggles .is-launching when a click spawns a NEW
+   window (restores/refocuses don't bounce). Every keyframe re-derives the
+   magnified base transform from --dock-glyph-rise/--dock-glyph-scale so the
+   hop composes with the current magnification instead of snapping the icon
+   small. */
+.dock-btn.is-launching .dock-btn-glyph {
+  animation: dockLaunch 640ms both;
+}
+@keyframes dockLaunch {
+  0% {
+    transform: translateY(var(--dock-glyph-rise)) scale(var(--dock-glyph-scale));
+    animation-timing-function: ease-out;
+  }
+  24% {
+    transform: translateY(calc(var(--dock-glyph-rise) - 22px)) scale(var(--dock-glyph-scale));
+    animation-timing-function: ease-in;
+  }
+  48% {
+    transform: translateY(var(--dock-glyph-rise)) scale(var(--dock-glyph-scale));
+    animation-timing-function: ease-out;
+  }
+  70% {
+    transform: translateY(calc(var(--dock-glyph-rise) - 9px)) scale(var(--dock-glyph-scale));
+    animation-timing-function: ease-in;
+  }
+  88%, 100% {
+    transform: translateY(var(--dock-glyph-rise)) scale(var(--dock-glyph-scale));
+  }
+}
+
+.dock-tip {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--fg-1);
+  background: var(--surface-panel-popover);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.14s ease, transform 0.18s cubic-bezier(0.2, 0.8, 0.3, 1.4);
+  box-shadow: 0 8px 24px var(--shadow-color-md);
+  z-index: 60;
+}
+.dock-btn:hover .dock-tip,
+.dock-btn:focus-visible .dock-tip {
+  opacity: 1;
+  /* The tip is anchored to the button's top edge (bottom: 100%), and the
+     button itself grows with --dock-mag, so it rides up over the bump for
+     free. */
+  transform: translate(-50%, 0);
+}
+
+/* Apps marked desktop-only (the terminal, the unlocked /root window) hide
+   their dock buttons on narrow viewports — typing the puzzle password on a
+   phone keyboard is a non-experience. Threshold: 768px. */
+@media (max-width: 767px) {
+  .dock-btn[data-desktop-only="true"] {
+    display: none;
+  }
+}
+
+.dock-sep {
+  width: 1px;
+  height: 28px;
+  background: var(--dock-sep);
+  border-radius: 1px;
+  /* The dock is bottom-anchored (align-items: flex-end) so the magnified
+     button grows upward; this bottom margin re-centers the 28px separator
+     within the 44px resting row and keeps it pinned there. */
+  margin: 0 2px 8px;
+  flex-shrink: 0;
+  /* Positioned so it paints above .dock-glass/.dock-stroke like the
+     (position: relative) buttons do — in-flow content renders beneath
+     positioned siblings, and the glass layer's backdrop blur would smear
+     the line away. */
+  position: relative;
+}
+
+/* Boot handoff choreography — plays when page.tsx flips the root to
+   data-phase="desktop" (so the reboot easter egg replays it). The keyframes
+   carry the dock's base translateX(-50%) so the widget-panel re-centering
+   transition above is unaffected once the entrance ends. `backwards` keeps
+   the dock invisible through the 80ms delay while the topbar leads. */
+.lc-root[data-phase="desktop"] .dock {
+  animation: dockRise 460ms var(--spring-settle) 80ms backwards;
+}
+@keyframes dockRise {
+  from {
+    transform: translate(-50%, 16px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
