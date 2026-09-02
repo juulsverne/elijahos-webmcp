@@ -1,0 +1,374 @@
+/* ── Wobbles ──────────────────────────────────────────────────────── */
+/* iPhone Photos-style horizontal slide carousel. Stage is a fixed
+   aspect-ratio viewport; track holds all slides side by side and
+   translates left/right on page change. */
+.wobbles-widget {
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  flex: 0 1 auto;
+  min-height: 92px;
+}
+/* The photo stage is the first widget to give height back on short displays.
+   It tops out near the original 8:7 frame, then compresses so Index and
+   Pulse still have room without making the sidebar scroll. The subtracted
+   constant budgets for every fixed sibling in the column (weather + music +
+   index + pulse's minimum + gaps); revisit it when widgets join or leave. */
+.wobbles-stage {
+  position: relative;
+  width: 100%;
+  height: clamp(92px, calc(100dvh - 590px), 207px);
+  background: var(--bg-deep);
+  overflow: hidden;
+  /* Size container for the vitals page. Its height is the only thing that
+     varies (the clamp above spans 92→207px), and every type size, gap and
+     breakpoint on that page is expressed in cqh/cqi against this box — so the
+     readout scales with the stage instead of the viewport. Safe to contain:
+     the stage's own size comes from the clamp, never from its contents. */
+  container: wobbles-stage / size;
+}
+.wobbles-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 360ms cubic-bezier(0.32, 0.72, 0.24, 1);
+  will-change: transform;
+}
+.wobbles-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.wobbles-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Wobbles · vitals page ────────────────────────────────────────────
+   The last slide is a spec sheet, not a photo: kicker + live role chip,
+   a serif nameplate paired with the one live number (age), then a
+   two-across grid of stat cells and a mono footer aside.
+
+   Everything is sized in cqh against .wobbles-stage, so the page fills the
+   stage at 207px and compresses to fit at 92px rather than clipping — which
+   is what the old fixed-pixel layout did (59px of it fell off the bottom).
+   The @container rules at the end shed the footer, then the breed line, then
+   the kicker row as the stage shortens; their thresholds are the measured
+   heights at which each stops fitting, verified pixel-by-pixel across the
+   whole 92→207px clamp. Re-verify that sweep if you add a row here — the
+   stage only has room for two rows of stat cells. */
+.wobbles-vitals-slide {
+  /* Single accent for the bloom + the live role dot — retheme in one line. */
+  --wv-accent: var(--accent-violet);
+  background:
+    radial-gradient(
+      118% 88% at 100% 0%,
+      color-mix(in srgb, var(--wv-accent) 18%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      96% 80% at 0% 100%,
+      color-mix(in srgb, var(--accent-blue) 11%, transparent),
+      transparent 64%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg-warm) 34%, var(--bg-mid)),
+      var(--bg-deep)
+    );
+  /* Same specular top edge every glass surface in the OS carries. */
+  box-shadow: inset 0 1px 0 var(--glass-sheen-start);
+  overflow: hidden;
+}
+.wobbles-vitals {
+  --wv-gap: clamp(4px, 3.4cqh, 9px);
+  --wv-pad-x: clamp(10px, 5cqi, 14px);
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--wv-gap);
+  padding: clamp(9px, 7cqh, 15px) var(--wv-pad-x);
+  overflow: hidden;
+  color: var(--fg-2);
+}
+
+/* Head — path kicker on the left, role chip with a live dot on the right.
+   The dot reuses the panel's .live-dot language (and its widget-pulse
+   keyframes) so this card reads as the same instrument as Pulse. */
+.wobbles-vitals-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: clamp(8px, 5.4cqh, 10px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  line-height: 1;
+}
+.wobbles-vitals-kicker {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wobbles-vitals-role {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--fg-2);
+  white-space: nowrap;
+}
+.wobbles-vitals-role::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--wv-accent);
+  box-shadow: 0 0 5px var(--wv-accent);
+  animation: widget-pulse 2s ease-in-out infinite;
+}
+
+/* Hero — nameplate + the live age readout. Mirrors the Weather card's
+   big-number-plus-caption rhythm, and the About app's serif italic headline
+   with a gradient period, so the panel and the desktop read as one product. */
+.wobbles-vitals-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+.wobbles-vitals-nameblock {
+  min-width: 0;
+}
+.wobbles-vitals-name {
+  margin: 0;
+  min-width: 0;
+  font-size: clamp(17px, 15cqh, 31px);
+  font-weight: 400;
+  line-height: 0.9;
+  color: var(--fg-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Breed sits with the nameplate rather than in the stat grid — it reads as
+   identity, and keeping it out of the grid holds that to two rows. Absent from
+   the data today (see ELIJAH.wobbles.bio), so this usually renders nothing. */
+.wobbles-vitals-breed {
+  margin: 3px 0 0;
+  font-family: var(--font-mono);
+  font-size: clamp(7px, 4.4cqh, 9px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wobbles-vitals-age {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1;
+}
+.wobbles-vitals-age-value {
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 9cqh, 18px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--fg-1);
+  font-variant-numeric: tabular-nums;
+}
+.wobbles-vitals-age-label {
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: clamp(7px, 4.4cqh, 9px);
+  letter-spacing: 0.16em;
+  color: var(--fg-3);
+}
+
+/* Stat cells — two across, label over value, hairline above each row.
+   Columns are deliberately uneven: the widest value in the set ("lilac golden
+   shell", 18 mono characters) needs ~112px, which two equal columns of a 234px
+   card can't give it. The 1.35fr/1fr split buys the left column that width, so
+   nothing ellipsises — the component orders `stats` to match.
+   Four cells / two rows is the budget; a third row does not fit the stage. */
+.wobbles-vitals-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-content: start;
+  margin: 0;
+  overflow: hidden;
+}
+.wobbles-vitals-cell {
+  min-width: 0;
+  padding: clamp(3px, 2.6cqh, 5px) 0;
+  border-top: 1px solid var(--glass-border);
+}
+/* Column rule on the right column only. Every cell is half-width, so even
+   children are exactly the second column — no flow arithmetic needed. */
+.wobbles-vitals-cell:nth-child(even) {
+  border-left: 1px solid var(--glass-border);
+  padding-left: clamp(8px, 4cqi, 12px);
+}
+.wobbles-vitals-cell dt {
+  font-family: var(--font-mono);
+  font-size: clamp(7px, 4.4cqh, 9px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  line-height: 1;
+}
+/* Ceiling is 10.5px, not the stage-proportional value the rest of the page
+   uses: past that the longest value stops fitting its column. Growth on tall
+   stages goes into the nameplate, gaps and padding instead. */
+.wobbles-vitals-cell dd {
+  margin: 2px 0 0;
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 5.6cqh, 10.5px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--fg-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Footer trivia, marked up like a code comment — the OS's mono voice. */
+.wobbles-vitals-foot {
+  margin: 0;
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: clamp(8px, 4.8cqh, 10px);
+  letter-spacing: 0.04em;
+  color: var(--fg-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wobbles-vitals-foot::before {
+  content: "// ";
+  color: color-mix(in srgb, var(--wv-accent) 70%, var(--fg-3));
+}
+
+/* Landing on the page stages the blocks in top-to-bottom. Keyed off
+   .is-vitals on the card, so it replays every time you page back to it. */
+.wobbles-widget.is-vitals .wobbles-vitals > * {
+  animation: wobbles-vitals-rise 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.wobbles-widget.is-vitals .wobbles-vitals > *:nth-child(2) { animation-delay: 45ms; }
+.wobbles-widget.is-vitals .wobbles-vitals > *:nth-child(3) { animation-delay: 90ms; }
+.wobbles-widget.is-vitals .wobbles-vitals > *:nth-child(4) { animation-delay: 135ms; }
+@keyframes wobbles-vitals-rise {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Short stages shed their most decorative lines rather than clipping the data,
+   least load-bearing first. Thresholds are measured, not guessed — each is the
+   height at which that line stops fitting. */
+@container wobbles-stage (max-height: 150px) {
+  .wobbles-vitals-foot {
+    display: none;
+  }
+}
+@container wobbles-stage (max-height: 120px) {
+  .wobbles-vitals-breed {
+    display: none;
+  }
+}
+@container wobbles-stage (max-height: 110px) {
+  .wobbles-vitals-head {
+    display: none;
+  }
+  .wobbles-vitals {
+    padding: 7px var(--wv-pad-x);
+  }
+  .wobbles-vitals-cell {
+    padding: 2px 0;
+  }
+  .wobbles-vitals-cell dd {
+    margin-top: 1px;
+  }
+}
+
+/* Edge chevrons — hint that the widget paginates left/right. */
+.wobbles-chev {
+  position: absolute;
+  top: 50%;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--fg-1);
+  background: var(--surface-deep-strong);
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.85);
+  transition: opacity 0.15s ease, transform 0.18s cubic-bezier(0.2, 0.8, 0.3, 1.4);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--glass-border-strong);
+  z-index: 2;
+}
+.wobbles-chev-l { left: 8px; }
+.wobbles-chev-r { right: 8px; }
+.wobbles-widget:hover .wobbles-chev {
+  opacity: 0.9;
+  transform: translateY(-50%) scale(1);
+}
+.wobbles-widget.is-vitals:hover .wobbles-chev {
+  opacity: 0;
+}
+
+/* Page indicator dots, bottom-center. */
+.wobbles-dots {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  pointer-events: none;
+  z-index: 2;
+}
+.wobbles-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--glass-border-bright);
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+.wobbles-dot.is-active {
+  background: var(--fg-1);
+  transform: scale(1.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wobbles-track { transition: none; }
+  .wobbles-chev { transition: opacity 0.15s ease; transform: translateY(-50%) scale(1); }
+  .wobbles-widget.is-vitals .wobbles-vitals > * { animation: none; }
+  .wobbles-vitals-role::before { animation: none; }
+}

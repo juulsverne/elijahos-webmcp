@@ -52,3 +52,9 @@ output/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# docs
+docs/WEBMCP_JUDGE_STRATEGY.md
+docs/webmcp-demo-video-script.md
+docs/webmcp-finish-runbook.md

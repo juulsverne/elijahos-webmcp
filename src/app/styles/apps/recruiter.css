@@ -1,0 +1,343 @@
+/* -- Recruiter workspace (WebMCP tool surface, role context, activity) --- */
+
+.recruiter-app {
+  padding: 24px;
+  min-height: 100%;
+  box-sizing: border-box;
+  color: var(--fg-2);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.recruiter-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.recruiter-title {
+  margin: 0;
+  font-size: clamp(2rem, 12cqi, var(--fs-display));
+  line-height: 0.95;
+  color: var(--fg-1);
+  font-family: var(--font-serif);
+  font-style: italic;
+  text-wrap: balance;
+}
+
+.recruiter-tagline {
+  margin: 0;
+  color: var(--fg-3);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  max-width: 54ch;
+}
+
+/* Sections --------------------------------------------------------------- */
+
+.recruiter-section {
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-subtle);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.recruiter-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.recruiter-heading {
+  margin: 0;
+  font-size: var(--fs-lg);
+  color: var(--fg-1);
+  font-family: var(--font-serif);
+  font-style: italic;
+  flex: 1;
+}
+
+.recruiter-subheading {
+  margin: 8px 0 0;
+  font-size: var(--fs-sm);
+  color: var(--fg-2);
+  font-family: var(--font-mono);
+  text-transform: lowercase;
+}
+
+.recruiter-count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+
+.recruiter-explainer,
+.recruiter-note,
+.recruiter-empty {
+  margin: 0;
+  color: var(--fg-3);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  max-width: 60ch;
+}
+
+/* Tool surface ----------------------------------------------------------- */
+
+.recruiter-status {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+.recruiter-status[data-supported="true"] {
+  color: var(--accent-blue);
+}
+
+.recruiter-tools {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recruiter-tool {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 8px;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 8px;
+}
+
+.recruiter-tool-name,
+.recruiter-log-tool {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-1);
+}
+
+.recruiter-badge {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 999px;
+  padding: 1px 8px;
+  color: var(--fg-3);
+}
+
+.recruiter-badge[data-kind="act"] {
+  color: var(--accent-gold);
+}
+
+.recruiter-tool-desc {
+  grid-column: 1 / -1;
+  color: var(--fg-3);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}
+
+/* Role context ----------------------------------------------------------- */
+
+.recruiter-role-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.recruiter-role-input {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 96px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border-strong);
+  background: var(--glass-bg-whisper);
+  color: var(--fg-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  padding: 10px 12px;
+}
+
+.recruiter-role-input:focus-visible {
+  outline: 1px solid var(--accent-violet);
+  outline-offset: 1px;
+}
+
+.recruiter-role-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.recruiter-btn {
+  appearance: none;
+  border: 1px solid var(--glass-border-strong);
+  background: var(--glass-bg-lift);
+  color: var(--fg-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  border-radius: 999px;
+  padding: 4px 14px;
+  cursor: pointer;
+}
+
+.recruiter-btn:hover:not(:disabled) {
+  background: var(--glass-bg-hover);
+}
+
+.recruiter-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.recruiter-role-stored {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recruiter-role-stored-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.recruiter-role-title {
+  color: var(--fg-1);
+  font-size: var(--fs-sm);
+  flex: 1;
+  min-width: 0;
+}
+
+.recruiter-intent-meta {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+.recruiter-matches {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.recruiter-match {
+  border-top: 1px solid var(--glass-border);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.recruiter-match-req {
+  color: var(--fg-2);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+
+.recruiter-gap {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--accent-gold);
+}
+
+.recruiter-evidence {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-left: 2px solid var(--glass-border-strong);
+}
+
+.recruiter-evidence-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.recruiter-evidence-link {
+  color: var(--accent-violet);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+}
+
+.recruiter-evidence-link:hover {
+  text-decoration: underline;
+}
+
+.recruiter-evidence-terms {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+/* Activity log ----------------------------------------------------------- */
+
+.recruiter-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.recruiter-log-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 6px;
+}
+
+.recruiter-log-time {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+
+.recruiter-log-summary {
+  color: var(--fg-2);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+
+.recruiter-log-entry[data-ok="false"] .recruiter-log-summary,
+.recruiter-log-failed {
+  color: var(--accent-gold);
+}
+
+/* Disclosure ------------------------------------------------------------- */
+
+.recruiter-disclosure {
+  margin: 0;
+  padding: 0 0 0 18px;
+  color: var(--fg-3);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

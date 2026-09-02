@@ -1,0 +1,228 @@
+/* ── Music widget ─────────────────────────────────────────────────── */
+.music-widget {
+  flex: 0 0 auto;
+  padding: clamp(6px, 1.4dvh, 8px) 10px;
+}
+.music-widget .widget-card-head {
+  margin-bottom: clamp(2px, 0.8dvh, 4px);
+}
+.music-widget .music-title {
+  font-size: var(--fs-sm);
+  color: var(--fg-1);
+  font-weight: 600;
+  margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Re-keyed per track in the component, so a track change replays this. */
+  animation: music-title-in 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes music-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.music-widget .music-artist-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: clamp(4px, 1dvh, 6px);
+}
+.music-widget .music-artist {
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Decorative equalizer — same contract as the mobile player: the bars only
+   animate while audio is playing (a paused widget showing a dancing EQ is a
+   lie), driven by data-playing on the card root. */
+.music-widget .music-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 9px;
+  flex-shrink: 0;
+}
+.music-widget .music-eq > span {
+  width: 2px;
+  height: 100%;
+  border-radius: 1px;
+  background: var(--accent-blue);
+  transform-origin: 50% 100%;
+  transform: scaleY(0.25);
+}
+.music-widget[data-playing] .music-eq > span {
+  animation: music-eq-bar 900ms ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 150ms);
+}
+@keyframes music-eq-bar {
+  0%, 100% { transform: scaleY(0.25); }
+  50%      { transform: scaleY(1); }
+}
+.music-widget .music-progress {
+  position: relative;
+  height: 3px;
+  background: var(--glass-bg-raised);
+  border-radius: 2px;
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: height 160ms ease;
+}
+/* The strip fattens when the card is engaged, signalling it's scrubbable. */
+.music-widget:hover .music-progress,
+.music-widget .music-progress:focus-visible {
+  height: 5px;
+}
+.music-widget .music-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent-pink) 55%, transparent);
+  border-radius: 2px;
+  pointer-events: none;
+}
+/* Scrub knob rides the leading edge of the fill; hidden at rest. */
+.music-widget .music-progress-fill::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--fg-1);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--accent-pink) 70%, transparent);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 140ms ease, transform 160ms var(--spring-pop);
+}
+.music-widget:hover .music-progress-fill::after,
+.music-widget .music-progress:focus-visible .music-progress-fill::after {
+  opacity: 1;
+  transform: scale(1);
+}
+.music-widget .music-times {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  margin-bottom: clamp(2px, 0.8dvh, 4px);
+  font-variant-numeric: tabular-nums;
+}
+.music-widget .music-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(8px, 1.8dvh, 12px);
+  margin-bottom: 2px;
+}
+.music-widget .music-btn {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: none;
+  color: var(--fg-1);
+  cursor: pointer;
+  padding: 0;
+  border-radius: 6px;
+  line-height: 1;
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    box-shadow 160ms ease,
+    transform 160ms var(--spring-pop);
+}
+.music-widget .music-btn:hover {
+  background: var(--glass-bg-lift);
+  transform: scale(1.06);
+}
+.music-widget .music-btn:active {
+  transform: scale(0.88);
+}
+/* Primary transport reads like the mobile player's hero button: a round
+   accent chip with a soft bloom, instead of a bare glyph. */
+.music-widget .music-btn.is-play {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: var(--fg-1);
+  background: color-mix(in srgb, var(--accent-blue) 24%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-blue) 46%, transparent);
+  box-shadow: 0 0 16px -4px color-mix(in srgb, var(--accent-blue) 75%, transparent);
+}
+.music-widget .music-btn.is-play:hover {
+  background: color-mix(in srgb, var(--accent-blue) 34%, transparent);
+  box-shadow: 0 0 20px -4px color-mix(in srgb, var(--accent-blue) 85%, transparent);
+}
+.music-widget .music-btn-icon {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+.music-widget .music-spotify {
+  display: block;
+  text-align: center;
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  text-decoration: none;
+  padding-top: 4px;
+  margin-top: 4px;
+  border-top: 1px solid var(--glass-border);
+  transition: color 140ms ease;
+}
+.music-widget .music-spotify:hover {
+  color: var(--accent-blue);
+}
+
+@media (max-height: 620px) {
+  .music-widget .music-artist-row,
+  .music-widget .music-spotify {
+    display: none;
+  }
+
+  .music-widget .music-title {
+    margin-bottom: clamp(3px, 0.9dvh, 5px);
+  }
+
+  .music-widget .music-btn {
+    width: 22px;
+    height: 22px;
+  }
+
+  .music-widget .music-btn.is-play {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-widget .music-title {
+    animation: none;
+  }
+  /* Bars hold a static mid-height instead of dancing. */
+  .music-widget[data-playing] .music-eq > span {
+    animation: none;
+    transform: scaleY(0.6);
+  }
+  .music-widget .music-progress,
+  .music-widget .music-btn,
+  .music-widget .music-progress-fill::after {
+    transition: none;
+  }
+  .music-widget .music-btn:hover,
+  .music-widget .music-btn:active {
+    transform: none;
+  }
+}

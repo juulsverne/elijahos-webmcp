@@ -41,6 +41,34 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: "webmcp-tools",
+    date: "2026-09-01",
+    version: "v1.6",
+    title: "The OS opens a door for agents",
+    summary:
+      "ElijahOS now speaks WebMCP: an AI agent browsing this site can state its visit intent, search the evidence, inspect any record's provenance and limitations, and compose real OS windows around what it finds. Everything an agent does here is visible, session-scoped, and judged by you, not scored by me.",
+    changes: [
+      {
+        kind: "added",
+        text:
+          "A recruiter workspace: state why you're here (or let your agent do it) and see every priority matched against the documented evidence — including an honest 'no documented evidence' when the site has none.",
+        appId: "recruiter",
+      },
+      {
+        kind: "added",
+        text:
+          "An agent tool surface with narrow inputs and accurate read-only annotations: visit intent, evidence search and inspection, workspace composition, workspace state, and small profile/resume/contact lookups.",
+        appId: "recruiter",
+      },
+      {
+        kind: "added",
+        text:
+          "A live agent activity log — every tool call an agent makes in your browser shows up in the workspace, so nothing happens here that you can't see.",
+        appId: "recruiter",
+      },
+    ],
+  },
+  {
     id: "index-visible",
     date: "2026-07-30",
     version: "v1.5",

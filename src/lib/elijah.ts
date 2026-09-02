@@ -635,8 +635,16 @@ export const ELIJAH: ElijahData = {
   music: {
     artist: "JUULS VERNE",
     spotifyArtistUrl: "https://open.spotify.com/artist/5XbOG4aFpBBHsMpC5DHt7O",
-    // Unreleased audio is deliberately excluded from the challenge export.
-    tracks: [],
+    // Drop real .mp3 files into public/music/ and update this list.
+    // Players gracefully handle missing files (skip → next track).
+    tracks: [
+      // Released as JUULS VERNE, lucyhere:
+      // https://open.spotify.com/track/6bckKbcaP9yjPlaAy6vEmz
+      { id: "silhouettes", title: "SILHOUETTES", file: "/music/SILHOUETTES.mp3" },
+      { id: "aether",     title: "AETHER",     unreleased: true, file: "/music/AETHER.mp3" },
+      { id: "stallions",  title: "STALLIONS",  unreleased: true, file: "/music/STALLIONS.mp3" },
+      { id: "always-you", title: "ALWAYS YOU", unreleased: true, file: "/music/always%20you.mp3" },
+    ],
   },
   wobbles: {
     bio: {
@@ -649,8 +657,23 @@ export const ELIJAH: ElijahData = {
       treats: ["bluefin tuna"],
       fact: "judges every PR",
     },
-    // Personal media is withheld until the public-release asset gate is approved.
-    media: [],
+    // Web-optimized via `npm run optimize:media` (videos -> .mp4 + poster,
+    // photos -> .webp). Drop new source files into public/wobbles/, re-run
+    // the script, point these refs at the outputs, then move the originals out
+    // of public/ so they don't ship in the deploy bundle.
+    media: [
+      { id: "wob-live-1", src: "/wobbles/IMG_6116.mp4", poster: "/wobbles/IMG_6116.poster.jpg", kind: "video", alt: "Wobbles, live cam" },
+      { id: "wob-live-2", src: "/wobbles/IMG_2608.mp4", poster: "/wobbles/IMG_2608.poster.jpg", kind: "video", alt: "Wobbles, live cam" },
+      { id: "wob-live-3", src: "/wobbles/copy_FDAF8B3E-A383-4C4F-94C6-5CAAB787BB13.mp4", poster: "/wobbles/copy_FDAF8B3E-A383-4C4F-94C6-5CAAB787BB13.poster.jpg", kind: "video", alt: "Wobbles, live cam" },
+      { id: "wob-1", src: "/wobbles/IMG_5495.webp", alt: "Wobbles" },
+      { id: "wob-2", src: "/wobbles/IMG_5617.webp", alt: "Wobbles" },
+      { id: "wob-3", src: "/wobbles/IMG_5702.webp", alt: "Wobbles" },
+      { id: "wob-4", src: "/wobbles/IMG_6136.webp", alt: "Wobbles" },
+      { id: "wob-5", src: "/wobbles/IMG_6299.webp", alt: "Wobbles" },
+      { id: "wob-6", src: "/wobbles/IMG_6478.webp", alt: "Wobbles" },
+      { id: "wob-7", src: "/wobbles/IMG_6480.webp", alt: "Wobbles" },
+      { id: "wob-8", src: "/wobbles/IMG_6512.webp", alt: "Wobbles" },
+    ],
   },
   // Two-column contrast pairs used by the ComparisonPanel block.
   // Grounded in the `differentiator` KB chunk and the ELIJAH identity copy.

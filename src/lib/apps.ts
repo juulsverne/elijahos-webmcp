@@ -117,6 +117,18 @@ const APPS_DEF = {
     desktopOnly: true,
     defaultRect: { x: 320, y: 140, w: 560, h: 520 },
   },
+  // Recruiter workspace: the visible face of the WebMCP tool surface — role
+  // context controls, the registered tool list, and the live agent activity
+  // log. Useful without WebMCP too (manual role-to-evidence comparison).
+  recruiter: {
+    id: "recruiter",
+    title: "/recruiter",
+    icon: "◫",
+    dock: true,
+    launchpad: true,
+    defaultRect: { x: 360, y: 120, w: 560, h: 700 },
+    mobileLabel: "recruiter",
+  },
   calculator: {
     id: "calculator",
     title: "/calculator",

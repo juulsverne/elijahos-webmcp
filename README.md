@@ -18,7 +18,29 @@ The baseline includes:
 
 The baseline deliberately excludes private model providers, retrieval and query logs, databases, analytics, internal plans, unrelated experiments, generated embeddings/evals, unpublished music, personal media, production configuration, and all prior Git history.
 
-The WebMCP adapter, evidence schema, recruiter workspace, tool-selection tests, and judged demo flow will be committed **after** the baseline tag so the challenge work remains reviewable as a clean diff.
+All WebMCP challenge work is committed **after** the baseline tag so it remains reviewable as a clean diff: `git diff challenge-baseline...HEAD`.
+
+## WebMCP tool surface (challenge work)
+
+The page registers its tools through `navigator.modelContext.registerTool(...)` (with `document.modelContext` as a fallback host). Five tools carry the agent journey, plus three small read-only lookups:
+
+| Tool | Read-only | What it does |
+| --- | --- | --- |
+| `set_visit_intent` | no | Stores the visitor's objective, context label, up to four priorities, and evidence standard — browser session only, shown in the recruiter workspace with edit/clear controls |
+| `search_evidence` | yes | Keyword search over candidate-authored evidence records; returns provenance, contribution scope, limitations, and the query terms that matched nothing |
+| `inspect_evidence` | yes | One full record by id, or a typed not-found result |
+| `compose_workspace` | no | Opens the apps that display 1-3 evidence records — real desktop windows tiled for `compare`/`grid` or foregrounded for `focus`; the mobile shell opens its normal full-screen app |
+| `get_workspace_state` | yes | The narrow workspace snapshot (shell, open/focused apps, composed evidence, visit intent) — reflects human actions so the agent can continue from them |
+| `get_candidate_profile` / `get_resume` / `get_contact` | yes | Small typed lookups over the same sources |
+
+Implementation map:
+
+- `src/lib/evidence.ts` — evidence records derived from the typed sources with claim, contribution scope, provenance, limitations, and app artifacts; lexical search with explicit gap reporting.
+- `src/lib/webmcp/` — the isolated adapter: ModelContext detection, input-schema validation, session-scoped visit intent, workspace composition/snapshot, visible activity log, tool definitions, idempotent registration.
+- `src/components/apps/RecruiterApp.tsx` — the visible recruiter workspace (`/recruiter` in the dock): visit intent with edit/clear, per-priority evidence matching with honest gaps, the registered tool list, and a live agent activity log.
+- `src/lib/**/*.test.ts` and `tests/webmcp.spec.ts` — unit and real-browser suites, including a fake ModelContext host that drives the full agent journey (`npm run test:webmcp`).
+
+WebMCP remains progressive enhancement: without a WebMCP host the site is unchanged, and the recruiter workspace still works as a manual evidence-comparison surface.
 
 See [CHALLENGE_BASELINE.md](./CHALLENGE_BASELINE.md) for provenance and [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for bundled font licenses.
 
@@ -69,6 +91,8 @@ WebMCP must remain progressive enhancement: the portfolio must still work for a 
 - Keep the Vercel project disconnected from Git; challenge deployment is a later explicit release action.
 - Do not change repository visibility until the privacy, history, asset, license, reproducibility, and release gates pass.
 
-## License status
+## License
 
-No repository-wide open-source license has been selected yet. That is an explicit owner approval and public-release gate. Until a license is added, the original ElijahOS source and assets remain all rights reserved. Bundled font files retain their own OFL-1.1 licenses in `licenses/`.
+This repository is released under the [MIT License](LICENSE). Bundled font files retain their own SIL Open Font License 1.1 terms in `licenses/`. All runtime dependencies are MIT-licensed; development dependencies are MIT or Apache-2.0.
+
+The code is the reusable part: the shell, the WebMCP adapter, the evidence layer, and the tests. The written portfolio content in `src/lib/elijah.ts` and `src/lib/case-studies.ts` describes a real person and is included as demonstration data. If you build on this repository, replace that content with your own; the license does not extend to Elijah Leung's name, likeness, or identity.

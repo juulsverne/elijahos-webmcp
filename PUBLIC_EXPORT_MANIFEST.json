@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-28T05:43:29.961Z",
+  "generatedAt": "2026-09-02T05:37:01.750Z",
   "sourceSnapshot": {
     "commit": "6e135e4f125f14ab2a877ad5ee70dcf7315913bf",
     "date": "2026-08-06"
@@ -26,7 +26,7 @@
     {
       "path": ".gitignore",
       "classification": "sanitized-foundation",
-      "sha256": "3a90326171f104f4169bb54862f69d511f0742bb9875b6f37d7c20b90068b093"
+      "sha256": "d7b8052f2e0d53f15d667a714a7ac0962d778f21642bafdf646532aa1f4dde51"
     },
     {
       "path": ".nvmrc",
@@ -59,9 +59,19 @@
       "sha256": "3a8562f965af53b3288cbed82d5373554a442ec64a970f27a7d24d93bbeecce0"
     },
     {
+      "path": "docs/webmcp-submission-control.md",
+      "classification": "challenge-repository-metadata",
+      "sha256": "cd7cdd2af718c857a1707ff44d690add98ed0da6c00c4fa32128c7703c28aee4"
+    },
+    {
       "path": "eslint.config.mjs",
       "classification": "sanitized-foundation",
       "sha256": "275a07c13fc7c83a652efcfa9fb6a207c451a2f5088e6793415ce44281285720"
+    },
+    {
+      "path": "LICENSE",
+      "classification": "sanitized-foundation",
+      "sha256": "749bea2a2dada6f92f12883e48ef9e19e8dad39973a428c3c36dc6543dde7aac"
     },
     {
       "path": "licenses/InstrumentSerif-OFL-1.1.txt",
@@ -86,7 +96,7 @@
     {
       "path": "package.json",
       "classification": "sanitized-foundation",
-      "sha256": "2bd6327deabf5f5067142ab9286386ea2f20fc78029190131d4653b2da9b51b0"
+      "sha256": "612ca0617d611c9529c7a17011b19cf16387040c595f7a2300c72002095d675a"
     },
     {
       "path": "playwright.config.ts",
@@ -114,14 +124,104 @@
       "sha256": "8699a5f1d9e297610da007f44fa0cc5b26352c85ce0eb7c9f8fe1baae6cb4bc7"
     },
     {
+      "path": "public/music/AETHER.mp3",
+      "classification": "sanitized-foundation",
+      "sha256": "6087f7faee9140028d07ca98f250c71c00bb2ed60e943fe2c8e6ff227f5ceeec"
+    },
+    {
+      "path": "public/music/always you.mp3",
+      "classification": "sanitized-foundation",
+      "sha256": "cb0c25352cdb5ae7739b4231ef2144ab5843688213fec8301b51afa102457c7f"
+    },
+    {
+      "path": "public/music/SILHOUETTES.mp3",
+      "classification": "sanitized-foundation",
+      "sha256": "9160d410ae04a25e70ab8e319ef43adccc28ab94af4ec0b6cec061fbf008b34b"
+    },
+    {
+      "path": "public/music/STALLIONS.mp3",
+      "classification": "sanitized-foundation",
+      "sha256": "4229c2bf5bf055b6b21ee17b115973484a7a45b14cddb22a0f7272d5107987d6"
+    },
+    {
+      "path": "public/wobbles/copy_FDAF8B3E-A383-4C4F-94C6-5CAAB787BB13.mp4",
+      "classification": "sanitized-foundation",
+      "sha256": "146b4ca32cf67efc3e5d2986523072562f0adc936e75d336a615b82d2a3d4983"
+    },
+    {
+      "path": "public/wobbles/copy_FDAF8B3E-A383-4C4F-94C6-5CAAB787BB13.poster.jpg",
+      "classification": "sanitized-foundation",
+      "sha256": "51919be0920d2763fcb0f2d4ccf3097b0daa6bcda3b8ced666fafb6d60594e84"
+    },
+    {
+      "path": "public/wobbles/IMG_2608.mp4",
+      "classification": "sanitized-foundation",
+      "sha256": "399b1f980f60f6844b774a3b4fe010b0c39ffe8e4052be19bd6ae09e39a79e62"
+    },
+    {
+      "path": "public/wobbles/IMG_2608.poster.jpg",
+      "classification": "sanitized-foundation",
+      "sha256": "7ba9b65a4f8028b78964664da5559e35a4891dda82c4ab3850aea95903290075"
+    },
+    {
+      "path": "public/wobbles/IMG_5495.webp",
+      "classification": "sanitized-foundation",
+      "sha256": "a41c9c9e822bda2b5bdb371f6c038580352bac3337e6462924b35a1170050e49"
+    },
+    {
+      "path": "public/wobbles/IMG_5617.webp",
+      "classification": "sanitized-foundation",
+      "sha256": "ef2c0cc78b0d1a7f0914c6fb5e8af6b30360229852ab40affe5ad4f4037a8b2c"
+    },
+    {
+      "path": "public/wobbles/IMG_5702.webp",
+      "classification": "sanitized-foundation",
+      "sha256": "bc56063e735116b1986e20ddb53dc3663aebcf6b002a43c2f1ee618972ac5b5e"
+    },
+    {
+      "path": "public/wobbles/IMG_6116.mp4",
+      "classification": "sanitized-foundation",
+      "sha256": "436802a618bb4f7f9c00e42968797d4d9849b0605a1bf481d22e6a10d611d549"
+    },
+    {
+      "path": "public/wobbles/IMG_6116.poster.jpg",
+      "classification": "sanitized-foundation",
+      "sha256": "c801e97b24192f82defaebc4a7abe4347052715339711c4d065f89b84902cedb"
+    },
+    {
+      "path": "public/wobbles/IMG_6136.webp",
+      "classification": "sanitized-foundation",
+      "sha256": "10db41ce83d0270d4872b7eba98c2c1a2aa3fab136fc9c5e5fbb8d03cfebf6b9"
+    },
+    {
+      "path": "public/wobbles/IMG_6299.webp",
+      "classification": "sanitized-foundation",
+      "sha256": "85dcc1109c19d0d631c3516c7d445fdc55a73ccb6b0e1d3526ad966547f93285"
+    },
+    {
+      "path": "public/wobbles/IMG_6478.webp",
+      "classification": "sanitized-foundation",
+      "sha256": "dcf95ed60b045d2381faf8ef147a5be4cbb77f4e7050c05afa60998bf2b27e49"
+    },
+    {
+      "path": "public/wobbles/IMG_6480.webp",
+      "classification": "sanitized-foundation",
+      "sha256": "8c4b7c94dc1679b0776f1b84fe606de510a7e874c2c531e2660f9e8c7f21831e"
+    },
+    {
+      "path": "public/wobbles/IMG_6512.webp",
+      "classification": "sanitized-foundation",
+      "sha256": "789b711ec0a8f4b745f547b049baceff0b97dbadb0603579cc823bf66d2009da"
+    },
+    {
       "path": "README.md",
       "classification": "challenge-repository-metadata",
-      "sha256": "9d60bfc49b6ac96c56e30e8f16ce077985b125fdbd36033dde9406440098d815"
+      "sha256": "30eb7caaa34efbcdcdd789e00fadf335dc24522d75e942690db9536a45d03633"
     },
     {
       "path": "scripts/build-export-manifest.mjs",
       "classification": "challenge-repository-metadata",
-      "sha256": "36eb0a6db5fb250ee987696eaeab824444c3a5155f7655c22fb503d6945ea542"
+      "sha256": "929568f2919b6a020f367b684d4b3f8210927e9886e0ca5283fe72b4c7921762"
     },
     {
       "path": "scripts/build-icons.mjs",
@@ -276,7 +376,7 @@
     {
       "path": "src/app/styles/apps.css",
       "classification": "sanitized-foundation",
-      "sha256": "fbced58a0a4a7a2c1a8f3c899e5a8f8bd23b9f620c7d09b63b872181e3b40981"
+      "sha256": "82c02c7ac333b2dca76901debaeb7b30af19329e0c37f76ee9d1c8210b19ec5c"
     },
     {
       "path": "src/app/styles/apps/about.css",
@@ -297,6 +397,11 @@
       "path": "src/app/styles/apps/projects.css",
       "classification": "sanitized-foundation",
       "sha256": "4ae80029072850fbf423f8ffae6c478948c3737dd66313b9344d1a8870d646c7"
+    },
+    {
+      "path": "src/app/styles/apps/recruiter.css",
+      "classification": "sanitized-foundation",
+      "sha256": "75bb09eca5db2126bd3a4dd2debfc7f81d243232a357b6ebb35fcfc12494d6ca"
     },
     {
       "path": "src/app/styles/apps/resume.css",
@@ -401,12 +506,17 @@
     {
       "path": "src/app/styles/widget-panel.css",
       "classification": "sanitized-foundation",
-      "sha256": "72805acd5a60e125b9456095213b0c99e0b1e89dca89a34b7607c82d092365fe"
+      "sha256": "8bd0ed83b5e910927373cc7299efccc9889c967d6c6d2fe8ed3690f7ba02c16d"
     },
     {
       "path": "src/app/styles/widget-panel/index-widget.css",
       "classification": "sanitized-foundation",
       "sha256": "fb4dec238c12355ef6dce676c9beeb93884ee528ff07220a0a7c4e86fb3dd550"
+    },
+    {
+      "path": "src/app/styles/widget-panel/music.css",
+      "classification": "sanitized-foundation",
+      "sha256": "4a66d013f17c3501f399c9778702bcea63236d9fcbef2bbc70a10c03cce499d3"
     },
     {
       "path": "src/app/styles/widget-panel/panel.css",
@@ -422,6 +532,11 @@
       "path": "src/app/styles/widget-panel/weather.css",
       "classification": "sanitized-foundation",
       "sha256": "14cc5b2c6862f5e7ad5de4ccb2d593e48a265f82fc0998ae246ba607096e853d"
+    },
+    {
+      "path": "src/app/styles/widget-panel/wobbles.css",
+      "classification": "sanitized-foundation",
+      "sha256": "2fff245caa6157a7cff04346697aaf7729d5f8dc08694472b5419bc39efb5047"
     },
     {
       "path": "src/app/styles/window.css",
@@ -484,9 +599,14 @@
       "sha256": "b0893e8dcfe1c85525c083cb482c6f77436fe10bbb232487d4fbf9ff1d12c784"
     },
     {
+      "path": "src/components/apps/RecruiterApp.tsx",
+      "classification": "sanitized-foundation",
+      "sha256": "fd39763a476b7b42b7795140b009d2de26831c5560bd4c859ee7fcabda429a48"
+    },
+    {
       "path": "src/components/apps/registry.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "c48cccb0d6562b1a70a7f67561a482fe9c5e6657d70c459168c7d50caad93118"
+      "sha256": "de064da71e88323a3b5c123c782991d6e344fc2d4070d5f0d8a2ac87eb864494"
     },
     {
       "path": "src/components/apps/ResumeApp.tsx",
@@ -606,7 +726,7 @@
     {
       "path": "src/components/ElijahOS.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "9ba3122af3ebe801c4117c4a4d13cb16e9bb0e09bb051c93d8f3c1e781386e76"
+      "sha256": "c44afa8cce87041fb8d47aac058849c0f33e56080a4a42ff23cf76f131c83862"
     },
     {
       "path": "src/components/ErrorBoundary.tsx",
@@ -671,7 +791,7 @@
     {
       "path": "src/components/mobile/MobileShell.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "f5c6d0f4112b249afbc7f60f30d73bdc9eb7a59534e297bf3e488d325599f45f"
+      "sha256": "c95fa6c27171f53bcf20c487e95827b9074123cc3759ff0635bfa57511f00aa0"
     },
     {
       "path": "src/components/mobile/MobileWeatherCard.tsx",
@@ -749,9 +869,19 @@
       "sha256": "ef42c154db4e09c3f1374ef4042b4bdb002200bc6a0e75a6b8d63e8fc513198f"
     },
     {
+      "path": "src/components/WebMCPProvider.tsx",
+      "classification": "sanitized-foundation",
+      "sha256": "5b4011da708c092d149cbb199f08a88484c89548115fc03348f0c153d8676fe1"
+    },
+    {
       "path": "src/components/widgets/IndexWidget.tsx",
       "classification": "sanitized-foundation",
       "sha256": "424cee90d60c6385fe28353ae13b116f2891cfa41d30774d1bc31240727f835a"
+    },
+    {
+      "path": "src/components/widgets/MusicWidget.tsx",
+      "classification": "sanitized-foundation",
+      "sha256": "7717a76f83b15c2da4d8b20ba9dedbf71753011c6ca39b0cbd8fb5618da8f1c6"
     },
     {
       "path": "src/components/widgets/SystemPulseWidget.tsx",
@@ -767,6 +897,11 @@
       "path": "src/components/widgets/WidgetPanel.tsx",
       "classification": "sanitized-foundation",
       "sha256": "d174fd71e764759184902994ed18f9f69d0bfc6507ec774912833afb01963d32"
+    },
+    {
+      "path": "src/components/widgets/WobblesWidget.tsx",
+      "classification": "sanitized-foundation",
+      "sha256": "93f09c6c16ab83bd3118da16eb9f57cd469042df1b8b6be8b29de2150d951758"
     },
     {
       "path": "src/components/Window.tsx",
@@ -786,7 +921,7 @@
     {
       "path": "src/lib/apps.ts",
       "classification": "sanitized-foundation",
-      "sha256": "904798753f4376cba3bd62f2f82fbef7e5b195af671733ecd1bde05f965168b0"
+      "sha256": "e20301c7a2b3e0c6b485b227150921f475ec196a42d373a840496b882b1a7fd6"
     },
     {
       "path": "src/lib/audio-analyser.ts",
@@ -816,7 +951,7 @@
     {
       "path": "src/lib/changelog.ts",
       "classification": "sanitized-foundation",
-      "sha256": "ce1f9e9a3c5583e15e68b54704b0c2cd932e43b363dff2420ec8057d4e03fa9a"
+      "sha256": "af786361a1213625f5ed83390100b2bedfe9a786728b4b2f1c97f2ed4a2c71f0"
     },
     {
       "path": "src/lib/desktop-store.test.ts",
@@ -841,7 +976,17 @@
     {
       "path": "src/lib/elijah.ts",
       "classification": "sanitized-foundation",
-      "sha256": "b486b757069ed2caa8ab295d25c94907fe76897e112ab21c62bddaaff37aac46"
+      "sha256": "7e429000fe57b706d5b10b60383aaad1bccd2240c94544d1cd892924228b4528"
+    },
+    {
+      "path": "src/lib/evidence.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "884ad3f9c3b324b45890ffb62b21db23f011242d36ba21f67a14ac73a930e834"
+    },
+    {
+      "path": "src/lib/evidence.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "0956ead0de179e491e6f76db3c8664d7ef49260f16fcbde50a04a8e084b7b283"
     },
     {
       "path": "src/lib/index-scene.ts",
@@ -941,7 +1086,7 @@
     {
       "path": "src/lib/ui-copy.ts",
       "classification": "sanitized-foundation",
-      "sha256": "a8c194cebbda0aa4049c3815471a1ab0d92581981a4027668891ea723e87bd4e"
+      "sha256": "1e96c62deca09b3653a94a4b1c8c9ae0d57699c65361cdd54db7a6c4e11dd787"
     },
     {
       "path": "src/lib/use-is-mobile.ts",
@@ -994,6 +1139,61 @@
       "sha256": "b6b67734de6b9730a364bcb65db74a7155b2606117bb3fdcb730f59d9d98d074"
     },
     {
+      "path": "src/lib/webmcp/activity.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "993d72452404f6134a457eec15e9896df9011d3baf4a84f9ff073f29d0028e04"
+    },
+    {
+      "path": "src/lib/webmcp/model-context.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "ca3b673a84641db502b7dce2893f9e9767fba365d6c3c0f545b4ee9a33634c98"
+    },
+    {
+      "path": "src/lib/webmcp/register.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "676c6617a9d1dc77c89070df3d43d9be36791c69e199162973de0e6a61734c63"
+    },
+    {
+      "path": "src/lib/webmcp/schema.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "4e4257bf985603be6735c237c270687a72ac0b9b6eddff20257839e222d4d915"
+    },
+    {
+      "path": "src/lib/webmcp/schema.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "0d4bfb19683aaf327be545117c7c736dd78c5c065898c721a176e81ac8dfc0e3"
+    },
+    {
+      "path": "src/lib/webmcp/tools.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "c50f3ac3fefd0805b23f7b8b05f04a030f4e5df815696f891253a5af40a44ed9"
+    },
+    {
+      "path": "src/lib/webmcp/tools.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "910d393bd70d884175254e8851d295193ba87155b354986e6a8b3c4835294f37"
+    },
+    {
+      "path": "src/lib/webmcp/visit-intent.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "d06e2209804e0f965ddcccdc497af49308cb26b1e22e19cb2089d079f0c97bbb"
+    },
+    {
+      "path": "src/lib/webmcp/visit-intent.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "57f4b2df86a8f2e9c04b96385d70892078acd9badf1364e01eb5e2f6b45613fe"
+    },
+    {
+      "path": "src/lib/webmcp/workspace.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "c0778559046a1d4eca3736bdde03d669c38fe4d140beaab1aca8d3d57ff49546"
+    },
+    {
+      "path": "src/lib/webmcp/workspace.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "be185035d6dab14b415e9fe837f7fe6718ed78d2647bb81d6006c59873240e30"
+    },
+    {
       "path": "src/lib/widget-store.ts",
       "classification": "sanitized-foundation",
       "sha256": "d571f7c27c480389f828917a7ca918355a5dd0c79d4da6591ad35b963946478f"
@@ -1001,7 +1201,7 @@
     {
       "path": "src/lib/widgets.ts",
       "classification": "sanitized-foundation",
-      "sha256": "2ebb9fbc8c08dc87d7f1e73c988095035d56250dbf922cf685ee6166c7d12b7d"
+      "sha256": "575136aa047bbedf074fc0386eaddbab6abab8d0fee1fc4fe2d2f0a2ce5c294c"
     },
     {
       "path": "src/lib/window-anim.ts",
@@ -1087,6 +1287,11 @@
       "path": "tests/responsive.spec.ts",
       "classification": "sanitized-foundation",
       "sha256": "8c50d02d75e2490f1683f63e0c82e5b8b63d22d26831d68eb006cc3501e87455"
+    },
+    {
+      "path": "tests/webmcp.spec.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "ef2b44e85750d5b2da17df84d5d93e22feb61404d42bed95da2b0c77ce09b00a"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",

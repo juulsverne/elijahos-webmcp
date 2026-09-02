@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import {
   createHash,
 } from "node:crypto";
@@ -67,6 +68,7 @@ function classify(path) {
     path === "CHALLENGE_BASELINE.md" ||
     path === "README.md" ||
     path === "THIRD_PARTY_NOTICES.md" ||
+    path.startsWith("docs/") ||
     path.startsWith("scripts/")
   ) {
     return "challenge-repository-metadata";
@@ -85,7 +87,23 @@ if (checking) {
   generatedAt = current.generatedAt;
 }
 
+// Only files git would export may appear in the public manifest. Tracked and
+// untracked-but-not-ignored files qualify; anything matched by .gitignore is
+// excluded so a local-only file can never leak its name or hash into the
+// committed manifest and checksum list.
+function gitExportablePaths() {
+  const output = execFileSync(
+    "git",
+    ["ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+    { cwd: root, encoding: "utf8" },
+  );
+  return new Set(output.split("\0").filter(Boolean));
+}
+
+const exportable = gitExportablePaths();
+
 const files = walk(root)
+  .filter((absolute) => exportable.has(toPortablePath(absolute)))
   .map((absolute) => {
     const path = toPortablePath(absolute);
     return {

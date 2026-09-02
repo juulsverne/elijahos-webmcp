@@ -542,4 +542,46 @@ export const UI_COPY = {
       status: "Status",
     },
   },
+  recruiter: {
+    title: "Recruiter workspace",
+    tagline:
+      "The agent-readable side of this site: browser tools an AI agent can call, a session-scoped role context you control, and a live log of everything agents do here.",
+    status: {
+      heading: "Agent tool surface",
+      supported: "WebMCP detected — tools are registered in this browser.",
+      unsupported:
+        "This browser has no WebMCP support. Everything on the site still works; agents just can't call tools here.",
+      checking: "Checking for WebMCP support…",
+      toolCount: (n: number) => `${n} tools`,
+      readOnlyBadge: "read-only",
+      writesBadge: "acts",
+    },
+    intent: {
+      heading: "Visit intent",
+      explainer:
+        "State why you're here — or let your agent do it with set_visit_intent — and see each priority compared against the documented evidence on this site. Stays in this browser session only, never sent to a server, and you can edit or clear it any time.",
+      placeholder:
+        "First line: your objective (e.g. a role title).\nThen one line per priority…",
+      set: "Set visit intent",
+      edit: "Edit",
+      clear: "Clear",
+      suppliedByAgent: "set by your agent",
+      suppliedByHuman: "set by you",
+      contextLabel: "context",
+      evidenceStandardLabel: "evidence standard",
+      priorityCount: (n: number) =>
+        n === 1 ? "1 priority" : `${n} priorities`,
+      matchHeading: "Evidence per priority",
+      gap: "No documented evidence on this site",
+      matchNote:
+        "Matching is keyword overlap over candidate-authored records — a starting point for your judgment, not an assessment.",
+    },
+    activity: {
+      heading: "Agent activity",
+      empty: "No tool calls yet this session.",
+      clear: "Clear log",
+      failed: "failed",
+    },
+    disclosureHeading: "What this surface is (and isn't)",
+  },
 } as const;

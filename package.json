@@ -2,6 +2,7 @@
   "name": "elijahos-webmcp",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "packageManager": "npm@10.9.2",
   "engines": {
     "node": "22.x"
@@ -20,7 +21,8 @@
     "check:public-index": "tsx scripts/build-public-index.ts --check",
     "build:export-manifest": "node scripts/build-export-manifest.mjs",
     "check:export-manifest": "node scripts/build-export-manifest.mjs --check",
-    "verify": "npm run lint && npm run typecheck && npm test && npm run check:ui && npm run check:public-index && npm run check:export-manifest"
+    "verify": "npm run lint && npm run typecheck && npm test && npm run check:ui && npm run check:public-index && npm run check:export-manifest",
+    "test:webmcp": "cross-env NO_COLOR= playwright test tests/webmcp.spec.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

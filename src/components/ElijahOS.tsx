@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { Boot } from "@/components/Boot";
+import { WebMCPProvider } from "@/components/WebMCPProvider";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useDesktopStore } from "@/lib/desktop-store";
 import { APPS, INITIAL_OPEN } from "@/lib/apps";
@@ -145,6 +146,9 @@ export function ElijahOS() {
 
   return (
     <main className="lc-root" data-phase={phase}>
+      {/* Registers the agent tool surface; renders nothing. Mounted outside
+          the shell branches so desktop and mobile expose the same tools. */}
+      <WebMCPProvider />
       <div className="lc-bg" />
       <div className="lc-iridescent" />
       {/* ParticleField uses pointer/drag interactions that aren't designed

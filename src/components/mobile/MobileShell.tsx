@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { setMobileOpener, type AppOrigin } from "@/lib/app-launcher";
+import { setMobileActiveAppId } from "@/lib/webmcp/workspace";
 import { APPS, LAUNCHPAD_ORDER } from "@/lib/apps";
 import { MOBILE_APP_EXIT_MS } from "@/lib/layout";
 import { useKeyboardInset } from "@/lib/use-keyboard-inset";
@@ -56,6 +57,12 @@ export function MobileShell() {
   const [activeId, setActiveId] = useState<string | null>(
     () => getInitialMobileAppId(),
   );
+  // Mirror the active app into the WebMCP workspace seam so
+  // get_workspace_state can report it without reaching into shell state.
+  useEffect(() => {
+    setMobileActiveAppId(activeId);
+    return () => setMobileActiveAppId(null);
+  }, [activeId]);
   // Point the app expands from / collapses back into (the tapped icon).
   const [origin, setOrigin] = useState<AppOrigin | null>(null);
   const [closing, setClosing] = useState(false);
