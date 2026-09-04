@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-04T03:59:53.371Z",
+  "generatedAt": "2026-09-04T05:50:34.908Z",
   "sourceSnapshot": {
     "commit": "6e135e4f125f14ab2a877ad5ee70dcf7315913bf",
     "date": "2026-08-06"
@@ -67,6 +67,11 @@
       "path": "docs/superpowers/specs/2026-09-03-ask-elijah-lite-design.md",
       "classification": "challenge-repository-metadata",
       "sha256": "4b8aff02124e7739861e01bf4d091376d9d7422a1cb760e3916e0c2e8d751856"
+    },
+    {
+      "path": "docs/webmcp-prd.md",
+      "classification": "challenge-repository-metadata",
+      "sha256": "0f3adf824865e9f63749b2d5de9741d2afbef28fdcfbca1c252cdb1103281262"
     },
     {
       "path": "docs/webmcp-submission-control.md",
