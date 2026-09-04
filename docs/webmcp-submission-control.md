@@ -4,7 +4,7 @@
 >
 > Last rules and anonymous-access check: September 3, 2026
 >
-> Submission deadline: September 3, 2026 at 1:00 PM PDT / 3:00 PM CDT
+> Submission deadline: September 4, 2026 at 1:00 AM PDT / 3:00 AM CDT
 
 This document records release truth, required evidence, and final freeze gates. The [README](../README.md) owns the project thesis and the four Devpost answers. The [tool reference](./webmcp-tools.md) owns the detailed WebMCP contracts.
 
@@ -147,7 +147,7 @@ Do not show a fit score, ranking, hiring verdict, automated rejection claim, or 
 - [ ] Public YouTube video opens anonymously and remains under three minutes.
 - [ ] Testing instructions are sufficient and contain no credentials unless authentication is actually required.
 - [ ] Devpost entry is marked **submitted**, not left as a draft.
-- [ ] Submission confirmation is captured before 1:00 PM PDT / 3:00 PM CDT.
+- [ ] Submission confirmation is captured before 1:00 AM PDT / 3:00 AM CDT on September 4.
 
 ## Freeze after submission
 
