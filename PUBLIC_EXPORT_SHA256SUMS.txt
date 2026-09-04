@@ -51,8 +51,8 @@ e8394b71d2762e773cf723c1ca50241ac164464f3c453aae5a4df20621176d10  README.md
 7b1e0fc2d185337fdf568bcf24c0839b1fddbe015fa2071c00826d7bb2fa973f  src/app/api/ask/stream/route.ts
 81f519473290ce2c5329e6582e4ec11fadbc47513f601acedc2ae9eb45e6fce1  src/app/api/job-intent/extract-job-intent.test.ts
 9b3c589177e059f674b2d45d0d0c552d46d0c50428937802d1ae960f39e06934  src/app/api/job-intent/extract-job-intent.ts
-e1806f0a12f07b84f17e91be52b47035a944f629409364f985f0ad8c4f9715f7  src/app/api/job-intent/job-intent-handler.test.ts
-30b528c4b033d553d87c50ec5b2045e56547fc626c8afb023f8d38111881f7bf  src/app/api/job-intent/job-intent-handler.ts
+1664f3bf4286fb1c37e8af2baa9d739336058ded436cfdb36811fc9e2875c34e  src/app/api/job-intent/job-intent-handler.test.ts
+204b7f87f74abcb45b4f1c99f169e57986c36c4e6b22e60f0add10d6a8333c86  src/app/api/job-intent/job-intent-handler.ts
 17fe38393e8241c38808e28ba8171d2cb03d831c3ef0fab899c244d178e6b585  src/app/api/job-intent/route.ts
 82ac0f84f9d7a5621b9950ce7a442b9d22c1b4fe69873c5dbc8a067c769381f3  src/app/api/weather/route.test.ts
 c4433df4e5bb39eccaffddb367d67e3f1c342b8b3b1f4a230760b49154f967f4  src/app/api/weather/route.ts
@@ -213,7 +213,7 @@ b2597fca90fef9206184c1a09a063085ef5e4f212e61a27e1799c285f8d9b42f  src/lib/bio-te
 33d74cfec067cc16e360e9b36b3c4619085f4444860b99fbf22453dbc7a18fb9  src/lib/case-anchor.ts
 5c283a15fe7344f5a0aa0e05cf26229b0a47f86585724dbfcce2f3e124c4fffb  src/lib/case-studies.ts
 735d9b1c75a43a12ffc2b261e69693d34add8b1891c6977f5012924582df2e40  src/lib/changelog.test.ts
-f670cbdd6cd3673c13560aa00d4a07e09429270ed50e80062edb0f5565f0abba  src/lib/changelog.ts
+971e14ffa78d58f4db6d3ceec87fa3fa802cb1f7928b5e4feab9f2b3538afc18  src/lib/changelog.ts
 a040efe7aaf8391c5b4abb8b32dc973781546b8db01da2af5db6ebb1d6926402  src/lib/desktop-store.test.ts
 865f1902e93e6cccbe9a0bb6701ae8e043056020487919f464db0c3b83d855de  src/lib/desktop-store.ts
 9ca09105c27b2c619c0712fe31f3f23ada610f251e867d1518ff0bea95b50663  src/lib/elijah-docs.test.ts
@@ -244,7 +244,7 @@ ddbd33993ca869421a540e537b6438a45a5cf6975076b1c0872e9273031d4ff5  src/lib/site-u
 aeb2828ec2e42555a7cab559e2c53cc6e33fad13836789c14b8a16dc3458adf3  src/lib/system-events.ts
 4fc3940ed41fd4aff8ead58391b4b614dd030b9b0ddf0efdd562b68e0277975c  src/lib/theme.ts
 80dbd81cdf0e6710d9d0f129180995ed82307b53ca8c83b1ccf8f53bf1911573  src/lib/track-process-memory.ts
-8a6b82188847b37c9fc1fc96424a63dc00d5a7a408e384b6fa89e5f28a668782  src/lib/ui-copy.ts
+aaf63acf6984a40703b7126af48593412b379cd8c4961abcf9fae2b7b9c49713  src/lib/ui-copy.ts
 78df9e85a1f607c5d62236ac7d736181183c8ce6887d1f638e5539a770d6700f  src/lib/use-is-mobile.ts
 0b6f1166df27147f25eee3e83f021dca66c2d148f0254be0636dbd275c9a80ea  src/lib/use-keyboard-inset.ts
 9ed5bc6f64fb9d217b35ba31680bf797ff09269f9ae72c877375bd31759bf538  src/lib/use-page-visible.ts

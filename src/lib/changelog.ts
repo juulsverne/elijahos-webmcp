@@ -72,7 +72,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     version: "v1.7",
     title: "The recruiter workspace becomes the agent workspace",
     summary:
-      "The workspace outgrew its recruiting-only framing: it's where you and your AI agent browse this OS together. The visit intent now fills itself three ways — quick-start presets, a pasted job posting link, or your agent — and the tool surface grew to ten tools, because an OS should let an agent open the snake game and put a track on, not just read a résumé.",
+      "The workspace outgrew its recruiting-only framing: it's where you and your AI agent browse this OS together. The visit intent now fills itself three ways — quick-start presets, a supported job-board link, or your agent — and the tool surface grew to ten tools, because an OS should let an agent open the snake game and put a track on, not just read a résumé.",
     changes: [
       {
         kind: "improved",
@@ -83,7 +83,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       {
         kind: "added",
         text:
-          "Paste a job posting link and the workspace pulls the title, company, and requirement bullets into a visit-intent draft for you to review — fetched once, never stored.",
+          "Paste a supported job-board link and the workspace pulls the title, company, and requirement bullets into a visit-intent draft for you to review — fetched once, never stored.",
         appId: "agent",
       },
       {

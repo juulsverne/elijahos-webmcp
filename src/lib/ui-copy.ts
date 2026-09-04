@@ -593,9 +593,10 @@ export const UI_COPY = {
       // One-tap starting points (content in src/lib/webmcp/intent-presets.ts).
       presetsLead: "quick starts",
       presetAria: (label: string) => `Use the "${label}" quick start`,
-      // Paste-a-job-link puller. The route fetches the page once server-side
-      // (browsers can't cross-origin fetch job boards) and returns only the
-      // extracted draft — the human reviews it before anything is stored.
+      // Paste-a-job-link puller. The route fetches supported providers once
+      // server-side (browsers can't cross-origin fetch job boards) and returns
+      // only the extracted draft — the human reviews it before anything is
+      // stored.
       jobLink: {
         lead: "or pull it from a job posting",
         placeholder: "Paste a job posting link…",
@@ -605,10 +606,11 @@ export const UI_COPY = {
         pulled: (host: string) =>
           `Pulled from ${host} — review the draft, tweak it, then set it.`,
         privacy:
-          "The link is fetched once through this site's server to read the posting; neither the link nor the page is stored.",
+          "Supported job-board links are fetched once to read the posting; neither the link nor the page is stored.",
         failed: {
           "invalid-url": "That doesn't look like a web link.",
-          "blocked-url": "That link points somewhere this site won't fetch.",
+          "blocked-url":
+            "That provider isn't supported. Paste the details in by hand instead.",
           "rate-limited": "Too many pulls right now — try again in a minute.",
           "fetch-failed":
             "Couldn't read that page. Paste the details in by hand instead.",

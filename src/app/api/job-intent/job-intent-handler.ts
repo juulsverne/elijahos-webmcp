@@ -8,12 +8,11 @@
 // stays browser-local).
 //
 // Because this is a URL-fetching proxy, it refuses URL shapes that don't
-// look like a plain public web origin: http(s) only, no credentials in the
-// URL, no IP literals, no intranet-style single-label names, default ports
-// only, and every redirect hop is re-validated against the same rules. The
-// checks are name-based and do not resolve DNS, so a public hostname pointed
-// at a private address is outside this guard; the serverless deployment
-// gives the function no privileged internal network to reach.
+// belong to a supported job-board provider: http(s) only, no credentials in
+// the URL, no IP literals, no intranet-style single-label names, default
+// ports only, and every redirect hop is re-validated against the same rules.
+// Restricting DNS ownership to these providers closes the arbitrary-host
+// SSRF path without relying on a racy resolve-then-fetch check.
 
 import { clientIpKey, createRateLimiter, type RateLimiter } from "@/lib/ratelimit";
 import type {
@@ -50,6 +49,25 @@ const jobIntentLimiter = createRateLimiter({
 const PRIVATE_IPV4_RE =
   /^(0\.|10\.|127\.|169\.254\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\.)/;
 
+const ALLOWED_JOB_HOST_SUFFIXES = [
+  "applytojob.com",
+  "ashbyhq.com",
+  "bamboohr.com",
+  "greenhouse.io",
+  "icims.com",
+  "indeed.com",
+  "jobvite.com",
+  "lever.co",
+  "linkedin.com",
+  "myworkdayjobs.com",
+  "paylocity.com",
+  "smartrecruiters.com",
+  "wellfound.com",
+  "workable.com",
+  "workdayjobs.com",
+  "ziprecruiter.com",
+] as const;
+
 function isBlockedHostname(hostname: string): boolean {
   const host = hostname.toLowerCase().replace(/\.$/, "");
   if (host === "localhost" || host.endsWith(".localhost")) return true;
@@ -70,6 +88,13 @@ function isBlockedHostname(hostname: string): boolean {
   return false;
 }
 
+function isAllowedJobHostname(hostname: string): boolean {
+  const host = hostname.toLowerCase().replace(/\.$/, "");
+  return ALLOWED_JOB_HOST_SUFFIXES.some(
+    (suffix) => host === suffix || host.endsWith(`.${suffix}`),
+  );
+}
+
 // null when the URL is not fetchable under this proxy's rules.
 export function validateJobUrl(raw: string): URL | null {
   if (raw.length > MAX_URL_LENGTH) return null;
@@ -83,6 +108,7 @@ export function validateJobUrl(raw: string): URL | null {
   if (url.username || url.password) return null;
   if (url.port && url.port !== "80" && url.port !== "443") return null;
   if (isBlockedHostname(url.hostname)) return null;
+  if (!isAllowedJobHostname(url.hostname)) return null;
   return url;
 }
 

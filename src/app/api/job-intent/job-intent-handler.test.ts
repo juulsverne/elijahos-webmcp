@@ -39,9 +39,23 @@ function htmlResponse(html: string, contentType = "text/html; charset=utf-8") {
 }
 
 describe("validateJobUrl", () => {
-  it("accepts plain public http(s) URLs", () => {
-    assert.ok(validateJobUrl("https://boards.example.com/jobs/123"));
-    assert.ok(validateJobUrl("http://example.com/careers"));
+  it("accepts supported job-board URLs", () => {
+    assert.ok(validateJobUrl("https://boards.greenhouse.io/jobs/123"));
+    assert.ok(validateJobUrl("http://jobs.lever.co/example/careers"));
+    assert.ok(
+      validateJobUrl("https://company.wd1.myworkdayjobs.com/en-US/jobs"),
+    );
+  });
+
+  it("rejects public-looking hostnames outside supported job boards", () => {
+    const blocked = [
+      "https://example.com/careers",
+      "http://169.254.169.254.nip.io/latest/meta-data",
+      "https://greenhouse.io.attacker.example/jobs/123",
+    ];
+    for (const url of blocked) {
+      assert.equal(validateJobUrl(url), null, url);
+    }
   });
 
   it("rejects everything that is not a public web origin", () => {
@@ -72,7 +86,7 @@ describe("validateJobUrl", () => {
 describe("handleJobIntentRequest", () => {
   it("extracts job details through a fake fetch", async () => {
     const response = await handleJobIntentRequest(
-      jsonRequest({ url: "https://boards.example.com/jobs/123" }),
+      jsonRequest({ url: "https://boards.greenhouse.io/jobs/123" }),
       {
         fetchImpl: async () => htmlResponse(JOB_HTML),
         limiter: openLimiter(),
@@ -81,7 +95,7 @@ describe("handleJobIntentRequest", () => {
     assert.equal(response.status, 200);
     const payload = (await response.json()) as Record<string, unknown>;
     assert.equal(payload.ok, true);
-    assert.equal(payload.host, "boards.example.com");
+    assert.equal(payload.host, "boards.greenhouse.io");
     assert.equal(payload.jobTitle, "AI Engineer");
     assert.equal(payload.organization, "Example Corp");
     assert.deepEqual(payload.priorities, ["Experience with TypeScript"]);
@@ -90,15 +104,15 @@ describe("handleJobIntentRequest", () => {
   it("follows a same-rules redirect and reports the final host", async () => {
     const calls: string[] = [];
     const response = await handleJobIntentRequest(
-      jsonRequest({ url: "https://short.example.com/j/1" }),
+      jsonRequest({ url: "https://jobs.lever.co/example/j/1" }),
       {
         fetchImpl: async (input) => {
           const url = String(input);
           calls.push(url);
-          if (url.startsWith("https://short.example.com")) {
+          if (url.startsWith("https://jobs.lever.co")) {
             return new Response(null, {
               status: 302,
-              headers: { location: "https://boards.example.com/jobs/123" },
+              headers: { location: "https://boards.greenhouse.io/jobs/123" },
             });
           }
           return htmlResponse(JOB_HTML);
@@ -108,13 +122,13 @@ describe("handleJobIntentRequest", () => {
     );
     const payload = (await response.json()) as Record<string, unknown>;
     assert.equal(payload.ok, true);
-    assert.equal(payload.host, "boards.example.com");
+    assert.equal(payload.host, "boards.greenhouse.io");
     assert.equal(calls.length, 2);
   });
 
   it("refuses a redirect that points at a blocked target", async () => {
     const response = await handleJobIntentRequest(
-      jsonRequest({ url: "https://short.example.com/j/1" }),
+      jsonRequest({ url: "https://jobs.lever.co/example/j/1" }),
       {
         fetchImpl: async () =>
           new Response(null, {
@@ -148,7 +162,7 @@ describe("handleJobIntentRequest", () => {
 
   it("rejects non-HTML responses", async () => {
     const response = await handleJobIntentRequest(
-      jsonRequest({ url: "https://boards.example.com/jobs.json" }),
+      jsonRequest({ url: "https://boards.greenhouse.io/jobs.json" }),
       {
         fetchImpl: async () =>
           htmlResponse('{"job": true}', "application/json"),
@@ -161,7 +175,7 @@ describe("handleJobIntentRequest", () => {
 
   it("reports no-details when a page has nothing job-shaped", async () => {
     const response = await handleJobIntentRequest(
-      jsonRequest({ url: "https://boards.example.com/empty" }),
+      jsonRequest({ url: "https://boards.greenhouse.io/empty" }),
       {
         fetchImpl: async () =>
           htmlResponse("<html><body><p>nothing here</p></body></html>"),
@@ -174,7 +188,7 @@ describe("handleJobIntentRequest", () => {
 
   it("returns 429 when the per-IP budget is exhausted", async () => {
     const response = await handleJobIntentRequest(
-      jsonRequest({ url: "https://boards.example.com/jobs/123" }),
+      jsonRequest({ url: "https://boards.greenhouse.io/jobs/123" }),
       {
         fetchImpl: async () => htmlResponse(JOB_HTML),
         limiter: openLimiter({ consumePerIp: () => false }),

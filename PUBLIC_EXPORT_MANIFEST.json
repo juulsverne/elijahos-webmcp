@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-04T03:28:59.069Z",
+  "generatedAt": "2026-09-04T03:45:32.524Z",
   "sourceSnapshot": {
     "commit": "6e135e4f125f14ab2a877ad5ee70dcf7315913bf",
     "date": "2026-08-06"
@@ -286,12 +286,12 @@
     {
       "path": "src/app/api/job-intent/job-intent-handler.test.ts",
       "classification": "sanitized-foundation",
-      "sha256": "e1806f0a12f07b84f17e91be52b47035a944f629409364f985f0ad8c4f9715f7"
+      "sha256": "1664f3bf4286fb1c37e8af2baa9d739336058ded436cfdb36811fc9e2875c34e"
     },
     {
       "path": "src/app/api/job-intent/job-intent-handler.ts",
       "classification": "sanitized-foundation",
-      "sha256": "30b528c4b033d553d87c50ec5b2045e56547fc626c8afb023f8d38111881f7bf"
+      "sha256": "204b7f87f74abcb45b4f1c99f169e57986c36c4e6b22e60f0add10d6a8333c86"
     },
     {
       "path": "src/app/api/job-intent/route.ts",
@@ -1096,7 +1096,7 @@
     {
       "path": "src/lib/changelog.ts",
       "classification": "sanitized-foundation",
-      "sha256": "f670cbdd6cd3673c13560aa00d4a07e09429270ed50e80062edb0f5565f0abba"
+      "sha256": "971e14ffa78d58f4db6d3ceec87fa3fa802cb1f7928b5e4feab9f2b3538afc18"
     },
     {
       "path": "src/lib/desktop-store.test.ts",
@@ -1251,7 +1251,7 @@
     {
       "path": "src/lib/ui-copy.ts",
       "classification": "sanitized-foundation",
-      "sha256": "8a6b82188847b37c9fc1fc96424a63dc00d5a7a408e384b6fa89e5f28a668782"
+      "sha256": "aaf63acf6984a40703b7126af48593412b379cd8c4961abcf9fae2b7b9c49713"
     },
     {
       "path": "src/lib/use-is-mobile.ts",
