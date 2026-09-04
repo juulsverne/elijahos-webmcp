@@ -5,7 +5,7 @@
 // integration path: feature detection, registration, schema validation,
 // the five-tool agent journey (set_visit_intent → search_evidence →
 // inspect_evidence → compose_workspace → get_workspace_state), and the
-// visible recruiter workspace.
+// visible agent workspace.
 
 import { expect, test, type Page } from "@playwright/test";
 
@@ -132,11 +132,11 @@ test("the full agent journey composes real windows and stays visible", async ({ 
       priorities: ["agent systems and evals", "underwaterbasketweaving"],
     }),
   );
-  await expect(page.locator(".recruiter-app")).toBeVisible();
-  await expect(page.locator(".recruiter-role-title")).toContainText(
+  await expect(page.locator(".agent-app")).toBeVisible();
+  await expect(page.locator(".agent-intent-title")).toContainText(
     "Staff AI Engineer",
   );
-  await expect(page.locator(".recruiter-gap").first()).toBeVisible();
+  await expect(page.locator(".agent-gap").first()).toBeVisible();
 
   // 2-3. Agent searches and picks evidence.
   const search = (await page.evaluate(() =>
@@ -179,7 +179,7 @@ test("the full agent journey composes real windows and stays visible", async ({ 
   expect(state.snapshot.visitIntent?.suppliedBy).toBe("visitor-agent");
 
   // The visible activity log recorded the whole journey.
-  const logText = await page.locator(".recruiter-log").innerText();
+  const logText = await page.locator(".agent-log").innerText();
   for (const tool of [
     "set_visit_intent",
     "search_evidence",
@@ -198,9 +198,9 @@ test("human can edit and clear the agent-set intent", async ({ page }) => {
       priorities: ["pipelines"],
     }),
   );
-  await expect(page.locator(".recruiter-app")).toBeVisible();
+  await expect(page.locator(".agent-app")).toBeVisible();
   await page.getByRole("button", { name: "Edit" }).click();
-  const value = await page.locator(".recruiter-role-input").inputValue();
+  const value = await page.locator(".agent-intent-input").inputValue();
   expect(value).toContain("Screen for platform role");
   expect(value).toContain("- pipelines");
   await page.getByRole("button", { name: "Set visit intent" }).isVisible();
@@ -208,7 +208,7 @@ test("human can edit and clear the agent-set intent", async ({ page }) => {
   // Cancel edit by re-setting, then clear entirely.
   await page.getByRole("button", { name: "Set visit intent" }).click();
   await page.getByRole("button", { name: "Clear", exact: true }).click();
-  await expect(page.locator(".recruiter-role-input")).toBeVisible();
+  await expect(page.locator(".agent-intent-input")).toBeVisible();
 });
 
 test("mobile shell registers the same tools and composes its primary app", async ({ page }) => {
@@ -216,7 +216,7 @@ test("mobile shell registers the same tools and composes its primary app", async
   await boot(page);
   await expect(page.locator(".mobile-root")).toBeVisible();
   const count = await page.evaluate(() => window.__webmcpTools.size);
-  expect(count).toBeGreaterThanOrEqual(8);
+  expect(count).toBeGreaterThanOrEqual(10);
 
   const search = (await page.evaluate(() =>
     window.__callTool("search_evidence", { query: "finance", kinds: ["experience"] }),
@@ -239,6 +239,43 @@ test("mobile shell registers the same tools and composes its primary app", async
   expect(state.snapshot.openAppIds).toEqual(composed.openedAppIds);
 });
 
+test("open_app opens the snake game and play_music surfaces the player", async ({ page }) => {
+  await boot(page);
+
+  const opened = (await page.evaluate(() =>
+    window.__callTool("open_app", { app: "snake" }),
+  )) as { opened: string; shell: string };
+  expect(opened.opened).toBe("snake");
+  expect(opened.shell).toBe("desktop");
+  await expect(page.locator('.win[data-window-id="snake"]')).toBeVisible();
+
+  const music = (await page.evaluate(() =>
+    window.__callTool("play_music", { action: "play", track: 1 }),
+  )) as { tracks: { track: number; title: string }[] };
+  expect(music.tracks.length).toBeGreaterThan(0);
+  // The tool makes playback visible: the widget panel opens with the player.
+  await expect(page.locator(".widget-panel.is-open")).toBeVisible();
+  await expect(page.locator(".music-widget")).toBeVisible();
+
+  // Both calls are on the visible record.
+  await page.locator(".dock").getByRole("button", { name: /agent/i }).click();
+  const logText = await page.locator(".agent-log").innerText();
+  expect(logText).toContain("open_app");
+  expect(logText).toContain("play_music");
+});
+
+test("a preset chip fills the visit intent in one tap", async ({ page }) => {
+  await boot(page);
+  await page.locator(".dock").getByRole("button", { name: /agent/i }).click();
+  await expect(page.locator(".agent-app")).toBeVisible();
+  await page.locator(".agent-chip").first().click();
+  await expect(page.locator(".agent-intent-title")).toBeVisible();
+  // A preset is a human action and is labeled that way.
+  await expect(page.locator(".agent-badge[data-kind='read']").first()).toContainText(
+    "set by you",
+  );
+});
+
 test("without a WebMCP host the workspace reports unsupported", async ({ browser }) => {
   // Fresh context WITHOUT the fake host.
   const ctx = await browser.newContext({ reducedMotion: "reduce" });
@@ -246,8 +283,8 @@ test("without a WebMCP host the workspace reports unsupported", async ({ browser
   await clean.setViewportSize({ width: 1440, height: 900 });
   await clean.goto("/");
   await clean.locator(".boot-wrap").waitFor({ state: "detached", timeout: 15_000 });
-  await clean.locator(".dock").getByRole("button", { name: /recruiter/i }).click();
-  await expect(clean.locator(".recruiter-status")).toHaveAttribute(
+  await clean.locator(".dock").getByRole("button", { name: /agent/i }).click();
+  await expect(clean.locator(".agent-status")).toHaveAttribute(
     "data-supported",
     "false",
   );

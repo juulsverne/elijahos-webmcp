@@ -56,6 +56,10 @@ export type EvidenceRecord = {
   };
   limitations: string[];
   artifacts: EvidenceArtifact[];
+  // Independently checkable references attached to this specific claim —
+  // e.g. a project's public repository. Empty when the canonical source
+  // documents none; never invented.
+  externalLinks: { label: string; url: string }[];
   tags: string[];
 };
 
@@ -64,7 +68,35 @@ export type EvidenceRecord = {
 export const EVIDENCE_DISCLOSURE: readonly string[] = [
   "All records are candidate-authored self-descriptions; no third-party verification, references, or employment checks are included.",
   "Records reflect the site content as of the per-document revision dates in provenance.",
-  "Search is lexical (keyword overlap), not semantic ranking; absence of a match means no documented evidence on this site, not a negative claim.",
+  "Search is lexical (keyword overlap with light word-form normalization), not semantic ranking; absence of a match means no documented evidence on this site, not a negative claim.",
+  "The strongest checks are first-hand: judge the live site you are browsing and the linked public code yourself (see firstHandSources); records carry externalLinks when the claim has a public artifact.",
+  "Qualities like analytical or architectural ability are never stored as claims. They are demonstrated: read kind 'decision' records (options considered, tradeoffs, the pick and why), the case studies' structure, and this site's own build — then judge the reasoning yourself.",
+];
+
+// Pointers an agent can verify without trusting any self-description: the
+// artifact it is standing in, and public code. The site names where to look
+// and leaves every judgment — UI, writing, architecture, originality — to
+// the agent. No self-grading.
+export const FIRST_HAND_SOURCES: readonly {
+  label: string;
+  url: string | null;
+  note: string;
+}[] = [
+  {
+    label: "This site, live",
+    url: null,
+    note: "You are browsing the candidate's own build — the OS shell, its apps, all copy, and this WebMCP tool surface. Judge the UI, writing, architecture, and originality first-hand.",
+  },
+  {
+    label: "This site's source repository",
+    url: "https://github.com/juulsverne/elijahos-webmcp",
+    note: "Architecture, tests, and commit history for the site you are browsing; the challenge-baseline tag separates pre-challenge work.",
+  },
+  {
+    label: "GitHub profile",
+    url: `https://${ELIJAH.contact.github}`,
+    note: "Public repositories and activity beyond this site.",
+  },
 ];
 
 const BASE_LIMITATION =
@@ -116,6 +148,12 @@ function buildRecords(): EvidenceRecord[] {
           ? [{ appId: "case", label: "Case study window" }]
           : []),
       ],
+      externalLinks: [
+        ...(p.links?.repo
+          ? [{ label: "Source repository", url: p.links.repo }]
+          : []),
+        ...(p.links?.demo ? [{ label: "Live demo", url: p.links.demo }] : []),
+      ],
       tags: tagsFrom(p.stack, p.status, p.name, "project"),
     });
   }
@@ -141,6 +179,7 @@ function buildRecords(): EvidenceRecord[] {
         "No employer confirmation or reference is attached to this entry.",
       ],
       artifacts: [{ appId: "resume", label: "Resume app" }],
+      externalLinks: [],
       tags: tagsFrom(e.co, e.role, "experience"),
     });
   });
@@ -163,6 +202,7 @@ function buildRecords(): EvidenceRecord[] {
       },
       limitations: [BASE_LIMITATION, "No transcript or registrar verification is attached."],
       artifacts: [{ appId: "resume", label: "Resume app" }],
+      externalLinks: [],
       tags: tagsFrom(e.school, e.degree, "education"),
     });
   });
@@ -186,6 +226,7 @@ function buildRecords(): EvidenceRecord[] {
       },
       limitations: [BASE_LIMITATION],
       artifacts: [{ appId: "about", label: "About app" }],
+      externalLinks: [],
       tags: tagsFrom(a.tags, a.topic),
     });
   }
@@ -196,7 +237,12 @@ function buildRecords(): EvidenceRecord[] {
         id: `section:${key}:${s.id}`,
         kind: "case-study-section",
         title: `${cs.title}: ${s.heading}`,
-        claim: s.body.join(" "),
+        // Points are part of the section's content; leaving them out would
+        // silently shrink what agent-side evidence search can match.
+        claim: [
+          ...s.body,
+          ...(s.points ?? []).map((p) => `${p.label} — ${p.text}`),
+        ].join(" "),
         source: {
           label: "src/lib/case-studies.ts — sections",
           canonicalPath: projectRoute(cs.projectId),
@@ -212,6 +258,7 @@ function buildRecords(): EvidenceRecord[] {
         artifacts: [
           { appId: "case", label: "Case study window", anchorId: s.id },
         ],
+        externalLinks: [],
         tags: tagsFrom(s.heading, cs.projectId, "case study"),
       });
     }
@@ -233,8 +280,20 @@ function buildRecords(): EvidenceRecord[] {
           updated: ELIJAH.updated.projects,
         },
         limitations: [BASE_LIMITATION],
-        artifacts: [{ appId: "case", label: "Case study window" }],
-        tags: tagsFrom(d.picked, d.considered, "architecture decision", cs.projectId),
+        artifacts: [
+          // Decisions render inside the case study's decisions section.
+          { appId: "case", label: "Case study window", anchorId: "decisions" },
+        ],
+        externalLinks: [],
+        // "tradeoffs considered" is artifact-type metadata, not a trait
+        // claim: a decision record IS a documented tradeoff analysis.
+        tags: tagsFrom(
+          d.picked,
+          d.considered,
+          "architecture decision",
+          "tradeoffs considered",
+          cs.projectId,
+        ),
       });
     });
   }
@@ -275,10 +334,54 @@ export function tokenize(text: string): string[] {
       text
         .toLowerCase()
         .split(/[^a-z0-9+#.]+/)
-        .map((t) => t.replace(/^[.#+]+|[.#+]+$/g, "").trim())
+        .map((raw) => {
+          const stripped = raw.replace(/^[.#+]+|[.#+]+$/g, "").trim();
+          if (!/^[a-z]$/.test(stripped)) return stripped;
+          // "c#" and "c++" stripped to a bare letter would vanish from both
+          // matching and the unmatched-terms gap report; single-letter cores
+          // keep their symbols instead. Digit shorts like "5+" stay stripped
+          // so requirement boilerplate never becomes a searchable term.
+          const symbolic = raw.replace(/^\.+|\.+$/g, "").trim();
+          return symbolic.length > 1 ? symbolic : stripped;
+        })
         .filter((t) => t.length > 1 && !STOPWORDS.has(t)),
     ),
   ];
+}
+
+// Pure spelling variants of terms the content already uses — not synonyms.
+// A recruiter's "genai" names the generative-AI work this site simply calls
+// "AI" throughout; mapping one to the other invents no claim.
+const QUERY_ALIASES: Record<string, string> = {
+  genai: "ai",
+};
+
+// Matching stays lexical, but a query term is tried in light word-form
+// variants so "testing" still finds content that says "tests" or "tested".
+// Substring matching means stemming the QUERY side alone is enough; gap
+// reporting stays keyed to the recruiter's original word.
+function queryVariants(term: string): string[] {
+  const variants = new Set([term]);
+  const alias = QUERY_ALIASES[term];
+  if (alias) variants.add(alias);
+  for (const suffix of ["ing", "ed", "es", "s"]) {
+    if (term.endsWith(suffix) && term.length - suffix.length >= 4) {
+      variants.add(term.slice(0, -suffix.length));
+      break;
+    }
+  }
+  return [...variants];
+}
+
+// Substring matching is too loose for very short terms: "eq" must not hit
+// "sequence", nor "ci" hit "decisions". Purely alphanumeric terms of 1-2
+// chars match on word boundaries instead; symbol-bearing shorts ("c#")
+// keep substring matching, where the symbol already makes them precise.
+function textHas(text: string, variant: string): boolean {
+  if (variant.length <= 2 && /^[a-z0-9]+$/.test(variant)) {
+    return new RegExp(`\\b${variant}\\b`).test(text);
+  }
+  return text.includes(variant);
 }
 
 export type EvidenceMatch = {
@@ -314,10 +417,11 @@ export function searchEvidence(
     let score = 0;
     const matchedTerms: string[] = [];
     for (const term of terms) {
+      const variants = queryVariants(term);
       let s = 0;
-      if (tagText.includes(term)) s += 3;
-      if (title.includes(term)) s += 2;
-      if (claim.includes(term)) s += 1;
+      if (variants.some((v) => textHas(tagText, v))) s += 3;
+      if (variants.some((v) => textHas(title, v))) s += 2;
+      if (variants.some((v) => textHas(claim, v))) s += 1;
       if (s > 0) {
         score += s;
         matchedTerms.push(term);

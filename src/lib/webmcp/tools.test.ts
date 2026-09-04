@@ -1,8 +1,15 @@
 import assert from "node:assert/strict";
 import { beforeEach, describe, it } from "node:test";
+import { useCaseAnchorStore } from "@/lib/case-anchor";
 import { useDesktopStore } from "@/lib/desktop-store";
 import { ELIJAH } from "@/lib/elijah";
 import { EVIDENCE_RECORDS } from "@/lib/evidence";
+import {
+  __resetMusicRemoteForTests,
+  registerMusicController,
+  type MusicCommand,
+} from "@/lib/music-remote";
+import { useWidgetStore } from "@/lib/widget-store";
 import { useToolActivityStore } from "./activity";
 import type { ModelContextLike, WebMCPTool } from "./model-context";
 import {
@@ -33,14 +40,18 @@ beforeEach(() => {
   useToolActivityStore.getState().clear();
   useCompositionStore.getState().setComposition([]);
   useDesktopStore.setState({ wins: [], focusId: null });
+  useWidgetStore.setState({ isOpen: false });
+  __resetMusicRemoteForTests();
 });
 
 describe("tool surface contract", () => {
-  it("ships the five core tools plus the small read-only lookups", () => {
+  it("ships the five core tools plus lookups and personality tools", () => {
     const names = WEBMCP_TOOLS.map((t) => t.name);
     for (const name of CORE_TOOLS) assert.ok(names.includes(name), name);
+    assert.ok(names.includes("open_app"));
+    assert.ok(names.includes("play_music"));
     assert.equal(new Set(names).size, names.length);
-    assert.ok(names.length <= 8, "surface stays small enough to reason about");
+    assert.ok(names.length <= 10, "surface stays small enough to reason about");
   });
 
   it("uses snake_case names, honest descriptions, and closed schemas", () => {
@@ -63,9 +74,27 @@ describe("tool surface contract", () => {
   });
 
   it("marks only genuinely read-only tools read-only", () => {
-    const mutating = ["set_visit_intent", "compose_workspace"];
+    const mutating = [
+      "set_visit_intent",
+      "compose_workspace",
+      "open_app",
+      "play_music",
+    ];
     for (const t of WEBMCP_TOOLS) {
       assert.equal(t.readOnly, !mutating.includes(t.name), t.name);
+    }
+  });
+
+  it("marks every tool that can echo caller-controlled content as untrusted", () => {
+    const untrusted = new Set([
+      "set_visit_intent",
+      "search_evidence",
+      "inspect_evidence",
+      "compose_workspace",
+      "get_workspace_state",
+    ]);
+    for (const t of WEBMCP_TOOLS) {
+      assert.equal(t.untrustedContent ?? false, untrusted.has(t.name), t.name);
     }
   });
 
@@ -95,6 +124,38 @@ describe("evidence tools", () => {
       assert.ok(m.limitations.length > 0);
     }
     assert.ok(out.disclosure.length > 0);
+  });
+
+  it("evidence responses point at first-hand sources instead of self-grading", () => {
+    const out = run("search_evidence", { query: "finance" }) as {
+      firstHandSources: { label: string; url: string | null }[];
+    };
+    assert.ok(out.firstHandSources.length > 0);
+    const urls = out.firstHandSources.map((s) => s.url);
+    assert.ok(urls.includes("https://github.com/juulsverne"));
+
+    const record = EVIDENCE_RECORDS[0];
+    const detail = run("inspect_evidence", { id: record.id }) as {
+      firstHandSources: unknown[];
+    };
+    assert.ok(detail.firstHandSources.length > 0);
+  });
+
+  it("project hits carry their public repository as an external link", () => {
+    const out = run("search_evidence", {
+      query: "glyph",
+      kinds: ["project"],
+    }) as {
+      matches: { id: string; externalLinks: { label: string; url: string }[] }[];
+    };
+    const glyph = out.matches.find((m) => m.id.includes("glyph"));
+    assert.ok(glyph, "glyph project found");
+    assert.ok(
+      glyph.externalLinks.some((l) =>
+        l.url.includes("github.com/juulsverne/glyph"),
+      ),
+      "glyph repo link present",
+    );
   });
 
   it("search_evidence surfaces unmatched terms and a typed empty result", () => {
@@ -161,6 +222,58 @@ describe("visit intent and workspace tools", () => {
     assert.equal(out.error, "invalid input");
   });
 
+  it("set_visit_intent rejects a whitespace-only objective without storing", () => {
+    const out = run("set_visit_intent", { objective: "   " });
+    assert.equal(out.error, "invalid input");
+    assert.equal(useVisitIntentStore.getState().intent, null);
+  });
+
+  it("set_visit_intent stores an agent-supplied visit_type", () => {
+    const out = run("set_visit_intent", {
+      objective: "Scope an enterprise AI engagement",
+      visit_type: "client-project",
+    }) as { stored: { visitType: string | null } };
+    assert.equal(out.stored.visitType, "client-project");
+    assert.equal(
+      useVisitIntentStore.getState().intent?.visitType,
+      "client-project",
+    );
+  });
+
+  it("set_visit_intent rejects a visit_type outside the enum", () => {
+    const out = run("set_visit_intent", {
+      objective: "x",
+      visit_type: "acquisition-target",
+    });
+    assert.equal(out.error, "invalid input");
+  });
+
+  it("compose_workspace queues the primary record's case-study anchor", () => {
+    const section = EVIDENCE_RECORDS.find(
+      (r) => r.kind === "case-study-section",
+    )!;
+    const anchor = section.artifacts.find((a) => a.appId === "case")?.anchorId;
+    assert.ok(anchor, "section record carries an anchor");
+    run("compose_workspace", {
+      evidence_ids: [section.id],
+      layout: "focus",
+    });
+    assert.equal(useCaseAnchorStore.getState().anchorId, anchor);
+    useCaseAnchorStore.getState().clear();
+  });
+
+  it("compose_workspace deduplicates repeated evidence ids", () => {
+    const project = EVIDENCE_RECORDS.find((r) => r.kind === "project")!;
+    run("compose_workspace", {
+      evidence_ids: [project.id, project.id],
+      layout: "compare",
+    });
+    const state = run("get_workspace_state") as {
+      snapshot: { composedEvidenceIds: string[] };
+    };
+    assert.deepEqual(state.snapshot.composedEvidenceIds, [project.id]);
+  });
+
   it("compose_workspace opens real windows and get_workspace_state reports them", () => {
     const project = EVIDENCE_RECORDS.find((r) => r.kind === "project")!;
     const exp = EVIDENCE_RECORDS.find((r) => r.kind === "experience")!;
@@ -220,6 +333,96 @@ describe("read-only lookups", () => {
     assert.equal(resume.experience.length, ELIJAH.experience.length);
     assert.match(resume.updated, /^\d{4}-\d{2}-\d{2}$/);
   });
+
+  it("get_candidate_profile carries pillars, creative facts, and first-hand sources", () => {
+    const profile = run("get_candidate_profile") as {
+      pillars: { k: string; v: string }[];
+      creative: {
+        music: { tracks: { title: string }[]; spotifyArtist: string };
+        note: string;
+      };
+      firstHandSources: unknown[];
+    };
+    assert.equal(profile.pillars.length, ELIJAH.pillars.length);
+    assert.equal(
+      profile.creative.music.tracks.length,
+      ELIJAH.music.tracks.length,
+    );
+    assert.equal(
+      profile.creative.music.spotifyArtist,
+      ELIJAH.music.spotifyArtistUrl,
+    );
+    assert.ok(profile.firstHandSources.length > 0);
+    // The creative block states facts and artifacts, never trait adjectives.
+    const text = JSON.stringify(profile.creative).toLowerCase();
+    for (const adjective of ["talented", "brilliant", "exceptional"]) {
+      assert.ok(!text.includes(adjective), adjective);
+    }
+  });
+});
+
+describe("personality tools", () => {
+  it("open_app opens a launchpad app in the desktop shell", () => {
+    const out = run("open_app", { app: "snake" }) as {
+      opened: string;
+      title: string;
+      shell: string;
+    };
+    assert.equal(out.opened, "snake");
+    assert.equal(out.title, "/snake");
+    assert.equal(out.shell, "desktop");
+    assert.ok(useDesktopStore.getState().wins.some((w) => w.id === "snake"));
+  });
+
+  it("open_app refuses non-launchpad ids at the schema boundary", () => {
+    // `root` stays gated behind the /zsh puzzle — it must not be in the enum.
+    const out = run("open_app", { app: "root" });
+    assert.equal(out.error, "invalid input");
+    assert.equal(
+      useDesktopStore.getState().wins.some((w) => w.id === "root"),
+      false,
+    );
+  });
+
+  it("play_music opens the widget panel and queues the command until the player mounts", () => {
+    const out = run("play_music", { action: "play", track: 1 }) as {
+      delivered: boolean;
+      nowPlaying: unknown;
+      tracks: { track: number; title: string }[];
+    };
+    // No player is mounted in node, so the command queues honestly.
+    assert.equal(out.delivered, false);
+    assert.equal(out.nowPlaying, null);
+    assert.equal(out.tracks.length, ELIJAH.music.tracks.length);
+    assert.equal(useWidgetStore.getState().isOpen, true);
+
+    const received: MusicCommand[] = [];
+    registerMusicController({
+      command: (cmd) => received.push(cmd),
+      snapshot: () => ({ playing: true, trackIndex: 0, trackTitle: "t" }),
+    });
+    assert.deepEqual(received, [{ action: "play", trackIndex: 0 }]);
+  });
+
+  it("play_music reports the live player state when one is mounted", () => {
+    registerMusicController({
+      command: () => {},
+      snapshot: () => ({ playing: true, trackIndex: 1, trackTitle: "Two" }),
+    });
+    const out = run("play_music", { action: "next" }) as {
+      delivered: boolean;
+      nowPlaying: { trackTitle: string };
+    };
+    assert.equal(out.delivered, true);
+    assert.equal(out.nowPlaying.trackTitle, "Two");
+  });
+
+  it("play_music validates the track number against the real track list", () => {
+    const out = run("play_music", {
+      track: ELIJAH.music.tracks.length + 1,
+    });
+    assert.equal(out.error, "invalid input");
+  });
 });
 
 describe("activity log", () => {
@@ -258,10 +461,37 @@ describe("registration", () => {
         const reg = seen.find((s) => s.name === t.name);
         assert.ok(reg, t.name);
         assert.equal(reg.annotations?.readOnlyHint, t.readOnly, t.name);
+        assert.equal(
+          reg.annotations?.untrustedContentHint,
+          t.untrustedContent ?? false,
+          t.name,
+        );
       }
       // Idempotent: a second call must not double-register.
       registerWebMCPTools();
       assert.equal(seen.length, WEBMCP_TOOLS.length);
+    } finally {
+      delete (globalThis as { window?: unknown }).window;
+      __resetRegistrationForTests();
+    }
+  });
+
+  it("registers through the document.modelContext fallback", () => {
+    __resetRegistrationForTests();
+    const seen: WebMCPTool[] = [];
+    const host: ModelContextLike = { registerTool: (t) => void seen.push(t) };
+    (globalThis as { window?: unknown }).window = {
+      navigator: {},
+      document: { modelContext: host },
+    };
+    try {
+      const result = registerWebMCPTools();
+      assert.equal(result.supported, true);
+      assert.equal(result.registered.length, WEBMCP_TOOLS.length);
+      assert.deepEqual(
+        seen.map((tool) => tool.name),
+        WEBMCP_TOOLS.map((tool) => tool.name),
+      );
     } finally {
       delete (globalThis as { window?: unknown }).window;
       __resetRegistrationForTests();

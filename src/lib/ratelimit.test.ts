@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { createRateLimiter } from "./ratelimit";
+import { createRateLimiter, shouldTrustProxyHeaders } from "./ratelimit";
 
 function namespace(name: string): string {
   return `test-${name}-${Date.now()}-${Math.random()}`;
@@ -54,5 +54,18 @@ describe("createRateLimiter", () => {
     assert.equal(disabledWindow.consumeGlobal(0), false);
     assert.equal(invalidWindow.consumePerIp("a", 0), false);
     assert.equal(invalidWindow.consumeGlobal(0), false);
+  });
+});
+
+describe("shouldTrustProxyHeaders", () => {
+  it("lets explicit env values win", () => {
+    assert.equal(shouldTrustProxyHeaders("true", false), true);
+    assert.equal(shouldTrustProxyHeaders("false", true), false);
+  });
+
+  it("defaults to the platform: trusted on Vercel, untrusted elsewhere", () => {
+    assert.equal(shouldTrustProxyHeaders(undefined, true), true);
+    assert.equal(shouldTrustProxyHeaders(undefined, false), false);
+    assert.equal(shouldTrustProxyHeaders("", true), true);
   });
 });

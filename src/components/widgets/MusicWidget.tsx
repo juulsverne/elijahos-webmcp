@@ -16,6 +16,7 @@ import {
 } from "@/components/icons";
 import { useAudioAnalyserStore } from "@/lib/audio-analyser";
 import { ELIJAH, type Track } from "@/lib/elijah";
+import { registerMusicController } from "@/lib/music-remote";
 import { emit } from "@/lib/system-events";
 import { UI_COPY } from "@/lib/ui-copy";
 import { WIDGETS } from "@/lib/widgets";
@@ -88,6 +89,45 @@ export function MusicWidget({ active = true }: { active?: boolean }) {
       a.pause();
     }
   }, [playing, index]);
+
+  // Remote-control seam: the WebMCP play_music tool drives this player
+  // through the same state the buttons use. Deliberately skips
+  // ensureAnalyserAttached — a tool call is not a user gesture, and creating
+  // the AudioContext outside one could leave it suspended with the element
+  // routed through it (silent playback). The analyser attaches on the next
+  // human click instead.
+  const remoteStateRef = useRef({ playing, index });
+  useEffect(() => {
+    remoteStateRef.current = { playing, index };
+  }, [playing, index]);
+  useEffect(() => {
+    return registerMusicController({
+      command: (cmd) => {
+        if (
+          cmd.trackIndex !== undefined &&
+          cmd.trackIndex >= 0 &&
+          cmd.trackIndex < tracks.length
+        ) {
+          setIndex(cmd.trackIndex);
+        }
+        if (cmd.action === "play") setPlaying(true);
+        else if (cmd.action === "pause") setPlaying(false);
+        else if (cmd.action === "next") {
+          setIndex((i) => (i + 1) % tracks.length);
+          setPlaying(true);
+        } else if (cmd.action === "previous") {
+          setIndex((i) => (i - 1 + tracks.length) % tracks.length);
+          setPlaying(true);
+        }
+      },
+      snapshot: () => ({
+        playing: remoteStateRef.current.playing,
+        trackIndex: remoteStateRef.current.index,
+        trackTitle:
+          displayTitle(tracks[remoteStateRef.current.index]) ?? null,
+      }),
+    });
+  }, [tracks]);
 
   // Lazy-attach the Web Audio analyser inside a user gesture. Idempotent —
   // safe to call from every play/next/prev click. iOS Safari needs the
@@ -230,7 +270,12 @@ export function MusicWidget({ active = true }: { active?: boolean }) {
         </button>
       </div>
 
-      <a className="music-spotify" href={ELIJAH.music.spotifyArtistUrl} target="_blank" rel="noopener noreferrer">
+      <a
+        className="music-spotify"
+        href={current?.spotifyUrl ?? ELIJAH.music.spotifyArtistUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {UI_COPY.widgets.playback.listenOnSpotify}
       </a>
 

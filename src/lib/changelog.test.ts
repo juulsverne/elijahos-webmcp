@@ -1,6 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { CHANGELOG, type ChangeKind } from "./changelog";
+import {
+  CHANGELOG,
+  type ChangeKind,
+} from "./changelog";
 import { APPS } from "./apps";
 
 const VALID_KINDS: ChangeKind[] = [
@@ -57,4 +60,22 @@ test("every entry has a title and at least one change", () => {
     assert.ok(entry.title.trim().length > 0, `empty title in "${entry.id}"`);
     assert.ok(entry.changes.length > 0, `no changes in "${entry.id}"`);
   }
+});
+
+test("the latest entry identifies the WebMCP Challenge edition and points to the original ElijahOS", () => {
+  const latest = CHANGELOG[0];
+  const copy = [
+    latest.title,
+    latest.summary ?? "",
+    ...latest.changes.map((change) => change.text),
+  ].join(" ");
+  const originalUrls = latest.changes
+    .map((change) => change.href)
+    .filter(Boolean);
+
+  assert.equal(latest.id, "webmcp-challenge-edition");
+  assert.match(copy, /WebMCP Challenge/i);
+  assert.match(copy, /full Ask Elijah/i);
+  assert.match(copy, /elijahos\.com/i);
+  assert.deepEqual(originalUrls, ["https://www.elijahos.com"]);
 });

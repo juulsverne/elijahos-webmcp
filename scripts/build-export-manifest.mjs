@@ -55,6 +55,9 @@ function classify(path) {
   if (path.startsWith("assets/") || path.startsWith("licenses/")) {
     return "third-party-licensed";
   }
+  if (path.startsWith("public/music/") || path.startsWith("public/wobbles/")) {
+    return "owner-approved-public-media";
+  }
   if (
     path === "src/lib/public-index.generated.json" ||
     path === "public/apple-icon.png" ||
@@ -131,7 +134,7 @@ const manifest = {
     "private model, retrieval, persistence, analytics, and query-log implementation",
     "internal plans and unrelated experiments",
     "generated embeddings and evaluation reports",
-    "unpublished audio and unapproved personal media",
+    "media source masters and media not approved for public use",
   ],
   files,
 };

@@ -1,3 +1,6 @@
+import type { JobIntentFailureReason } from "./job-intent-payload";
+import type { VisitType } from "./webmcp/visit-intent";
+
 type TraceRetrieval = {
   dense: "none" | "in-process" | "vercel-postgres";
 };
@@ -22,7 +25,6 @@ export const UI_COPY = {
       openApp: (title: string) => `Open ${title}`,
     },
     topbar: {
-      building: (thing: string) => `/${thing}`,
       widgets: "widgets",
       openWidgets: "open widgets",
       closeWidgets: "close widgets",
@@ -542,10 +544,10 @@ export const UI_COPY = {
       status: "Status",
     },
   },
-  recruiter: {
-    title: "Recruiter workspace",
+  agent: {
+    title: "Agent workspace",
     tagline:
-      "The agent-readable side of this site: browser tools an AI agent can call, a session-scoped role context you control, and a live log of everything agents do here.",
+      "Where you and your AI agent browse this site together: typed browser tools an agent can call, a shared visit intent you both control, and a live log of everything agents do here.",
     status: {
       heading: "Agent tool surface",
       supported: "WebMCP detected — tools are registered in this browser.",
@@ -559,7 +561,11 @@ export const UI_COPY = {
     intent: {
       heading: "Visit intent",
       explainer:
-        "State why you're here — or let your agent do it with set_visit_intent — and see each priority compared against the documented evidence on this site. Stays in this browser session only, never sent to a server, and you can edit or clear it any time.",
+        "Why are you here? Your agent can set this with set_visit_intent — or fill it yourself below. Session-only and never sent to a server; edit or clear it any time.",
+      // Shown only while no intent is stored, so a first-time visitor knows
+      // what this section does before anything is set.
+      emptyNote:
+        "Nothing is set yet. Once an intent exists, every priority is matched against this site's documented evidence — gaps included — so you and your agent can both see what the visit is about.",
       placeholder:
         "First line: your objective (e.g. a role title).\nThen one line per priority…",
       set: "Set visit intent",
@@ -569,16 +575,55 @@ export const UI_COPY = {
       suppliedByHuman: "set by you",
       contextLabel: "context",
       evidenceStandardLabel: "evidence standard",
+      visitTypeLabel: "visit",
+      visitTypeNames: {
+        hiring: "hiring",
+        "client-project": "client project",
+        "technical-review": "technical review",
+        inspiration: "inspiration",
+        "just-exploring": "just exploring",
+        other: "other",
+      } satisfies Record<VisitType, string>,
       priorityCount: (n: number) =>
         n === 1 ? "1 priority" : `${n} priorities`,
       matchHeading: "Evidence per priority",
       gap: "No documented evidence on this site",
       matchNote:
         "Matching is keyword overlap over candidate-authored records — a starting point for your judgment, not an assessment.",
+      // One-tap starting points (content in src/lib/webmcp/intent-presets.ts).
+      presetsLead: "quick starts",
+      presetAria: (label: string) => `Use the "${label}" quick start`,
+      // Paste-a-job-link puller. The route fetches the page once server-side
+      // (browsers can't cross-origin fetch job boards) and returns only the
+      // extracted draft — the human reviews it before anything is stored.
+      jobLink: {
+        lead: "or pull it from a job posting",
+        placeholder: "Paste a job posting link…",
+        pull: "Pull details",
+        pulling: "Pulling…",
+        aria: "Job posting link",
+        pulled: (host: string) =>
+          `Pulled from ${host} — review the draft, tweak it, then set it.`,
+        privacy:
+          "The link is fetched once through this site's server to read the posting; neither the link nor the page is stored.",
+        failed: {
+          "invalid-url": "That doesn't look like a web link.",
+          "blocked-url": "That link points somewhere this site won't fetch.",
+          "rate-limited": "Too many pulls right now — try again in a minute.",
+          "fetch-failed":
+            "Couldn't read that page. Paste the details in by hand instead.",
+          "no-details":
+            "Nothing job-shaped found on that page. Paste the details in by hand instead.",
+        } satisfies Record<JobIntentFailureReason, string>,
+        objective: (title: string, org: string | null) =>
+          org ? `Evaluate fit for ${title} at ${org}` : `Evaluate fit for ${title}`,
+        untitledObjective: "Evaluate fit for this role",
+      },
     },
     activity: {
       heading: "Agent activity",
-      empty: "No tool calls yet this session.",
+      empty:
+        "No tool calls yet this session. When an agent acts here, every call lands in this log.",
       clear: "Clear log",
       failed: "failed",
     },

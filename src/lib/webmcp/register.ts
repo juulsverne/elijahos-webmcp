@@ -48,9 +48,10 @@ export function registerWebMCPTools(): RegisterResult {
   const activity = useToolActivityStore.getState();
   if (!context) {
     // Normal case: no WebMCP host. The OS works identically without it.
+    // Deliberately not latched — a polyfill extension can inject its host
+    // after hydration, and a later re-probe should still register.
     activity.setRegistration(false, false);
-    registeredOnce = { supported: false, registered: [] };
-    return registeredOnce;
+    return { supported: false, registered: [] };
   }
 
   const registered: string[] = [];

@@ -85,6 +85,45 @@ describe("evidence search", () => {
     for (const m of result.matches) assert.equal(m.record.kind, "experience");
   });
 
+  it("answers core recruiter vocabulary without false gaps", () => {
+    // Word-form variants: content says "tests"/"tested"; recruiters type
+    // "testing". Spelling variants: "genai" is "generative ai".
+    for (const term of ["typescript", "testing", "genai", "evals"]) {
+      const result = searchEvidence(term, 3);
+      assert.ok(result.matches.length > 0, `"${term}" should match`);
+      assert.deepEqual(result.unmatchedTerms, [], term);
+    }
+    // TypeScript evidence anchors on the site's own build.
+    const ts = searchEvidence("typescript", 3);
+    assert.ok(ts.matches.some((m) => m.record.id === "project:elijahos"));
+  });
+
+  it("routes trait-shaped queries to the records that demonstrate them", () => {
+    // "tradeoffs" is the recruiter's word for what a decision record is.
+    const result = searchEvidence("tradeoffs", 3);
+    assert.ok(result.matches.length > 0);
+    assert.ok(result.matches.every((m) => m.record.kind === "decision"));
+    assert.deepEqual(result.unmatchedTerms, []);
+  });
+
+  it("keeps genuinely undocumented terms as explicit gaps", () => {
+    for (const term of ["kubernetes", "aws", "mlops"]) {
+      const result = searchEvidence(term, 3);
+      assert.equal(result.matches.length, 0, term);
+      assert.deepEqual(result.unmatchedTerms, [term]);
+    }
+  });
+
+  it("short terms match whole words only — no substring false positives", () => {
+    // "eq" must not hit "sequence"/"request"; "ai" must still match the
+    // word the content uses everywhere.
+    const eq = searchEvidence("eq", 3);
+    assert.equal(eq.matches.length, 0);
+    assert.deepEqual(eq.unmatchedTerms, ["eq"]);
+    const ai = searchEvidence("ai", 3);
+    assert.ok(ai.matches.length > 0);
+  });
+
   it("caps the limit at 8 and keeps ordering deterministic", () => {
     const a = searchEvidence("ai systems", 50);
     const b = searchEvidence("ai systems", 50);
@@ -103,5 +142,19 @@ describe("tokenize", () => {
     assert.ok(terms.includes("react"));
     assert.ok(!terms.includes("experience"));
     assert.ok(!terms.includes("of"));
+    assert.ok(!terms.includes("5+"));
+  });
+
+  it("keeps symbol-bearing shorts so their gaps stay reportable", () => {
+    const terms = tokenize("C# and C++ evals");
+    assert.ok(terms.includes("c#"));
+    assert.ok(terms.includes("c++"));
+    assert.ok(!terms.includes("c"));
+  });
+
+  it("reports an unsearched symbol term as unmatched, not silently dropped", () => {
+    const result = searchEvidence("C# evals");
+    assert.ok(result.unmatchedTerms.includes("c#"));
+    assert.ok(!result.matchedTerms.includes("c#"));
   });
 });

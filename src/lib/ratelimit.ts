@@ -89,6 +89,19 @@ export function createRateLimiter(config: RateLimiterConfig): RateLimiter {
   };
 }
 
+// Decide whether proxy-supplied client-IP headers are trustworthy. Explicit
+// env values win; unset defaults to trusting them exactly when running on
+// Vercel, whose edge rewrites x-forwarded-for. Without this default, every
+// visitor on Vercel would collapse into one shared rate-limit bucket.
+export function shouldTrustProxyHeaders(
+  value: string | undefined,
+  isVercel = process.env.VERCEL === "1",
+): boolean {
+  if (value === "true") return true;
+  if (value === "false") return false;
+  return isVercel;
+}
+
 // Derive a per-IP key from request headers. When `trustProxy` is false (self-
 // hosting behind an untrusted network where clients can spoof the header),
 // collapse everyone to a single "shared" bucket rather than minting a fresh

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-02T05:37:01.750Z",
+  "generatedAt": "2026-09-03T20:19:02.606Z",
   "sourceSnapshot": {
     "commit": "6e135e4f125f14ab2a877ad5ee70dcf7315913bf",
     "date": "2026-08-06"
@@ -15,18 +15,23 @@
     "private model, retrieval, persistence, analytics, and query-log implementation",
     "internal plans and unrelated experiments",
     "generated embeddings and evaluation reports",
-    "unpublished audio and unapproved personal media"
+    "media source masters and media not approved for public use"
   ],
   "files": [
     {
+      "path": ".claude/launch.json",
+      "classification": "sanitized-foundation",
+      "sha256": "066a40cf4d71b8ed07de6bb1f0a29f62967b46fb7b5fc2387635cadcfc31de41"
+    },
+    {
       "path": ".env.example",
       "classification": "sanitized-foundation",
-      "sha256": "4d779c0fd8da6208d398dcf7ffa53780362a0806a384a56eb89dd4490c792ece"
+      "sha256": "175413958e9d53d6c865a865b2b4d7d9cf89e737379d2cb6b1698de77d6c3559"
     },
     {
       "path": ".gitignore",
       "classification": "sanitized-foundation",
-      "sha256": "d7b8052f2e0d53f15d667a714a7ac0962d778f21642bafdf646532aa1f4dde51"
+      "sha256": "4b97bd21ca2dc6c76a239ac78f25d37096b908c1cac19b2cd229a13ca582ef92"
     },
     {
       "path": ".nvmrc",
@@ -56,12 +61,32 @@
     {
       "path": "CHALLENGE_BASELINE.md",
       "classification": "challenge-repository-metadata",
-      "sha256": "3a8562f965af53b3288cbed82d5373554a442ec64a970f27a7d24d93bbeecce0"
+      "sha256": "3ce8ba8f89666c4c484f65b23154265bc225e79365bf4237f7292b4bf10e955b"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-03-ask-elijah-lite.md",
+      "classification": "challenge-repository-metadata",
+      "sha256": "03203bb152fee0d504aef3636e748b72095cb8b0283f9016f881e75d44175224"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-03-video-script.md",
+      "classification": "challenge-repository-metadata",
+      "sha256": "75af69f7e73be3f55f17348b38f70d68487fbda7ad5a8c3497c5229c09ed9a64"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-09-03-ask-elijah-lite-design.md",
+      "classification": "challenge-repository-metadata",
+      "sha256": "4b8aff02124e7739861e01bf4d091376d9d7422a1cb760e3916e0c2e8d751856"
     },
     {
       "path": "docs/webmcp-submission-control.md",
       "classification": "challenge-repository-metadata",
-      "sha256": "cd7cdd2af718c857a1707ff44d690add98ed0da6c00c4fa32128c7703c28aee4"
+      "sha256": "77f81215737221a98e1568307c8ae84f77cc4218d10b8920a99eb44ffcceb303"
+    },
+    {
+      "path": "docs/webmcp-tools.md",
+      "classification": "challenge-repository-metadata",
+      "sha256": "157c7e19b36672a12f17f5d7abdbb9e14d48638981488eec5534d77e7d3177ca"
     },
     {
       "path": "eslint.config.mjs",
@@ -96,7 +121,7 @@
     {
       "path": "package.json",
       "classification": "sanitized-foundation",
-      "sha256": "612ca0617d611c9529c7a17011b19cf16387040c595f7a2300c72002095d675a"
+      "sha256": "f86929155cb5f64e00cfe5b2fd88bf0af26be2735ac89aa2f9dc294f480230a1"
     },
     {
       "path": "playwright.config.ts",
@@ -125,103 +150,103 @@
     },
     {
       "path": "public/music/AETHER.mp3",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "6087f7faee9140028d07ca98f250c71c00bb2ed60e943fe2c8e6ff227f5ceeec"
     },
     {
       "path": "public/music/always you.mp3",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "cb0c25352cdb5ae7739b4231ef2144ab5843688213fec8301b51afa102457c7f"
     },
     {
       "path": "public/music/SILHOUETTES.mp3",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "9160d410ae04a25e70ab8e319ef43adccc28ab94af4ec0b6cec061fbf008b34b"
     },
     {
       "path": "public/music/STALLIONS.mp3",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "4229c2bf5bf055b6b21ee17b115973484a7a45b14cddb22a0f7272d5107987d6"
     },
     {
       "path": "public/wobbles/copy_FDAF8B3E-A383-4C4F-94C6-5CAAB787BB13.mp4",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "146b4ca32cf67efc3e5d2986523072562f0adc936e75d336a615b82d2a3d4983"
     },
     {
       "path": "public/wobbles/copy_FDAF8B3E-A383-4C4F-94C6-5CAAB787BB13.poster.jpg",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "51919be0920d2763fcb0f2d4ccf3097b0daa6bcda3b8ced666fafb6d60594e84"
     },
     {
       "path": "public/wobbles/IMG_2608.mp4",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "399b1f980f60f6844b774a3b4fe010b0c39ffe8e4052be19bd6ae09e39a79e62"
     },
     {
       "path": "public/wobbles/IMG_2608.poster.jpg",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "7ba9b65a4f8028b78964664da5559e35a4891dda82c4ab3850aea95903290075"
     },
     {
       "path": "public/wobbles/IMG_5495.webp",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "a41c9c9e822bda2b5bdb371f6c038580352bac3337e6462924b35a1170050e49"
     },
     {
       "path": "public/wobbles/IMG_5617.webp",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "ef2c0cc78b0d1a7f0914c6fb5e8af6b30360229852ab40affe5ad4f4037a8b2c"
     },
     {
       "path": "public/wobbles/IMG_5702.webp",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "bc56063e735116b1986e20ddb53dc3663aebcf6b002a43c2f1ee618972ac5b5e"
     },
     {
       "path": "public/wobbles/IMG_6116.mp4",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "436802a618bb4f7f9c00e42968797d4d9849b0605a1bf481d22e6a10d611d549"
     },
     {
       "path": "public/wobbles/IMG_6116.poster.jpg",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "c801e97b24192f82defaebc4a7abe4347052715339711c4d065f89b84902cedb"
     },
     {
       "path": "public/wobbles/IMG_6136.webp",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "10db41ce83d0270d4872b7eba98c2c1a2aa3fab136fc9c5e5fbb8d03cfebf6b9"
     },
     {
       "path": "public/wobbles/IMG_6299.webp",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "85dcc1109c19d0d631c3516c7d445fdc55a73ccb6b0e1d3526ad966547f93285"
     },
     {
       "path": "public/wobbles/IMG_6478.webp",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "dcf95ed60b045d2381faf8ef147a5be4cbb77f4e7050c05afa60998bf2b27e49"
     },
     {
       "path": "public/wobbles/IMG_6480.webp",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "8c4b7c94dc1679b0776f1b84fe606de510a7e874c2c531e2660f9e8c7f21831e"
     },
     {
       "path": "public/wobbles/IMG_6512.webp",
-      "classification": "sanitized-foundation",
+      "classification": "owner-approved-public-media",
       "sha256": "789b711ec0a8f4b745f547b049baceff0b97dbadb0603579cc823bf66d2009da"
     },
     {
       "path": "README.md",
       "classification": "challenge-repository-metadata",
-      "sha256": "30eb7caaa34efbcdcdd789e00fadf335dc24522d75e942690db9536a45d03633"
+      "sha256": "e8394b71d2762e773cf723c1ca50241ac164464f3c453aae5a4df20621176d10"
     },
     {
       "path": "scripts/build-export-manifest.mjs",
       "classification": "challenge-repository-metadata",
-      "sha256": "929568f2919b6a020f367b684d4b3f8210927e9886e0ca5283fe72b4c7921762"
+      "sha256": "747c23bc39a8a8a182394e88e9673ad5f1f20748958959305ec5e37e5d6ef64e"
     },
     {
       "path": "scripts/build-icons.mjs",
@@ -239,6 +264,11 @@
       "sha256": "281db4dd86fe74482dd7d3c00702d26d01c9d61402c65964593d9826b9d403f7"
     },
     {
+      "path": "scripts/demo-driver.mjs",
+      "classification": "challenge-repository-metadata",
+      "sha256": "2937ec47c11a1902314904edc523f8b8494d93219b82da82d3a509583664cb31"
+    },
+    {
       "path": "src/app/about/page.test.ts",
       "classification": "sanitized-foundation",
       "sha256": "395be872b9500e14171f0ea823d9bfead4f543a7b28990ef24c08259143364c7"
@@ -249,14 +279,59 @@
       "sha256": "6e086462619702f2a8f39d19f3b8e71e144a9e2725414ce6dd5ba733d09872d2"
     },
     {
+      "path": "src/app/api/ask/stream/route.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "7b1e0fc2d185337fdf568bcf24c0839b1fddbe015fa2071c00826d7bb2fa973f"
+    },
+    {
+      "path": "src/app/api/job-intent/extract-job-intent.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "81f519473290ce2c5329e6582e4ec11fadbc47513f601acedc2ae9eb45e6fce1"
+    },
+    {
+      "path": "src/app/api/job-intent/extract-job-intent.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "9b3c589177e059f674b2d45d0d0c552d46d0c50428937802d1ae960f39e06934"
+    },
+    {
+      "path": "src/app/api/job-intent/job-intent-handler.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "e1806f0a12f07b84f17e91be52b47035a944f629409364f985f0ad8c4f9715f7"
+    },
+    {
+      "path": "src/app/api/job-intent/job-intent-handler.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "30b528c4b033d553d87c50ec5b2045e56547fc626c8afb023f8d38111881f7bf"
+    },
+    {
+      "path": "src/app/api/job-intent/route.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "17fe38393e8241c38808e28ba8171d2cb03d831c3ef0fab899c244d178e6b585"
+    },
+    {
       "path": "src/app/api/weather/route.test.ts",
       "classification": "sanitized-foundation",
-      "sha256": "db031e7d0ccadb1aa68c37d38b0fceb96412fcf9d14166db0577aa210b73f9d8"
+      "sha256": "82ac0f84f9d7a5621b9950ce7a442b9d22c1b4fe69873c5dbc8a067c769381f3"
     },
     {
       "path": "src/app/api/weather/route.ts",
       "classification": "sanitized-foundation",
-      "sha256": "a4df4581e3bd2a259ce20191bb616aa02382461a2120ae85dbeda25b200bfcda"
+      "sha256": "c4433df4e5bb39eccaffddb367d67e3f1c342b8b3b1f4a230760b49154f967f4"
+    },
+    {
+      "path": "src/app/api/weather/weather-handler.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "fbfa2801be7d2c55693309b3d25c8423bfd415722c5df62783edc5a1448af514"
+    },
+    {
+      "path": "src/app/api/weather/weather-handler.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "6953bd3ac228baefcf32af03555d4428951cab94d68e86e18da75bc3abc6f68f"
+    },
+    {
+      "path": "src/app/api/weather/weather-proxy.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "33a57dfc2a0aa944ea2ee3da89fcf5225d24fe43f89d1196f4041816327e67d7"
     },
     {
       "path": "src/app/favicon.ico",
@@ -331,7 +406,7 @@
     {
       "path": "src/app/projects/[id]/page.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "4db2a5a95b624de7a9422bb996bae3db20cef4cca2f57fadd550fe9b94b12bf7"
+      "sha256": "2f78069f95cd183afd286677f3b6ca2449030f4ac6764d53862c180fb6b9101c"
     },
     {
       "path": "src/app/projects/page.test.ts",
@@ -376,12 +451,22 @@
     {
       "path": "src/app/styles/apps.css",
       "classification": "sanitized-foundation",
-      "sha256": "82c02c7ac333b2dca76901debaeb7b30af19329e0c37f76ee9d1c8210b19ec5c"
+      "sha256": "548ccc799ca4d87801fffefa5ed073932ea7c1cc4ee28d27c33d3ccf8c584491"
     },
     {
       "path": "src/app/styles/apps/about.css",
       "classification": "sanitized-foundation",
       "sha256": "d1d87b8912b3cd27158e75cc005f1c888e6eddf5012fbbc68054965de48c5808"
+    },
+    {
+      "path": "src/app/styles/apps/agent-workspace.css",
+      "classification": "sanitized-foundation",
+      "sha256": "be4d2fbd202f9d0acfbf077510bd24e002bf97f721b982feabb68e9909b728e5"
+    },
+    {
+      "path": "src/app/styles/apps/ask.css",
+      "classification": "sanitized-foundation",
+      "sha256": "47b47e814a0416bec6bd88f25468cb364ee45cc38ab2ef46e5dce091209da390"
     },
     {
       "path": "src/app/styles/apps/changelog.css",
@@ -397,11 +482,6 @@
       "path": "src/app/styles/apps/projects.css",
       "classification": "sanitized-foundation",
       "sha256": "4ae80029072850fbf423f8ffae6c478948c3737dd66313b9344d1a8870d646c7"
-    },
-    {
-      "path": "src/app/styles/apps/recruiter.css",
-      "classification": "sanitized-foundation",
-      "sha256": "75bb09eca5db2126bd3a4dd2debfc7f81d243232a357b6ebb35fcfc12494d6ca"
     },
     {
       "path": "src/app/styles/apps/resume.css",
@@ -436,7 +516,7 @@
     {
       "path": "src/app/styles/case-study.css",
       "classification": "sanitized-foundation",
-      "sha256": "2c6eabce87b17b520fb6b9bf47d1a135573b6e00b8aeb04cafaa4b5ca1180f17"
+      "sha256": "b51453d61b38f2948e26a429acc78fbaecc6de2f0d1d69af12a00b96f6e00d11"
     },
     {
       "path": "src/app/styles/context-menu.css",
@@ -491,7 +571,7 @@
     {
       "path": "src/app/styles/tokens.css",
       "classification": "sanitized-foundation",
-      "sha256": "2cf8deac55c69382319c3dd785d2aaf58ee0b97469d6f10e420e84683b93e44a"
+      "sha256": "5734110ae314647d7e007c81b1a3171a0424fe462611fc22bd14d83dfff3586b"
     },
     {
       "path": "src/app/styles/topbar.css",
@@ -549,9 +629,19 @@
       "sha256": "24de7497ccabc9e12ec0d8cddacd1f73d80a42b08a4b4c9be4677ceb7c757dd3"
     },
     {
+      "path": "src/components/apps/AgentWorkspaceApp.tsx",
+      "classification": "sanitized-foundation",
+      "sha256": "59af077354b737e7a29bfd9f59272f2ce29309a99c6ed19d204045c3ef9a3085"
+    },
+    {
+      "path": "src/components/apps/ask-lite/AskChat.tsx",
+      "classification": "sanitized-foundation",
+      "sha256": "614ef7fc1d7902d32ff52b3acd4e35171244fd66d5b1ee4f6ff825df1b4ba106"
+    },
+    {
       "path": "src/components/apps/AskApp.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "df77460b63f2196f412f1bd995437a502bdb6fa3fcd8224f45b5f6c229b4e8fe"
+      "sha256": "df0e8db78bcdaa92a26559a908e21426ea41cd3426307f61fc8ed79ec48a11e3"
     },
     {
       "path": "src/components/apps/CalculatorApp.tsx",
@@ -561,12 +651,12 @@
     {
       "path": "src/components/apps/CaseStudyApp.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "c1d402eb1717722d673e0b94c59f9e81d569612c6e645d62b13631af5c5e7c0a"
+      "sha256": "6d19fc0903d1055c97925972a5d6cd7c557285c2582055123a9d8c32a45d61e0"
     },
     {
       "path": "src/components/apps/ChangelogApp.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "c390c8855bd8abadea138dfad0739ec32dab61911c19d09aa9fe5cb0d41d5251"
+      "sha256": "994e33e33e35da0786e9c98955b5290e428d90133cd15ae901e3bcd3d9c2fd6e"
     },
     {
       "path": "src/components/apps/ClockApp.tsx",
@@ -599,14 +689,9 @@
       "sha256": "b0893e8dcfe1c85525c083cb482c6f77436fe10bbb232487d4fbf9ff1d12c784"
     },
     {
-      "path": "src/components/apps/RecruiterApp.tsx",
-      "classification": "sanitized-foundation",
-      "sha256": "fd39763a476b7b42b7795140b009d2de26831c5560bd4c859ee7fcabda429a48"
-    },
-    {
       "path": "src/components/apps/registry.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "de064da71e88323a3b5c123c782991d6e344fc2d4070d5f0d8a2ac87eb864494"
+      "sha256": "19855a54c37973a1720cafa2826ee00af0f57d1d2c83c642e762045b456b66c4"
     },
     {
       "path": "src/components/apps/ResumeApp.tsx",
@@ -696,7 +781,7 @@
     {
       "path": "src/components/doc/doc-nav.module.css",
       "classification": "sanitized-foundation",
-      "sha256": "66370883e2dffec01ec0ab2a866ecd8f526b17b77994eb321ac7373d759ea5b1"
+      "sha256": "86c7b67cc15393fa72c053a2244e753a273e361c152ed686b2fcc910c9bf4b55"
     },
     {
       "path": "src/components/doc/doc.module.css",
@@ -706,7 +791,7 @@
     {
       "path": "src/components/doc/DocNav.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "546b7ca56d97581dd509a5ec36a14d9f0a195f14f60275ec47bf1ae87f76f218"
+      "sha256": "8e9ad4c4c69bfe76b23a23df26ad9421a5b957b8530b7c7dcbd5b5bff150c8e4"
     },
     {
       "path": "src/components/doc/DocPage.test.ts",
@@ -726,7 +811,7 @@
     {
       "path": "src/components/ElijahOS.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "c44afa8cce87041fb8d47aac058849c0f33e56080a4a42ff23cf76f131c83862"
+      "sha256": "26daf171d497df224d656238b98c0f1690b8081e08ce6837c08cf815b4ef58ac"
     },
     {
       "path": "src/components/ErrorBoundary.tsx",
@@ -791,7 +876,7 @@
     {
       "path": "src/components/mobile/MobileShell.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "c95fa6c27171f53bcf20c487e95827b9074123cc3759ff0635bfa57511f00aa0"
+      "sha256": "6c8464431650e5a1431a873935db68d1c79b4d8eaa39c468751e5e4b8e4e32fb"
     },
     {
       "path": "src/components/mobile/MobileWeatherCard.tsx",
@@ -866,12 +951,12 @@
     {
       "path": "src/components/Topbar.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "ef42c154db4e09c3f1374ef4042b4bdb002200bc6a0e75a6b8d63e8fc513198f"
+      "sha256": "1f396cf54bfdda4fb58c92f2abf11b5f1df257343ba22b859638e168074d3503"
     },
     {
       "path": "src/components/WebMCPProvider.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "5b4011da708c092d149cbb199f08a88484c89548115fc03348f0c153d8676fe1"
+      "sha256": "ac1bf423abad7bb2cd675a7859fb37021d9165cd1036c1c268512364eb73c89c"
     },
     {
       "path": "src/components/widgets/IndexWidget.tsx",
@@ -881,7 +966,7 @@
     {
       "path": "src/components/widgets/MusicWidget.tsx",
       "classification": "sanitized-foundation",
-      "sha256": "7717a76f83b15c2da4d8b20ba9dedbf71753011c6ca39b0cbd8fb5618da8f1c6"
+      "sha256": "82cfc011134340a3430269f95ee53138b48d3a03b8a9ae0834ffa148f388e81f"
     },
     {
       "path": "src/components/widgets/SystemPulseWidget.tsx",
@@ -921,7 +1006,72 @@
     {
       "path": "src/lib/apps.ts",
       "classification": "sanitized-foundation",
-      "sha256": "e20301c7a2b3e0c6b485b227150921f475ec196a42d373a840496b882b1a7fd6"
+      "sha256": "1d36715859e4f2b0af42330398bb99a55540c82d3daaf6f20618d1916b92e397"
+    },
+    {
+      "path": "src/lib/ask-lite/context.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "d476b02dbde18dcea28d813d809c76d32b953ba06347991655d492fa55c09c95"
+    },
+    {
+      "path": "src/lib/ask-lite/context.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "ea901a99201d1e987360bc06b37f92bbdef9c865af9368dfee2c4b40ef9fd9ac"
+    },
+    {
+      "path": "src/lib/ask-lite/handler.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "397922b6615a28a2552aa5c7006c89d03e7c2e6aa287a7a8a228bc61c7d40897"
+    },
+    {
+      "path": "src/lib/ask-lite/handler.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "2fc95f05ac24bbc41814db022709e9b50c694d57e46aec9b4397bc6ca374d537"
+    },
+    {
+      "path": "src/lib/ask-lite/openai-stream.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "eaae37066f6b1110071cad76a86519168ce84bbb53d5c2c7261111e75d509c6c"
+    },
+    {
+      "path": "src/lib/ask-lite/openai-stream.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "326db9d3575a18c26c043e8ecbd5b8162fd27787cd56fa9a8a79e32ecc9c6c75"
+    },
+    {
+      "path": "src/lib/ask-lite/prompt.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "2693608547a087cc4d2d141738ec56c9a5712b063538fcc96b49cd4aa45fdd75"
+    },
+    {
+      "path": "src/lib/ask-lite/prompt.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "ea2fc59b42f0b17679cf21f177181a84c7077ee06a2c9ad0747e2f80ba213706"
+    },
+    {
+      "path": "src/lib/ask-lite/request.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "49f2038064aa78cf191fee49c4eaaf10f9e81248e7e35209d43841fd2c61a227"
+    },
+    {
+      "path": "src/lib/ask-lite/request.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "71da19f6ff08b55492f1a368fb513174f73d2a8a4892aee2c32d399dedeada72"
+    },
+    {
+      "path": "src/lib/ask-lite/stream-client.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "8a06a17ed2e4986d74f0de9161ff55580aa698789f487c8c37fd71c72e27776f"
+    },
+    {
+      "path": "src/lib/ask-lite/stream-client.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "6ba82dbdcee680c40da7fceaf1fb496f194c80a3438b0c072a2e649a2f433eca"
+    },
+    {
+      "path": "src/lib/ask-lite/types.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "c2762937ad927d65ee9a2d10bd124c9c72dacd75949eed1e8081d125fc999980"
     },
     {
       "path": "src/lib/audio-analyser.ts",
@@ -939,19 +1089,24 @@
       "sha256": "19a99907d5d1a77b423c8a650340305511ba8a4f4d7d943fa3b72e0cba356d93"
     },
     {
+      "path": "src/lib/case-anchor.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "33d74cfec067cc16e360e9b36b3c4619085f4444860b99fbf22453dbc7a18fb9"
+    },
+    {
       "path": "src/lib/case-studies.ts",
       "classification": "sanitized-foundation",
-      "sha256": "ed2c576029264aeb8e1c2a85edbfc5f516edaae9d8355e47d0892280429d0e72"
+      "sha256": "5c283a15fe7344f5a0aa0e05cf26229b0a47f86585724dbfcce2f3e124c4fffb"
     },
     {
       "path": "src/lib/changelog.test.ts",
       "classification": "sanitized-foundation",
-      "sha256": "cb7f09a17121797688ec2cda77fe76a17c7979d9030b7882b2828537e93c55a7"
+      "sha256": "735d9b1c75a43a12ffc2b261e69693d34add8b1891c6977f5012924582df2e40"
     },
     {
       "path": "src/lib/changelog.ts",
       "classification": "sanitized-foundation",
-      "sha256": "af786361a1213625f5ed83390100b2bedfe9a786728b4b2f1c97f2ed4a2c71f0"
+      "sha256": "f670cbdd6cd3673c13560aa00d4a07e09429270ed50e80062edb0f5565f0abba"
     },
     {
       "path": "src/lib/desktop-store.test.ts",
@@ -976,17 +1131,17 @@
     {
       "path": "src/lib/elijah.ts",
       "classification": "sanitized-foundation",
-      "sha256": "7e429000fe57b706d5b10b60383aaad1bccd2240c94544d1cd892924228b4528"
+      "sha256": "b1239716ef9b8a92e8c010be2f52c7226287335f1a60f96d16c2ef8585286673"
     },
     {
       "path": "src/lib/evidence.test.ts",
       "classification": "sanitized-foundation",
-      "sha256": "884ad3f9c3b324b45890ffb62b21db23f011242d36ba21f67a14ac73a930e834"
+      "sha256": "b06bf7553ccf3bef7f0c49bb4730f947ea0640194acdd71a63b27a33dcd4ef00"
     },
     {
       "path": "src/lib/evidence.ts",
       "classification": "sanitized-foundation",
-      "sha256": "0956ead0de179e491e6f76db3c8664d7ef49260f16fcbde50a04a8e084b7b283"
+      "sha256": "bfb21f83453c3d2b26edb3093f8c36d1948173de0115ce45f2da68b788b38f4d"
     },
     {
       "path": "src/lib/index-scene.ts",
@@ -1004,6 +1159,16 @@
       "sha256": "5112e0eced9e49acaab6c9dfd70173663a9d75f1cc86627e3268674981c29377"
     },
     {
+      "path": "src/lib/job-intent-client.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "5f744e3ce9bc316ebe83e218efa9935aa32581bcd1ebe53133a3eef16fb51259"
+    },
+    {
+      "path": "src/lib/job-intent-payload.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "814757cb4c6ee9492c536b7b939ee129e68793cd9c27b87360edd83c15a6d543"
+    },
+    {
       "path": "src/lib/launch-origin.ts",
       "classification": "sanitized-foundation",
       "sha256": "b28eab1191315a0f769826801f76a30ac728d66e70f9162668ec67e0a947a42e"
@@ -1019,6 +1184,16 @@
       "sha256": "5de6de04b576638584a69e227751d1cbe54db491307c4ed501b5ebc6ff349876"
     },
     {
+      "path": "src/lib/music-remote.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "791f68570cfc960dc9f5d26758db4d730a1351d4f7d7bb115261c5b323f2293f"
+    },
+    {
+      "path": "src/lib/music-remote.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "97a8360a071d386d01fb12ddf3d2b5b767263adf0f382935978a6eb492d45405"
+    },
+    {
       "path": "src/lib/public-index.generated.json",
       "classification": "generated-public",
       "sha256": "45ddbbb736aa623085c1049350a38f48d7dea65a15ab8144b21e48c3ff0cd1e7"
@@ -1031,12 +1206,12 @@
     {
       "path": "src/lib/ratelimit.test.ts",
       "classification": "sanitized-foundation",
-      "sha256": "3c92c82278f948e2433335d252980447faeb0e78cccc8a23f06b9e6c679325d4"
+      "sha256": "1c83e8d6e56baa14a10893f0f8b2ef1c19060b00d3ede74a638dd3853938430e"
     },
     {
       "path": "src/lib/ratelimit.ts",
       "classification": "sanitized-foundation",
-      "sha256": "12f8f411659744986a2a6ed548e4e3877c84beeca3a13c50b1fd224cce7f4328"
+      "sha256": "6900cfa5c24455b6130e6936cfd0e9e0bff4686639e45dd9b72869871111f673"
     },
     {
       "path": "src/lib/request-body.test.ts",
@@ -1086,7 +1261,7 @@
     {
       "path": "src/lib/ui-copy.ts",
       "classification": "sanitized-foundation",
-      "sha256": "1e96c62deca09b3653a94a4b1c8c9ae0d57699c65361cdd54db7a6c4e11dd787"
+      "sha256": "8a6b82188847b37c9fc1fc96424a63dc00d5a7a408e384b6fa89e5f28a668782"
     },
     {
       "path": "src/lib/use-is-mobile.ts",
@@ -1141,7 +1316,27 @@
     {
       "path": "src/lib/webmcp/activity.ts",
       "classification": "sanitized-foundation",
-      "sha256": "993d72452404f6134a457eec15e9896df9011d3baf4a84f9ff073f29d0028e04"
+      "sha256": "e8a84f0420ed4ad6561bc8de9da5fe3e4c418fe1a8510749587e7f20ac52e002"
+    },
+    {
+      "path": "src/lib/webmcp/eval-fixtures.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "200a0878e0b9c7e1770b24aeecd56df9f215060b01dd082dd9b3504869d0673c"
+    },
+    {
+      "path": "src/lib/webmcp/eval-fixtures.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "8f3714c3c95517646aa1d468c85485d18acfcd7aae4c7146dc2cebb00cb3fefc"
+    },
+    {
+      "path": "src/lib/webmcp/intent-presets.test.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "8c7250d103126588ee7f05c0e32454678403b0a8de37462c1ef3b198f414b2f6"
+    },
+    {
+      "path": "src/lib/webmcp/intent-presets.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "e623b7a76b998a12e372fa8117700d35c0d98cb4052ea13086c684cefc7a977a"
     },
     {
       "path": "src/lib/webmcp/model-context.ts",
@@ -1151,7 +1346,7 @@
     {
       "path": "src/lib/webmcp/register.ts",
       "classification": "sanitized-foundation",
-      "sha256": "676c6617a9d1dc77c89070df3d43d9be36791c69e199162973de0e6a61734c63"
+      "sha256": "29738c7be6e334f461453f9d01a82ab5fed594f8fdd67c8d616f78abe7f6bf65"
     },
     {
       "path": "src/lib/webmcp/schema.test.ts",
@@ -1166,22 +1361,22 @@
     {
       "path": "src/lib/webmcp/tools.test.ts",
       "classification": "sanitized-foundation",
-      "sha256": "c50f3ac3fefd0805b23f7b8b05f04a030f4e5df815696f891253a5af40a44ed9"
+      "sha256": "4aafe48bfc8db3313c60228a49f36a1e4ae9f651e7d3425e6b7a83fd1adc16b0"
     },
     {
       "path": "src/lib/webmcp/tools.ts",
       "classification": "sanitized-foundation",
-      "sha256": "910d393bd70d884175254e8851d295193ba87155b354986e6a8b3c4835294f37"
+      "sha256": "f00a6bb720012caab82d578a4a6248809c75ba37e2a80a0a2169a5383a8a953c"
     },
     {
       "path": "src/lib/webmcp/visit-intent.test.ts",
       "classification": "sanitized-foundation",
-      "sha256": "d06e2209804e0f965ddcccdc497af49308cb26b1e22e19cb2089d079f0c97bbb"
+      "sha256": "50eb46dc1f973ceaa7a5d59505ac8dfbb2da9029b91d8e909c86e86e961b4993"
     },
     {
       "path": "src/lib/webmcp/visit-intent.ts",
       "classification": "sanitized-foundation",
-      "sha256": "57f4b2df86a8f2e9c04b96385d70892078acd9badf1364e01eb5e2f6b45613fe"
+      "sha256": "c9b53d97404f5087f0ea979f71e30cfa3446dd59a12d5a017216fc5710e4b03d"
     },
     {
       "path": "src/lib/webmcp/workspace.test.ts",
@@ -1191,7 +1386,7 @@
     {
       "path": "src/lib/webmcp/workspace.ts",
       "classification": "sanitized-foundation",
-      "sha256": "be185035d6dab14b415e9fe837f7fe6718ed78d2647bb81d6006c59873240e30"
+      "sha256": "0fce1c40a366c9909de475ee8f71863e146007a991a0331ae5ff43316b95411a"
     },
     {
       "path": "src/lib/widget-store.ts",
@@ -1284,19 +1479,24 @@
       "sha256": "dfd4ed6fc58faf70b75b61f0c0496d3ee6363cb35cf85d5c8f53043caf50ccd9"
     },
     {
+      "path": "tests/ask-lite.spec.ts",
+      "classification": "sanitized-foundation",
+      "sha256": "39b1d856721981b55d513aa5408bb67e9c488e9eb94ef4d0faa254ae7f095991"
+    },
+    {
       "path": "tests/responsive.spec.ts",
       "classification": "sanitized-foundation",
-      "sha256": "8c50d02d75e2490f1683f63e0c82e5b8b63d22d26831d68eb006cc3501e87455"
+      "sha256": "b5430e79a282d5a0acbec56cb55edac4e01de92676e20fc91ba154e299c1f4e7"
     },
     {
       "path": "tests/webmcp.spec.ts",
       "classification": "sanitized-foundation",
-      "sha256": "ef2b44e85750d5b2da17df84d5d93e22feb61404d42bed95da2b0c77ce09b00a"
+      "sha256": "bc486a1355288f0d3bb459f3e9db31309abf098e80f3faacc55b6572627434eb"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
       "classification": "challenge-repository-metadata",
-      "sha256": "b06d5041d55bcec474d1806da845ac92504e3a013ca40286e01d675409e5c981"
+      "sha256": "96373e9cecde98bc579bc3d6b4a1d871c1494dd5951f9592ce1e6eb35634a9f8"
     },
     {
       "path": "tsconfig.json",

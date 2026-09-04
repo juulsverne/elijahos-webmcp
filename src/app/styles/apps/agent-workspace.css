@@ -1,0 +1,520 @@
+/* -- Agent workspace (WebMCP tool surface, visit intent, activity) -------
+   Each section carries a tone accent (data-tone) so the four jobs of the
+   workspace read at a glance: violet = intent, blue = tool surface,
+   pink = live activity, gold = disclosure. All color derives from the
+   shared accent tokens via color-mix — no literal colors. */
+
+.agent-app {
+  padding: 24px;
+  min-height: 100%;
+  box-sizing: border-box;
+  color: var(--fg-2);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.agent-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.agent-title {
+  margin: 0;
+  font-size: clamp(2rem, 12cqi, var(--fs-display));
+  line-height: 0.95;
+  color: var(--fg-1);
+  font-family: var(--font-serif);
+  font-style: italic;
+  text-wrap: balance;
+}
+
+.agent-tagline {
+  margin: 0;
+  color: var(--fg-3);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  max-width: 54ch;
+}
+
+/* Sections --------------------------------------------------------------- */
+
+.agent-section {
+  --tone: var(--accent-violet);
+  border: 1px solid color-mix(in srgb, var(--tone) 16%, var(--glass-border));
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--tone) 6%, transparent),
+      transparent 42%
+    ),
+    var(--glass-bg-subtle);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agent-section[data-tone="blue"] {
+  --tone: var(--accent-blue);
+}
+
+.agent-section[data-tone="pink"] {
+  --tone: var(--accent-pink);
+}
+
+.agent-section[data-tone="gold"] {
+  --tone: var(--accent-gold);
+}
+
+.agent-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.agent-heading {
+  margin: 0;
+  font-size: var(--fs-lg);
+  color: var(--fg-1);
+  font-family: var(--font-serif);
+  font-style: italic;
+  flex: 1;
+}
+
+.agent-heading::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  background: var(--tone);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--tone) 60%, transparent);
+  vertical-align: 2px;
+}
+
+.agent-subheading {
+  margin: 8px 0 0;
+  font-size: var(--fs-sm);
+  color: var(--fg-2);
+  font-family: var(--font-mono);
+  text-transform: lowercase;
+}
+
+.agent-count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: color-mix(in srgb, var(--tone) 70%, var(--fg-3));
+  white-space: nowrap;
+}
+
+.agent-explainer,
+.agent-note,
+.agent-empty {
+  margin: 0;
+  color: var(--fg-3);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  max-width: 60ch;
+}
+
+/* Tool surface ----------------------------------------------------------- */
+
+.agent-status {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+.agent-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--fg-3);
+  flex: none;
+}
+
+.agent-status[data-supported="true"] {
+  color: var(--accent-blue);
+}
+
+.agent-status[data-supported="true"] .agent-status-dot {
+  background: var(--accent-blue);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent-blue) 70%, transparent);
+}
+
+.agent-status[data-supported="unknown"] .agent-status-dot {
+  background: var(--accent-gold);
+}
+
+.agent-tools {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.agent-tool {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 8px;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 8px;
+}
+
+.agent-tool-name,
+.agent-log-tool {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-1);
+}
+
+.agent-tool-name[data-kind="read"] {
+  color: color-mix(in srgb, var(--accent-blue) 80%, var(--fg-1));
+}
+
+.agent-tool-name[data-kind="act"] {
+  color: color-mix(in srgb, var(--accent-gold) 80%, var(--fg-1));
+}
+
+.agent-badge {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 999px;
+  padding: 1px 8px;
+  color: var(--fg-3);
+}
+
+.agent-badge[data-kind="read"] {
+  color: var(--accent-blue);
+  border-color: color-mix(in srgb, var(--accent-blue) 35%, var(--glass-border-strong));
+  background: color-mix(in srgb, var(--accent-blue) 8%, transparent);
+}
+
+.agent-badge[data-kind="act"] {
+  color: var(--accent-gold);
+  border-color: color-mix(in srgb, var(--accent-gold) 35%, var(--glass-border-strong));
+  background: color-mix(in srgb, var(--accent-gold) 8%, transparent);
+}
+
+.agent-tool-desc {
+  grid-column: 1 / -1;
+  color: var(--fg-3);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}
+
+/* Visit intent builder ----------------------------------------------------- */
+
+.agent-intent-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.agent-lead {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: color-mix(in srgb, var(--tone) 70%, var(--fg-3));
+  text-transform: lowercase;
+}
+
+.agent-presets {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.agent-chip {
+  appearance: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-1);
+  border-radius: 999px;
+  padding: 4px 12px;
+  border: 1px solid color-mix(in srgb, var(--tone) 40%, var(--glass-border-strong));
+  background: color-mix(in srgb, var(--tone) 8%, var(--glass-bg-whisper));
+  transition: background 140ms ease, box-shadow 140ms ease;
+}
+
+.agent-chip:hover {
+  background: color-mix(in srgb, var(--tone) 16%, var(--glass-bg-lift));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--tone) 25%, transparent);
+}
+
+.agent-joblink {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.agent-joblink-row {
+  display: flex;
+  gap: 8px;
+}
+
+.agent-joblink-input {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border-strong);
+  background: var(--glass-bg-whisper);
+  color: var(--fg-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  padding: 8px 12px;
+}
+
+.agent-joblink-input:focus-visible,
+.agent-intent-input:focus-visible {
+  outline: 1px solid var(--accent-violet);
+  outline-offset: 1px;
+}
+
+.agent-joblink-note {
+  margin: 0;
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  color: var(--fg-3);
+  max-width: 60ch;
+}
+
+.agent-joblink-note[data-kind="ok"] {
+  color: var(--accent-blue);
+}
+
+.agent-joblink-note[data-kind="error"] {
+  color: var(--accent-gold);
+}
+
+.agent-intent-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agent-intent-input {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 96px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border-strong);
+  background: var(--glass-bg-whisper);
+  color: var(--fg-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  padding: 10px 12px;
+}
+
+.agent-intent-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.agent-btn {
+  appearance: none;
+  border: 1px solid var(--glass-border-strong);
+  background: var(--glass-bg-lift);
+  color: var(--fg-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  border-radius: 999px;
+  padding: 4px 14px;
+  cursor: pointer;
+  transition: background 140ms ease, box-shadow 140ms ease;
+}
+
+.agent-btn:hover:not(:disabled) {
+  background: var(--glass-bg-hover);
+}
+
+.agent-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.agent-btn.is-primary {
+  border-color: color-mix(in srgb, var(--accent-violet) 45%, var(--glass-border-strong));
+  background: color-mix(in srgb, var(--accent-violet) 14%, var(--glass-bg-lift));
+}
+
+.agent-btn.is-primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent-violet) 24%, var(--glass-bg-hover));
+  box-shadow: 0 0 12px var(--accent-violet-shadow);
+}
+
+/* Stored intent ------------------------------------------------------------ */
+
+.agent-intent-stored {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.agent-intent-stored-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.agent-intent-title {
+  color: var(--fg-1);
+  font-size: var(--fs-sm);
+  flex: 1;
+  min-width: 0;
+}
+
+.agent-intent-meta {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+.agent-matches {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agent-match {
+  border-top: 1px solid var(--glass-border);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.agent-match-req {
+  color: var(--fg-2);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+
+.agent-gap {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--accent-gold);
+}
+
+.agent-evidence {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-left: 2px solid color-mix(in srgb, var(--tone) 45%, var(--glass-border-strong));
+}
+
+.agent-evidence-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.agent-evidence-link {
+  color: var(--accent-violet);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+}
+
+.agent-evidence-link:hover {
+  text-decoration: underline;
+}
+
+.agent-evidence-terms {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+/* Activity log ------------------------------------------------------------ */
+
+.agent-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.agent-log-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 6px;
+}
+
+.agent-log-entry::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+  align-self: center;
+  background: color-mix(in srgb, var(--tone) 70%, var(--fg-3));
+}
+
+.agent-log-entry[data-ok="false"]::before {
+  background: var(--accent-gold);
+}
+
+.agent-log-time {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+
+.agent-log-summary {
+  color: var(--fg-2);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+
+.agent-log-entry[data-ok="false"] .agent-log-summary,
+.agent-log-failed {
+  color: var(--accent-gold);
+}
+
+/* Disclosure ------------------------------------------------------------- */
+
+.agent-disclosure {
+  margin: 0;
+  padding: 0 0 0 18px;
+  color: var(--fg-3);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

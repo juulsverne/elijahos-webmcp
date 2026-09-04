@@ -1,6 +1,7 @@
 /* App-body styles. Split per-app so no single file owns more than one
    concern; this file is just the aggregator. */
 @import "./apps/shared.css";
+@import "./apps/ask.css";
 @import "./apps/about.css";
 @import "./apps/terminal.css";
 @import "./apps/root.css";
@@ -8,4 +9,4 @@
 @import "./apps/resume.css";
 @import "./apps/contact.css";
 @import "./apps/changelog.css";
-@import "./apps/recruiter.css";
+@import "./apps/agent-workspace.css";

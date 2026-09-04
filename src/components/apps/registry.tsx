@@ -15,7 +15,8 @@ const APP_LOADERS = {
   clock: () => import("./ClockApp").then((m) => m.ClockApp),
   snake: () => import("./SnakeApp").then((m) => m.SnakeApp),
   changelog: () => import("./ChangelogApp").then((m) => m.ChangelogApp),
-  recruiter: () => import("./RecruiterApp").then((m) => m.RecruiterApp),
+  agent: () =>
+    import("./AgentWorkspaceApp").then((m) => m.AgentWorkspaceApp),
 } satisfies Record<AppId, () => Promise<ComponentType>>;
 
 const AboutApp = dynamic(APP_LOADERS.about, {
@@ -42,7 +43,7 @@ const SnakeApp = dynamic(APP_LOADERS.snake, {
 const ChangelogApp = dynamic(APP_LOADERS.changelog, {
   ssr: false,
 });
-const RecruiterApp = dynamic(APP_LOADERS.recruiter, { ssr: false });
+const AgentWorkspaceApp = dynamic(APP_LOADERS.agent, { ssr: false });
 
 // Internal map constrained via `satisfies Record<AppId, …>` so adding a
 // new app id without registering its component (or vice versa) is a
@@ -62,7 +63,7 @@ const APP_COMPONENTS_DEF = {
   clock: ClockApp,
   snake: SnakeApp,
   changelog: ChangelogApp,
-  recruiter: RecruiterApp,
+  agent: AgentWorkspaceApp,
 } satisfies Record<AppId, ComponentType>;
 
 export const APP_COMPONENTS: Record<string, ComponentType | undefined> = {

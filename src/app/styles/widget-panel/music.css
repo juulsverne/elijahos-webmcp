@@ -4,7 +4,7 @@
   padding: clamp(6px, 1.4dvh, 8px) 10px;
 }
 .music-widget .widget-card-head {
-  margin-bottom: clamp(2px, 0.8dvh, 4px);
+  margin-bottom: 2px;
 }
 .music-widget .music-title {
   font-size: var(--fs-sm);
@@ -31,7 +31,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: clamp(4px, 1dvh, 6px);
+  margin-bottom: clamp(2px, 0.6dvh, 3px);
 }
 .music-widget .music-artist {
   font-size: var(--fs-xs);
@@ -116,7 +116,7 @@
   justify-content: space-between;
   font-size: var(--fs-xs);
   color: var(--fg-3);
-  margin-bottom: clamp(2px, 0.8dvh, 4px);
+  margin-bottom: 2px;
   font-variant-numeric: tabular-nums;
 }
 .music-widget .music-controls {

@@ -1,4 +1,4 @@
-// In-memory log of WebMCP tool invocations, surfaced in the recruiter
+// In-memory log of WebMCP tool invocations, surfaced in the agent
 // workspace so a visitor can SEE what an agent asked their browser to do.
 // Ephemeral by design: not persisted anywhere, capped, cleared on reload.
 

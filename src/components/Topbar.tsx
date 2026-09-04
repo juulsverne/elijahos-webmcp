@@ -39,7 +39,7 @@ export function Topbar() {
 
       <span className="pill topbar-status">
         <span className="status-dot" />
-        {UI_COPY.chrome.topbar.building(ELIJAH.currentlyBuilding)}
+        {ELIJAH.topbarStatus}
       </span>
 
       <button

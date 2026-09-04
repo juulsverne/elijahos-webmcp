@@ -18,11 +18,26 @@ export const PRIORITY_MAX = 120;
 export const PRIORITIES_MAX = 4;
 export const EVIDENCE_STANDARD_MAX = 200;
 
+// The kinds of visit this site expects. A closed enum (not free text) so the
+// agent can name the visit from its own chat context without opening a new
+// fingerprinting surface: evaluate-him (hiring, client-project), learn-from-it
+// (technical-review, inspiration), experience-it (just-exploring), or other.
+export const VISIT_TYPES = [
+  "hiring",
+  "client-project",
+  "technical-review",
+  "inspiration",
+  "just-exploring",
+  "other",
+] as const;
+export type VisitType = (typeof VISIT_TYPES)[number];
+
 export type VisitIntent = {
   objective: string;
   contextLabel: string | null;
   priorities: string[];
   evidenceStandard: string | null;
+  visitType: VisitType | null;
   suppliedBy: "visitor-agent" | "human";
   // When the intent was set (ISO). Display-only.
   setAt: string;
@@ -33,6 +48,7 @@ export type VisitIntentInput = {
   contextLabel?: string | null;
   priorities?: string[];
   evidenceStandard?: string | null;
+  visitType?: VisitType | null;
 };
 
 export function normalizeIntent(
@@ -43,12 +59,21 @@ export function normalizeIntent(
     objective: input.objective.trim().slice(0, OBJECTIVE_MAX),
     contextLabel:
       input.contextLabel?.trim().slice(0, CONTEXT_LABEL_MAX) || null,
-    priorities: (input.priorities ?? [])
-      .map((p) => p.trim().slice(0, PRIORITY_MAX))
-      .filter(Boolean)
-      .slice(0, PRIORITIES_MAX),
+    priorities: [
+      // Deduplicated: repeated bullets from a job page (or a repetitive
+      // agent) would otherwise render duplicate list rows.
+      ...new Set(
+        (input.priorities ?? [])
+          .map((p) => p.trim().slice(0, PRIORITY_MAX))
+          .filter(Boolean),
+      ),
+    ].slice(0, PRIORITIES_MAX),
     evidenceStandard:
       input.evidenceStandard?.trim().slice(0, EVIDENCE_STANDARD_MAX) || null,
+    visitType:
+      input.visitType && (VISIT_TYPES as readonly string[]).includes(input.visitType)
+        ? input.visitType
+        : null,
     suppliedBy,
     setAt: new Date().toISOString(),
   };

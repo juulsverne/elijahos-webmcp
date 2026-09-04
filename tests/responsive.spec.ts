@@ -23,12 +23,31 @@ test("desktop shell boots with the About window and dock", async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(1);
 });
 
-test("mobile shell boots and can open the public Ask boundary", async ({ page }) => {
+test("Silhouettes links to its Spotify track from the music widget", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await boot(page);
+
+  await page.getByRole("button", { name: "open widgets" }).click();
+  await expect(page.locator(".music-title")).toHaveText("SILHOUETTES");
+  await expect(
+    page.getByRole("link", { name: /listen on spotify/i }),
+  ).toHaveAttribute(
+    "href",
+    "https://open.spotify.com/track/6bckKbcaP9yjPlaAy6vEmz?si=e1d8512183d64117",
+  );
+});
+
+test("mobile shell boots and opens the public-evidence Ask guide", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await boot(page, "/?app=ask");
 
   await expect(page.locator(".mobile-root")).toBeVisible();
-  await expect(page.getByText("The private model, retrieval, tracing, and query-log implementation is intentionally not included in this clean challenge repository.")).toBeVisible();
+  await expect(page.getByText("Site-owned guide", { exact: true })).toBeVisible();
+  await expect(
+    page.getByPlaceholder("ask Elijah about his public work"),
+  ).toBeVisible();
 
   const overflow = await page.evaluate(() => {
     const root = document.scrollingElement ?? document.documentElement;

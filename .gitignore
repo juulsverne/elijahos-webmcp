@@ -19,7 +19,11 @@
 # local agent/plugin session state
 /.superpowers/
 
-# media source originals — high-res phone files kept locally + in git history;
+# local release/automation scratch
+/.pnpm-store/
+/drive-chrome.tmp.mjs
+
+# media source originals — high-res source files kept locally;
 # only the web-optimized outputs in public/ ship. Re-encode via `npm run optimize:media`.
 /media-src/
 
@@ -54,7 +58,11 @@ output/
 next-env.d.ts
 
 
-# docs
+# docs — internal strategy/working notes, not part of the public release
 docs/WEBMCP_JUDGE_STRATEGY.md
 docs/webmcp-demo-video-script.md
 docs/webmcp-finish-runbook.md
+docs/superpowers/plans/2026-09-03-target-evidence-worksheet.md
+
+# local Claude Code permission state
+.claude/settings.local.json

@@ -10,7 +10,12 @@
    --docnav-slot in the bar's right padding (see tokens.css).
 
    Collapsed by default so it stays out of the OS's way. Native <details>, so it
-   opens and navigates with JavaScript disabled. */
+   opens and navigates with JavaScript disabled.
+
+   Also clipped out of view until focused or open — a skip-link pattern, not
+   display:none. The anchors stay in the DOM and the tab order, so they remain
+   reachable for keyboards and crawlers; only pointer users don't see the chip
+   sitting in the bar. */
 
 .nav {
   /* One source for the chip's height: the rule below centres the chip in the
@@ -32,6 +37,14 @@
   font-size: var(--fs-sm);
   letter-spacing: 0.04em;
   color: var(--fg-3);
+}
+
+/* Hidden state. clip-path (not display/visibility) keeps the summary
+   focusable and the links crawlable, and a fully clipped box takes no pointer
+   hits, so nothing invisible can be clicked by accident. Revealed while the
+   summary has focus (Tab) or the disclosure is open. */
+.nav:not([open]):not(:focus-within) {
+  clip-path: inset(50%);
 }
 
 /* Mirrors .widget-toggle in widget-panel/panel.css — the neighbouring control

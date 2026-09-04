@@ -6,7 +6,7 @@ import { Boot } from "@/components/Boot";
 import { WebMCPProvider } from "@/components/WebMCPProvider";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useDesktopStore } from "@/lib/desktop-store";
-import { APPS, INITIAL_OPEN } from "@/lib/apps";
+import { INITIAL_OPEN, resolveAppId } from "@/lib/apps";
 import { ELIJAH } from "@/lib/elijah";
 import { emit } from "@/lib/system-events";
 import { useIsMobile } from "@/lib/use-is-mobile";
@@ -47,8 +47,8 @@ const MobileShell = dynamic(loadMobileShell, { ssr: false });
 
 function getDeepLinkedAppId(): string | null {
   const requested = new URLSearchParams(window.location.search).get("app");
-  if (!requested || requested === "root" || !APPS[requested]) return null;
-  return requested;
+  if (!requested || requested === "root") return null;
+  return resolveAppId(requested);
 }
 
 async function preloadDesktopShell(ids: string[]) {

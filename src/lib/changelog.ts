@@ -22,6 +22,10 @@ export type ChangeItem = {
   // (enforced by changelog.test.ts). Typed as string, not AppId, so experiment
   // ids are valid targets too.
   appId?: string;
+  // Optional external destination for a release-note action. Keep this to
+  // public HTTPS pages; changelog rows render it with the same compact action
+  // treatment used for internal app links.
+  href?: string;
 };
 
 // One dated release/milestone.
@@ -41,30 +45,104 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: "webmcp-challenge-edition",
+    date: "2026-09-03",
+    version: "v1.8",
+    title: "The WebMCP Challenge edition",
+    summary:
+      "This is the public WebMCP Challenge edition of ElijahOS: the familiar human-operated OS, extended with a typed interface that lets a visitor's agent investigate the same published work and share the visible workspace.",
+    changes: [
+      {
+        kind: "added",
+        text:
+          "The challenge build keeps WebMCP as progressive enhancement: the desktop and mobile shells still work normally when no agent is present.",
+        appId: "agent",
+      },
+      {
+        kind: "improved",
+        text:
+          "Ask Elijah in this edition is a lightweight guide to the public evidence. For the full Ask Elijah app, visit the original ElijahOS at elijahos.com.",
+        href: "https://www.elijahos.com",
+      },
+    ],
+  },
+  {
+    id: "agent-workspace",
+    date: "2026-09-03",
+    version: "v1.7",
+    title: "The recruiter workspace becomes the agent workspace",
+    summary:
+      "The workspace outgrew its recruiting-only framing: it's where you and your AI agent browse this OS together. The visit intent now fills itself three ways — quick-start presets, a pasted job posting link, or your agent — and the tool surface grew to ten tools, because an OS should let an agent open the snake game and put a track on, not just read a résumé.",
+    changes: [
+      {
+        kind: "improved",
+        text:
+          "The recruiter workspace is now the agent workspace (/agent) — same honest evidence comparison, broader framing, and a fresh coat of color. Old /recruiter deep links still resolve.",
+        appId: "agent",
+      },
+      {
+        kind: "added",
+        text:
+          "Paste a job posting link and the workspace pulls the title, company, and requirement bullets into a visit-intent draft for you to review — fetched once, never stored.",
+        appId: "agent",
+      },
+      {
+        kind: "added",
+        text:
+          "Quick-start intent presets: hiring screen, technical deep-dive, or just exploring — one tap fills the visit intent, and you can edit it like any other.",
+        appId: "agent",
+      },
+      {
+        kind: "added",
+        text:
+          "Two personality tools for agents: open_app launches any launchpad app (yes, including /snake), and play_music drives the site's music player through the same controls a human clicks.",
+        appId: "agent",
+      },
+    ],
+  },
+  {
     id: "webmcp-tools",
-    date: "2026-09-01",
+    date: "2026-09-03",
     version: "v1.6",
     title: "The OS opens a door for agents",
     summary:
-      "ElijahOS now speaks WebMCP: an AI agent browsing this site can state its visit intent, search the evidence, inspect any record's provenance and limitations, and compose real OS windows around what it finds. Everything an agent does here is visible, session-scoped, and judged by you, not scored by me.",
+      "ElijahOS now speaks WebMCP: an AI agent browsing this site gets eight typed, page-scoped tools — state a visit intent, search and inspect the documented evidence, compose real OS windows around what it finds, and read the workspace back after you change it. Six tools are read-only, the two that mutate do it visibly, and it all runs in the page: no new server route, no model, no scoring.",
     changes: [
       {
         kind: "added",
         text:
           "A recruiter workspace: state why you're here (or let your agent do it) and see every priority matched against the documented evidence — including an honest 'no documented evidence' when the site has none.",
-        appId: "recruiter",
+        appId: "agent",
       },
       {
         kind: "added",
         text:
           "An agent tool surface with narrow inputs and accurate read-only annotations: visit intent, evidence search and inspection, workspace composition, workspace state, and small profile/resume/contact lookups.",
-        appId: "recruiter",
+        appId: "agent",
       },
       {
         kind: "added",
         text:
-          "A live agent activity log — every tool call an agent makes in your browser shows up in the workspace, so nothing happens here that you can't see.",
-        appId: "recruiter",
+          "A live agent activity log — every registered WebMCP tool call shows up in the workspace with a neutral summary.",
+        appId: "agent",
+      },
+      {
+        kind: "added",
+        text:
+          "A shared handoff: open or focus an app yourself and the narrow workspace snapshot your agent reads next reports that change — so it can continue from your decision, not its own assumptions.",
+        appId: "agent",
+      },
+      {
+        kind: "improved",
+        text:
+          "The whole surface is progressive enhancement — without an agent the normal interface remains usable, and the recruiter workspace still works as a manual evidence-comparison view.",
+        appId: "agent",
+      },
+      {
+        kind: "fixed",
+        text:
+          "An agent-set visit intent now opens the recruiter workspace front and center instead of leaving it buried behind other windows.",
+        appId: "agent",
       },
     ],
   },

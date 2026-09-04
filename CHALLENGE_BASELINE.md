@@ -1,37 +1,76 @@
 # WebMCP Challenge baseline
 
-## Provenance
+ElijahOS existed before the WebMCP Challenge. This document separates the imported foundation from the meaningful WebMCP extension added during the submission period.
+
+## Verifiable provenance
 
 - Private source snapshot: `6e135e4f125f14ab2a877ad5ee70dcf7315913bf`
-- Source snapshot date: 2026-08-06
+- Source snapshot date: August 6, 2026
 - Sanitized import: the commit identified by the annotated `challenge-baseline` tag
-- Resolve the sanitized import SHA with `git rev-parse challenge-baseline^{commit}`. The SHA is not self-embedded in this commit because a commit cannot contain its own final object ID.
-- Externally verifiable pre-challenge artifact: [https://www.elijahos.com](https://www.elijahos.com), backed by a Vercel Production deployment observed at `2026-08-06T05:39:04.465Z`, before the challenge implementation window.
-- The sanitized import commit keeps its real creation date; it is not backdated.
+- Baseline commit lookup: `git rev-parse challenge-baseline^{commit}`
+- Pre-challenge public artifact: [elijahos.com](https://www.elijahos.com), backed by a Vercel Production deployment observed at `2026-08-06T05:39:04.465Z`
 
-## Imported pre-existing foundation
+The sanitized import keeps its real creation date. It was not backdated. A commit cannot contain its own final object id, so the annotated tag is the stable reference.
 
-- Desktop windowed OS and intentional mobile shell
-- Shared app registry, launcher, desktop store, themes, widgets, and mini apps
-- Public portfolio content and crawlable About, Projects, project-detail, Resume, and `llms.txt` routes
-- Public-safe weather endpoint and content-only index visualization
-- Unit tests, UI-contract checks, production build configuration, and responsive browser test harness
-- Original ElijahOS interface code and icons included in the allowlisted export
+## What existed before the challenge
 
-## Excluded before Git initialization
+The baseline includes:
 
-- Original `.git` history, remotes, worktrees, `.vercel` link, machine-local state, and private agent configuration
-- Model providers, Ask Elijah API routes, private retrieval implementation, query logs, analytics, databases, and provider configuration
-- Generated embeddings, evaluation reports, private/internal documentation, unrelated experiments, and experiment routes
-- Unpublished audio, personal photo/video media, and unused template/trademark assets
-- Production environment values and deployment configuration
+- the windowed desktop OS and separate mobile shell;
+- the shared app registry, launcher, desktop store, themes, widgets, and mini apps;
+- public About, Projects, Case Study, Resume, Contact, and crawlable document routes;
+- typed public portfolio content;
+- the original Ask Elijah concept and interface shell, without its private runtime;
+- a public-safe weather endpoint and content-only index visualization;
+- unit tests, UI-contract checks, production build configuration, and responsive-browser test harness;
+- allowlisted interface code, icons, and bundled fonts.
 
-## Added for the WebMCP Challenge
+None of those elements is represented as work created during the WebMCP Challenge.
 
-Nothing in this baseline is represented as new challenge implementation. The WebMCP adapter, typed evidence records, tool surface, visible recruiter workspace, role-context controls, WebMCP evals, and final demo/release documentation must be committed after `challenge-baseline`.
+## What the sanitized baseline excluded
 
-The final challenge diff will be reviewable with:
+Before Git initialization, the export excluded:
+
+- the original Git history, remotes, worktrees, Vercel link, and machine-local state;
+- model providers, private retrieval code, query logs, analytics, databases, and provider configuration;
+- generated embeddings and evaluation reports;
+- private or internal documentation and unrelated experiments;
+- unpublished audio and personal photo/video media;
+- unused template or trademark assets;
+- production environment values, deployment configuration, and credentials.
+
+The public export was designed to preserve a usable ElijahOS shell without publishing private runtime services or a second biography.
+
+## What was added during the challenge
+
+All challenge implementation appears after `challenge-baseline`. The meaningful WebMCP extension includes:
+
+- one isolated client-side ModelContext adapter;
+- a ten-tool page capability surface with six read-only and four visible action tools;
+- schema validation, structured errors, accurate annotations, and idempotent registration;
+- evidence records derived from the existing typed public content;
+- provenance, documented contribution scope, limitations, explicit search gaps, and first-hand source links;
+- browser-session visit intent that is visible, editable, and clearable;
+- a desktop/mobile workspace bridge that reuses the existing app launcher and shells;
+- a narrow workspace snapshot that reflects both agent and human actions;
+- a visible, in-memory tool activity feed;
+- unit, injected-host browser, responsive, and native release checks;
+- public tool, architecture, verification, and submission documentation.
+
+Post-baseline work also restored owner-approved web media and rebuilt Ask Elijah Lite as a separately labeled site-owned guide. Those additions complete the product experience but are not represented as the core WebMCP implementation.
+
+## Review the challenge diff
+
+```bash
+git log --oneline --reverse challenge-baseline..HEAD
+git diff --stat challenge-baseline...HEAD
+git diff challenge-baseline...HEAD
+```
+
+The final submitted comparison will be:
 
 ```text
 challenge-baseline...webmcp-challenge-submission-v1
 ```
+
+Create the final tag only from the exact commit that is publicly accessible, deployed, anonymously tested, and depicted in the submission video.

@@ -9,6 +9,10 @@
 // in the topbar band: the whole desktop shell is dynamic(ssr:false) and mounts
 // only after boot, so anything living in it is absent from the initial HTML —
 // which is the one thing these links cannot afford to be.
+//
+// Visually clipped until it receives keyboard focus or is open (see
+// doc-nav.module.css), like a skip link: it stays out of the OS chrome, yet a
+// keyboard user reaches it on the first Tab and a crawler sees real anchors.
 
 import Link from "next/link";
 import { ELIJAH } from "@/lib/elijah";

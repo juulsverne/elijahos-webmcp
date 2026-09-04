@@ -43,6 +43,18 @@ function ChangeRow({ change }: { change: ChangeItem }) {
           <span aria-hidden="true"> ↗</span>
         </button>
       )}
+      {!target && change.href && (
+        <a
+          className="changelog-open"
+          href={change.href}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Open ${change.href}`}
+        >
+          {COPY.open}
+          <span aria-hidden="true"> ↗</span>
+        </a>
+      )}
     </li>
   );
 }

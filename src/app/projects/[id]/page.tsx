@@ -121,8 +121,21 @@ export default async function ProjectDetailPage({ params }: Props) {
         {study.sections.map((section) => (
           <section key={section.id}>
             <h2>{section.heading}</h2>
-            {section.body.map((paragraph, index) => (
+            {/* Same order as the OS window: lede, points, closing prose. */}
+            {section.body.slice(0, 1).map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
+            ))}
+            {section.points && (
+              <ul>
+                {section.points.map((point) => (
+                  <li key={point.label}>
+                    <strong>{point.label}</strong> — {point.text}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {section.body.slice(1).map((paragraph, index) => (
+              <p key={index + 1}>{paragraph}</p>
             ))}
           </section>
         ))}

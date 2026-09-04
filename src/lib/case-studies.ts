@@ -19,11 +19,25 @@ type CaseStudyKnowledge = {
   app: AppId;
 };
 
+// One labeled highlight in a section's scannable list. Rendered after the
+// prose as "Label — text" in both the OS window and the crawlable route.
+export type CaseStudyPoint = {
+  label: string;
+  text: string;
+};
+
 // One paragraph-style section in the case study, for example "What & why".
 export type CaseStudySection = {
   id: string;
   heading: string;
   body: string[];
+  /**
+   * Optional scannable highlights rendered as a bulleted list between the
+   * first body paragraph (the lede) and any remaining paragraphs. Use these
+   * for inventories (apps, pipeline stages, roadmap items) so the prose can
+   * stay short. Included in the derived evidence claim.
+   */
+  points?: CaseStudyPoint[];
   /**
    * Optional retrieval views over the prose above. Paragraph indexes keep the
    * knowledge base attached to the case study's source text instead of
@@ -105,7 +119,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     kicker: "personal site - 2026",
     title: "ElijahOS",
     desc:
-      "A portfolio that proves the pitch: a browser OS, a product surface, and an inspectable AI assistant built around evidence instead of slideware.",
+      "A portfolio that proves the pitch: a browser OS, an inspectable AI assistant, and a WebMCP tool surface for the agents visitors bring with them — built around evidence instead of slideware.",
     status: "in flight",
     accent: "blue",
     glyph: "*",
@@ -114,9 +128,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
         id: "why",
         heading: "Why it exists",
         body: [
-          "A normal portfolio asks visitors to believe the claims on the page. ElijahOS makes them use the claims. The interface is a working surface: apps open, windows move, tools run, traces explain themselves, and the assistant can cite the same source material the visitor is reading.",
-          "That is the point of the project. Elijah comes from finance and operations, where useful systems are the ones that expose evidence, reduce ambiguity, and make the next decision easier. ElijahOS applies that standard to a personal site: if the promise is product judgment, AI systems, and shipping discipline, the proof should be interactive.",
-          "The result is part portfolio, part operating environment, and part systems demo. It shows how the shell, content model, AI assistant, observability, and fallback paths fit together instead of hiding the hard parts behind a marketing page.",
+          "A normal portfolio asks visitors to believe the claims on the page. ElijahOS makes them use the claims: apps open, windows move, tools run, traces explain themselves, and the assistant cites the same source material the visitor is reading.",
+          "Elijah comes from finance and operations, where useful systems expose evidence, reduce ambiguity, and make the next decision easier. ElijahOS applies that standard to a personal site: if the promise is product judgment, AI systems, and shipping discipline, the proof should be interactive.",
+          "The result is part portfolio, part operating environment, part systems demo — the shell, content model, AI assistant, observability, and fallback paths shown working together instead of hidden behind a marketing page.",
         ],
         knowledge: [
           {
@@ -167,10 +181,26 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
         id: "shipped",
         heading: "What shipped",
         body: [
-          "The desktop shell has a topbar, dock, launchpad, context menu, widget panel, and draggable windows with focus stacking, resize, minimize, maximize, snapping, tiling, and deep links. It behaves like a small OS because the interactions are the work sample.",
-          "The mobile shell is not a squeezed desktop. It has its own widget console, dock, app drawer, mobile app frames, app filtering, and routing behavior so the same portfolio feels intentional on a phone.",
-          "The app surface includes About, Projects, this case study, Resume, Contact, Ask Elijah, Lab, a zsh-style terminal, a puzzle-gated root window, calculator, clock, and Snake. Widgets cover weather, music, Wobbles media, and system pulse. Experiments are registered from source and surfaced through Lab instead of being one-off pages.",
-          "The production layer matters too: optimized media, generated icons, manifest, robots, sitemap, Open Graph image, rate limits, prompt-injection guards, optional persistence, and graceful disabled modes. Those details are not glamorous, but they are what let the demo stay usable — and safe — outside a local happy path.",
+          "The desktop shell has a topbar, dock, launchpad, widget panel, and draggable windows with focus stacking, snapping, tiling, and deep links — it behaves like a small OS because the interactions are the work sample. The mobile shell is not a squeezed desktop: it gets its own widget console, dock, app drawer, and routing so the same portfolio feels intentional on a phone.",
+          "The production layer keeps the demo honest: optimized media, generated icons, manifest, sitemap, Open Graph image, rate limits, prompt-injection guards, optional persistence, and graceful disabled modes. Not glamorous — but they are what let the demo stay usable, and safe, outside a local happy path.",
+        ],
+        points: [
+          {
+            label: "Product apps",
+            text: "About, Projects, this case study, Resume, Contact, Ask Elijah, and Lab.",
+          },
+          {
+            label: "OS toys",
+            text: "a zsh-style terminal, a puzzle-gated root window, calculator, clock, and Snake.",
+          },
+          {
+            label: "Widgets",
+            text: "weather, music, Wobbles media, and system pulse.",
+          },
+          {
+            label: "Lab experiments",
+            text: "registered from source and surfaced through Lab instead of being one-off pages.",
+          },
         ],
         knowledge: [
           {
@@ -186,7 +216,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
               "mobile not squeezed desktop",
             ],
             app: "projects",
-            paragraphIndexes: [0, 1],
+            paragraphIndexes: [0],
           },
           {
             id: "project-elijahos-production-constraints",
@@ -201,7 +231,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
               "safe public demo",
             ],
             app: "projects",
-            paragraphIndexes: [3],
+            paragraphIndexes: [1],
           },
         ],
       },
@@ -209,19 +239,111 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
         id: "ask-elijah",
         heading: "Ask Elijah",
         body: [
-          "Ask Elijah is the centerpiece because it turns the site into an AI product rather than a portfolio with a chat box attached. A visitor's turn runs the same path the eval harness exercises: clear the rate limiter and a deterministic guard, retrieve evidence, compose a grounded prompt, stream the model, resolve tools, continue once after server tool use, grade the answer, and emit a trace. The guard earns its place — prompt-injection and 'reveal your system prompt' attempts are refused in code, before a single token is spent.",
-          "Retrieval is hybrid by default. BM25 provides an inspectable sparse baseline. Dense search uses OpenAI text embeddings when an API key is available, Vercel Postgres pgvector when Postgres is configured, and an in-process vector store as the local fallback. The two channels are fused with Reciprocal Rank Fusion, then the trace records which channel contributed what.",
-          "Generation sits behind a provider abstraction instead of a hardcoded model. The answer comes from OpenAI's gpt-5.6-luna, picked because it handles this corpus at roughly a tenth of a frontier model's token price; Anthropic's claude-sonnet-5 is wired through the same interface as a confidence-gated escalation, so a draft that grades poorly is retried once against the stronger model instead of shipping. Generator, judge, embedder, and retriever are each chosen by environment, so the system can swap models without touching a call site — and every trace names the provider and model that actually answered.",
-          "The tool boundary is deliberate. Server tools can search and fetch knowledge, then feed that evidence back into the continuation turn. Client tools can operate the OS by opening apps, arranging windows, copying contact fields, showing media, and highlighting citations. The assistant is allowed to act, but the action is visible.",
-          "The trace and eval tabs are part of the product, not developer leftovers. Visitors can inspect used and rejected chunks, tool calls, retrieval metadata, token counts, latency, model choice, estimated cost, and confidence. Golden cases measure recall, answer format, and tool behavior against the same turn runner the live route uses.",
+          "Ask Elijah is the centerpiece because it turns the site into an AI product rather than a portfolio with a chat box attached. A visitor's turn runs the same path the eval harness exercises: gate, retrieve evidence, compose a grounded prompt, stream the model, resolve tools, grade the answer, and emit a trace. Prompt-injection and 'reveal your system prompt' attempts are refused in code, before a single token is spent.",
+          "The trace and eval tabs are part of the product, not developer leftovers. Visitors can inspect used and rejected chunks, tool calls, token counts, latency, model choice, estimated cost, and confidence — and golden eval cases grade recall, answer format, and tool behavior against the same turn runner the live route uses.",
+        ],
+        points: [
+          {
+            label: "Hybrid retrieval",
+            text: "BM25 is the inspectable sparse baseline; OpenAI embeddings power the dense channel (pgvector in production, an in-process store as the local fallback); Reciprocal Rank Fusion merges the two, and the trace records which channel contributed what.",
+          },
+          {
+            label: "Model-agnostic generation",
+            text: "OpenAI's gpt-5.6-luna answers by default at roughly a tenth of a frontier model's token price; a draft that grades poorly is retried once against Anthropic's claude-sonnet-5 through the same provider interface. Every model is chosen by environment, and every trace names the model that actually answered.",
+          },
+          {
+            label: "A deliberate tool boundary",
+            text: "server tools search and fetch knowledge, then feed it back into the continuation turn; client tools operate the OS — opening apps, arranging windows, copying contact fields, highlighting citations. The assistant is allowed to act, but the action is visible.",
+          },
+        ],
+      },
+      {
+        id: "webmcp",
+        heading: "The agent door — WebMCP",
+        body: [
+          "Ask Elijah answers for the site; WebMCP hands the reasoning to the visitor. ElijahOS registers ten typed, page-scoped tools through the browser's ModelContext API — navigator.modelContext first, document.modelContext as the documented fallback. Six are read-only; the four that change anything change only visible, labeled page state.",
+          "Underneath is an evidence layer derived from the same typed sources the human interface renders: every record carries a claim, its provenance, Elijah's documented contribution scope, and at least one limitation. 'No documented evidence on this site' is a typed, first-class result, not a blank for the agent to fill in — and nothing returns a suitability score or hiring verdict; that judgment stays with the visitor and the agent they already trust.",
+          "Everything an agent does is visible. The visit intent it sets gets a 'set by your agent' badge with edit and clear controls and never leaves the browser session, and every registered tool call lands in an on-page activity log. Tool schemas are closed with additionalProperties: false, outputs carrying visitor-supplied text are marked untrusted, and the whole surface is client-side progressive enhancement — no new server route, no model, no key.",
+          "The handoff runs both ways: a person can redirect a composed workspace through normal navigation, and the workspace snapshot reports that change so the agent continues from the person's decision. The surface is covered by unit tests, Playwright against an injected fake ModelContext host, and executable acceptance fixtures — labeled honestly as human-authored plans, not proof of model tool selection.",
+        ],
+        points: [
+          {
+            label: "The journey",
+            text: "state a visit intent, search the evidence, inspect any record in full, compose real OS windows around what was found, and read the workspace back.",
+          },
+          {
+            label: "The extras",
+            text: "read-only lookups for profile, resume, and contact, plus open_app and play_music — an OS should let an agent open the snake game the way a human would.",
+          },
+        ],
+        knowledge: [
+          {
+            id: "project-elijahos-webmcp-surface",
+            topic: "Project · ElijahOS WebMCP tool surface",
+            tags: [
+              "webmcp",
+              "agent tools",
+              "modelcontext",
+              "tool surface",
+              "agents on the site",
+              "what can an agent do here",
+            ],
+            app: "agent",
+            paragraphIndexes: [0],
+          },
+          {
+            id: "project-elijahos-webmcp-evidence",
+            topic: "Project · ElijahOS evidence layer",
+            tags: [
+              "evidence records",
+              "provenance",
+              "contribution scope",
+              "limitations",
+              "no documented evidence",
+              "honest gaps",
+            ],
+            app: "agent",
+            paragraphIndexes: [1],
+          },
+          {
+            id: "project-elijahos-webmcp-safety",
+            topic: "Project · ElijahOS agent visibility and safety",
+            tags: [
+              "agent visibility",
+              "session only intent",
+              "activity log",
+              "progressive enhancement",
+              "privacy boundary",
+              "human agent handoff",
+            ],
+            app: "agent",
+            paragraphIndexes: [2, 3],
+          },
         ],
       },
       {
         id: "roadmap",
         heading: "Where it's heading",
         body: [
-          "The next version is not about making the interface busier. It is about making the proof deeper: persistent traces beyond the current in-memory buffer, an optional reranker, an LLM judge beyond deterministic grading, richer experiment persistence, multimodal chunks, and a reverse channel where client tool results can feed back into the agent loop.",
-          "The case-study system is also meant to grow beyond ElijahOS. More flagship projects can earn this treatment once they have enough real product behavior, architecture, decisions, and results to be worth inspecting.",
+          "The next version is not about making the interface busier. It is about making the proof deeper.",
+        ],
+        points: [
+          {
+            label: "Deeper observability",
+            text: "persistent traces beyond the current in-memory buffer, an optional reranker, an LLM judge beyond deterministic grading, and multimodal chunks.",
+          },
+          {
+            label: "A closed agent loop",
+            text: "a reverse channel where client tool results feed back into the agent loop.",
+          },
+          {
+            label: "Native agent proof",
+            text: "the WebMCP surface is verified today with unit coverage, an injected fake host, and executable fixtures; the next proof is a native supported-browser agent choosing these tools on its own.",
+          },
+          {
+            label: "More flagships",
+            text: "more projects earn this case-study treatment once they have enough real product behavior, decisions, and results to be worth inspecting.",
+          },
         ],
       },
     ],
@@ -337,6 +459,43 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
               id: "grade",
               label: "5 - Grade, escalate, trace",
               detail: "deterministic judge",
+              status: "live",
+            },
+          ],
+        },
+        {
+          id: "webmcp-surface",
+          heading: "WebMCP surface",
+          kicker: "the visitor's agent",
+          nodes: [
+            {
+              id: "adapter",
+              label: "ModelContext adapter",
+              detail: "navigator - document fallback",
+              status: "live",
+            },
+            {
+              id: "tool-surface",
+              label: "Ten typed tools",
+              detail: "6 read-only - 4 visibly mutate",
+              status: "live",
+            },
+            {
+              id: "evidence",
+              label: "Evidence layer",
+              detail: "provenance - scope - limitations",
+              status: "live",
+            },
+            {
+              id: "agent",
+              label: "Agent workspace",
+              detail: "visit intent - honest gaps",
+              status: "live",
+            },
+            {
+              id: "activity",
+              label: "Agent activity log",
+              detail: "every registered tool call visible",
               status: "live",
             },
           ],
@@ -597,6 +756,29 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
           app: "ask",
         },
       },
+      {
+        considered: [
+          "Site-owned assistant only",
+          "DOM automation for visiting agents",
+          "Typed WebMCP tools over page state",
+        ],
+        picked: "Typed WebMCP tools over page state",
+        reason:
+          "However well Ask Elijah cited, a visitor was still talking to the candidate's own model. WebMCP inverts that: the visitor's agent does the reasoning through ten small typed tools over the same live workspace — six read-only, every mutation visible. DOM automation lost because an OS metaphor is exactly where scraping is most brittle.",
+        knowledge: {
+          id: "decision-elijahos-webmcp-surface",
+          topic: "Decision · WebMCP over DOM automation",
+          tags: [
+            "why webmcp",
+            "agent access decision",
+            "dom automation alternative",
+            "typed page-scoped tools",
+            "ask elijah inversion",
+            "agent-readable site",
+          ],
+          app: "agent",
+        },
+      },
     ],
     stack: [
       {
@@ -655,9 +837,14 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
         why: "A sliding per-IP window plus a per-instance circuit breaker keep the public assistant from being trivially drained, and deterministic refusals reject prompt-injection before the model is ever called.",
       },
       {
+        tech: "WebMCP (ModelContext API)",
+        what: "Page-scoped agent tool surface",
+        why: "Ten typed tools registered through navigator.modelContext (document fallback) let a visitor's agent search evidence and compose the live workspace — client-side only, while the normal interface remains usable when no host exists.",
+      },
+      {
         tech: "node:test + Playwright + evals",
         what: "Verification suite",
-        why: "Unit tests cover the runtime, Playwright checks responsive behavior, and golden evals measure the assistant's retrieval and tool behavior.",
+        why: "Unit tests cover the runtime, Playwright checks responsive behavior and drives the WebMCP tools through an injected fake ModelContext host, and executable acceptance fixtures replay planned agent journeys through the real dispatcher.",
       },
     ],
   },

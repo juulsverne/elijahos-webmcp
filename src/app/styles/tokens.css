@@ -107,10 +107,12 @@
      document-nav chip (doc-nav.module.css). The chip is a fixed, server-
      rendered element — it can't sit in the topbar's flex row, because the
      topbar is client-only (ssr:false) and the chip's links must be in the
-     initial HTML. Both files read these two values, so the chip and the bar's
-     own content can never end up stacked on each other. */
+     initial HTML. The chip is clipped out of view until it is focused or
+     open, so the slot is 0: it overlays the bar only while revealed, the way
+     a skip link overlays a header. Raise it again if the chip ever returns
+     to being always visible. */
   --topbar-pad-x: 16px;
-  --docnav-slot: 84px;
+  --docnav-slot: 0px;
 
   /* Widget panel geometry â€” mirror of src/lib/layout.ts constants
      (WIDGET_PANEL_WIDTH, WIDGET_PANEL_Z, WIDGET_PANEL_TRANSITION_MS).

@@ -88,12 +88,14 @@ export type Track = {
   unreleased?: boolean;
   // Optional cosmetic duration label (server-truth comes from the audio).
   durationLabel?: string;
+  // Released track page. The player prefers this over the artist fallback.
+  spotifyUrl?: string;
 };
 
 export type Music = {
   // Artist alias surfaced in the player.
   artist: string;
-  // External link rendered as "Listen on Spotify ↗".
+  // Artist page used by /about and as a player fallback.
   spotifyArtistUrl: string;
   tracks: Track[];
 };
@@ -252,8 +254,8 @@ export type ElijahData = {
   bootReadyMessage: string;
   // Copy for the generated OpenGraph / link-preview card.
   ogCard: OgCard;
-  // Free-text status surfaced in the topbar pill ("building X").
-  currentlyBuilding: string;
+  // Free-text status surfaced in the topbar pill, rendered verbatim.
+  topbarStatus: string;
   // The one project featured on the mobile home screen's "now building" card.
   // `appId` keys into APPS so the card's glyph and route come from the app
   // registry rather than being retyped here.
@@ -324,7 +326,7 @@ export const ELIJAH: ElijahData = {
     bootCaption: "booting portfolio",
     bootProgress: 78,
   },
-  currentlyBuilding: "enterprise AI systems",
+  topbarStatus: "WebMCP enabled",
   nowBuilding: {
     appId: "leverage-map",
     name: "Leverage Map",
@@ -583,9 +585,9 @@ export const ELIJAH: ElijahData = {
       name: "ElijahOS",
       kind: "Personal site · the one you're on",
       desc:
-        "A portfolio that doubles as the proof: a browser OS with desktop and mobile shells, draggable windows, widgets, mini apps, experiments, and an agentic Ask Elijah assistant. Under the hood it runs hybrid retrieval, server/client tools, streamed model responses, inspectable traces, confidence grading, and golden-case evals.",
-      stack: ["Next.js 16", "React 19", "R3F", "Hybrid RAG", "OpenAI"],
-      result: "Live browser OS - Ask Elijah - hybrid retrieval - traces + evals",
+        "A portfolio that doubles as the proof: a browser OS with desktop and mobile shells, draggable windows, widgets, mini apps — and a WebMCP tool surface for the agents visitors bring with them. Eight typed, page-scoped tools let an agent state its visit intent, search evidence that carries provenance, contribution scope, and limitations, compose real OS windows around what it finds, and read the workspace back after a person redirects it.",
+      stack: ["TypeScript", "Next.js 16", "React 19", "R3F", "WebMCP", "Zustand"],
+      result: "Live browser OS - WebMCP agent tools - evidence with provenance - visible workspace",
       year: "2026",
       featured: true,
       status: "in flight",
@@ -638,9 +640,13 @@ export const ELIJAH: ElijahData = {
     // Drop real .mp3 files into public/music/ and update this list.
     // Players gracefully handle missing files (skip → next track).
     tracks: [
-      // Released as JUULS VERNE, lucyhere:
-      // https://open.spotify.com/track/6bckKbcaP9yjPlaAy6vEmz
-      { id: "silhouettes", title: "SILHOUETTES", file: "/music/SILHOUETTES.mp3" },
+      {
+        id: "silhouettes",
+        title: "SILHOUETTES",
+        file: "/music/SILHOUETTES.mp3",
+        spotifyUrl:
+          "https://open.spotify.com/track/6bckKbcaP9yjPlaAy6vEmz?si=e1d8512183d64117",
+      },
       { id: "aether",     title: "AETHER",     unreleased: true, file: "/music/AETHER.mp3" },
       { id: "stallions",  title: "STALLIONS",  unreleased: true, file: "/music/STALLIONS.mp3" },
       { id: "always-you", title: "ALWAYS YOU", unreleased: true, file: "/music/always%20you.mp3" },

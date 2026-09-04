@@ -13,6 +13,7 @@
 import { create } from "zustand";
 import { hasMobileOpener, openApp } from "@/lib/app-launcher";
 import { APPS } from "@/lib/apps";
+import { useCaseAnchorStore } from "@/lib/case-anchor";
 import { useDesktopStore } from "@/lib/desktop-store";
 import { getEvidenceRecord } from "@/lib/evidence";
 import { getVisitIntent, type VisitIntent } from "@/lib/webmcp/visit-intent";
@@ -78,8 +79,12 @@ export function composeWorkspace(
   const appIds: string[] = [];
   const unresolved: string[] = [];
   const resolved: string[] = [];
+  // First composed record with a case-study anchor wins: the case window
+  // opens scrolled to the section that documents it.
+  let caseAnchor: string | null = null;
 
   for (const id of evidenceIds) {
+    if (resolved.includes(id) || unresolved.includes(id)) continue;
     const record = getEvidenceRecord(id);
     const apps = record
       ? record.artifacts.map((a) => a.appId).filter(allowedApp)
@@ -89,12 +94,20 @@ export function composeWorkspace(
       continue;
     }
     resolved.push(id);
+    if (!caseAnchor) {
+      caseAnchor =
+        record.artifacts.find((a) => a.appId === "case" && a.anchorId)
+          ?.anchorId ?? null;
+    }
     for (const appId of apps) {
       if (!appIds.includes(appId)) appIds.push(appId);
     }
   }
 
   useCompositionStore.getState().setComposition(resolved);
+  if (caseAnchor && appIds.includes("case")) {
+    useCaseAnchorStore.getState().request(caseAnchor);
+  }
 
   if (appIds.length === 0) {
     return {

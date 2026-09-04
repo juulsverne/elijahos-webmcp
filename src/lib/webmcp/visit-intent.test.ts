@@ -70,6 +70,16 @@ describe("intentToText", () => {
   });
 });
 
+describe("normalizeIntent priorities", () => {
+  it("deduplicates repeated priorities so list rows render once", () => {
+    const intent = normalizeIntent(
+      { objective: "Screening", priorities: ["react", "react ", "evals"] },
+      "visitor-agent",
+    );
+    assert.deepEqual(intent.priorities, ["react", "evals"]);
+  });
+});
+
 describe("visit intent store", () => {
   it("sets and clears session-scoped intent", () => {
     const stored = useVisitIntentStore

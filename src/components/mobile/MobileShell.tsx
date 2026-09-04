@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { setMobileOpener, type AppOrigin } from "@/lib/app-launcher";
 import { setMobileActiveAppId } from "@/lib/webmcp/workspace";
-import { APPS, LAUNCHPAD_ORDER } from "@/lib/apps";
+import { APPS, LAUNCHPAD_ORDER, resolveAppId } from "@/lib/apps";
 import { MOBILE_APP_EXIT_MS } from "@/lib/layout";
 import { useKeyboardInset } from "@/lib/use-keyboard-inset";
 import { APP_COMPONENTS } from "@/components/apps/registry";
@@ -38,10 +38,12 @@ const DRAWER_EXIT_MS = 180;
 
 function getInitialMobileAppId(): string | null {
   if (typeof window === "undefined") return null;
-  const id = new URLSearchParams(window.location.search).get("app");
+  const requested = new URLSearchParams(window.location.search).get("app");
+  if (!requested || requested === "root") return null;
+  const id = resolveAppId(requested);
   if (!id) return null;
   const app = APPS[id];
-  if (!app || id === "root" || app.desktopOnly || !APP_COMPONENTS[id]) {
+  if (!app || app.desktopOnly || !APP_COMPONENTS[id]) {
     return null;
   }
   return id;

@@ -13,7 +13,10 @@
   color: var(--fg-2);
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 30px;
+  /* Numbered section headings (01, 02, …) are generated here so the copy in
+     case-studies.ts stays free of presentation. */
+  counter-reset: cs-section;
   /* Set --card-accent from the modifier so the accent stripe and glyph
      pick up the project's color, same pattern as .project-card. */
 }
@@ -96,16 +99,32 @@
 
 /* Body sections ---------------------------------------------------------- */
 
+/* Each section takes one of the four theme accents in rotation, exposed as
+   --section-accent so headings, point markers, and stack tech names inside
+   the section all agree on a color. Purely presentational — the cycle lives
+   here, not in content. */
 .case-study-section {
+  --section-accent: var(--card-accent, var(--accent-blue));
   display: flex;
   flex-direction: column;
   gap: 12px;
+  counter-increment: cs-section;
 }
 
+.case-study-app > .case-study-section:nth-of-type(4n + 1) { --section-accent: var(--accent-blue); }
+.case-study-app > .case-study-section:nth-of-type(4n + 2) { --section-accent: var(--accent-violet); }
+.case-study-app > .case-study-section:nth-of-type(4n + 3) { --section-accent: var(--accent-pink); }
+.case-study-app > .case-study-section:nth-of-type(4n)     { --section-accent: var(--accent-gold); }
+
 /* Mono kicker style — same vocabulary as .app-kicker, sized as a section
-   header so each section reads as a labeled block, not a competing title. */
+   header so each section reads as a labeled block, not a competing title.
+   The generated index number and trailing rule carry the section's accent;
+   the heading text keeps --fg-3 so the label stays quiet and legible. */
 .case-study-heading {
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
   color: var(--fg-3);
@@ -114,12 +133,68 @@
   font-weight: 500;
 }
 
+.case-study-heading::before {
+  content: counter(cs-section, decimal-leading-zero);
+  padding: 2px 6px;
+  border: 1px solid color-mix(in srgb, var(--section-accent) 40%, transparent);
+  border-radius: 4px;
+  color: var(--section-accent);
+  background: color-mix(in srgb, var(--section-accent) 10%, transparent);
+  letter-spacing: 0.04em;
+}
+
+.case-study-heading::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--section-accent), transparent 85%);
+  opacity: 0.3;
+}
+
 .case-study-body {
   margin: 0;
   color: var(--fg-2);
   font-size: var(--fs-md);
   line-height: 1.6;
   max-width: 62ch;
+}
+
+/* Points — the scannable list between a section's lede and its closing
+   prose. Accent dash markers + tinted lead-in labels give the eye a rail
+   to run down without the list shouting over the paragraphs. */
+.case-study-points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 62ch;
+}
+
+.case-study-points li {
+  position: relative;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--fg-2);
+  font-size: var(--fs-md);
+  line-height: 1.55;
+}
+
+.case-study-points li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.62em;
+  width: 8px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--section-accent);
+}
+
+.case-study-points strong {
+  font-weight: 500;
+  color: color-mix(in srgb, var(--section-accent) 55%, var(--fg-1));
 }
 
 /* Architecture diagram --------------------------------------------------- */
@@ -132,7 +207,11 @@
   margin: 8px 0 4px;
 }
 
+/* Layers rotate the four theme accents (same cycle as sections) so each
+   stratum of the stack has its own identity; the connectors stay blue as
+   the shared "data flowing" thread. */
 .arch-layer {
+  --layer-accent: var(--accent-blue);
   position: relative;
   border: 1px solid var(--glass-border);
   border-radius: var(--r-md);
@@ -144,6 +223,10 @@
   backdrop-filter: blur(6px);
 }
 
+.arch-diagram > .arch-layer:nth-of-type(4n + 2) { --layer-accent: var(--accent-violet); }
+.arch-diagram > .arch-layer:nth-of-type(4n + 3) { --layer-accent: var(--accent-pink); }
+.arch-diagram > .arch-layer:nth-of-type(4n)     { --layer-accent: var(--accent-gold); }
+
 /* Faint per-layer accent at the top edge to give the stack rhythm without
    competing with the connector animation. */
 .arch-layer::before {
@@ -154,11 +237,11 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--accent-blue) 30%,
-    var(--accent-blue) 70%,
+    var(--layer-accent) 30%,
+    var(--layer-accent) 70%,
     transparent 100%
   );
-  opacity: 0.3;
+  opacity: 0.35;
   border-radius: var(--r-md) var(--r-md) 0 0;
 }
 
@@ -171,7 +254,7 @@
 .arch-layer-kicker {
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
-  color: var(--fg-3);
+  color: color-mix(in srgb, var(--layer-accent) 60%, var(--fg-3));
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -210,7 +293,7 @@
 }
 
 .arch-node:hover {
-  border-color: var(--glass-border-strong);
+  border-color: color-mix(in srgb, var(--layer-accent) 35%, var(--glass-border-strong));
   background: var(--glass-bg-muted);
 }
 
@@ -291,8 +374,13 @@
   gap: 12px;
 }
 
+/* Cards rotate the four theme accents so the grid reads as a deck of
+   distinct decisions instead of one grey wall. The accent colors the top
+   hairline and the "picked" line only — the reasoning stays neutral. */
 .decision-vignette {
+  --decision-accent: var(--accent-blue);
   border: 1px solid var(--glass-border);
+  border-top: 2px solid color-mix(in srgb, var(--decision-accent) 55%, transparent);
   border-radius: var(--r-md);
   background: var(--glass-bg-subtle);
   padding: 14px 16px 16px;
@@ -300,6 +388,10 @@
   flex-direction: column;
   gap: 4px;
 }
+
+.decision-vignette:nth-child(4n + 2) { --decision-accent: var(--accent-violet); }
+.decision-vignette:nth-child(4n + 3) { --decision-accent: var(--accent-pink); }
+.decision-vignette:nth-child(4n)     { --decision-accent: var(--accent-gold); }
 
 .decision-label {
   font-family: var(--font-mono);
@@ -323,7 +415,7 @@
 
 .decision-picked {
   margin: 0;
-  color: var(--fg-1);
+  color: color-mix(in srgb, var(--decision-accent) 60%, var(--fg-1));
   font-size: var(--fs-lg);
   line-height: 1.2;
 }
@@ -353,7 +445,8 @@
 }
 
 .stack-row strong {
-  color: var(--fg-1);
+  /* Inherits the stack section's --section-accent from the cycle above. */
+  color: color-mix(in srgb, var(--section-accent) 45%, var(--fg-1));
   font-family: var(--font-mono);
   font-size: var(--fs-sm);
   letter-spacing: 0.02em;

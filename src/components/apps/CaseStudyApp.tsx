@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
 import { APPS } from "@/lib/apps";
 import { CASE_STUDIES } from "@/lib/case-studies";
+import { useCaseAnchorStore } from "@/lib/case-anchor";
 import { ELIJAH } from "@/lib/elijah";
 import { UI_COPY } from "@/lib/ui-copy";
 import { StatusPill } from "@/components/StatusPill";
@@ -13,6 +15,25 @@ export function CaseStudyApp() {
   // which one to show based on the project that opened the window) lands
   // when there's a second case study worth telling.
   const cs = CASE_STUDIES[ELIJAH.osSlug];
+
+  // Composed evidence can name a section: scroll it into view, then clear
+  // the request so the visitor's own scrolling is never fought later.
+  const anchorId = useCaseAnchorStore((s) => s.anchorId);
+  useEffect(() => {
+    if (!anchorId) return;
+    const el = document.getElementById(`case-section-${anchorId}`);
+    if (el) {
+      const reduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      el.scrollIntoView({
+        block: "start",
+        behavior: reduced ? "auto" : "smooth",
+      });
+    }
+    useCaseAnchorStore.getState().clear();
+  }, [anchorId]);
+
   if (!cs) return null;
 
   return (
@@ -33,10 +54,30 @@ export function CaseStudyApp() {
       </header>
 
       {cs.sections.map((section) => (
-        <section className="case-study-section" key={section.id}>
+        <section
+          className="case-study-section"
+          key={section.id}
+          id={`case-section-${section.id}`}
+        >
           <h2 className="case-study-heading">{section.heading}</h2>
-          {section.body.map((para, i) => (
+          {/* Points sit between the lede and any closing paragraphs so
+              inventories read in narrative order (see CaseStudySection). */}
+          {section.body.slice(0, 1).map((para, i) => (
             <p className="case-study-body" key={i}>
+              {para}
+            </p>
+          ))}
+          {section.points && (
+            <ul className="case-study-points">
+              {section.points.map((point) => (
+                <li key={point.label}>
+                  <strong>{point.label}</strong> — {point.text}
+                </li>
+              ))}
+            </ul>
+          )}
+          {section.body.slice(1).map((para, i) => (
+            <p className="case-study-body" key={i + 1}>
               {para}
             </p>
           ))}
@@ -60,7 +101,7 @@ export function CaseStudyApp() {
         ))}
       </section>
 
-      <section className="case-study-section">
+      <section className="case-study-section" id="case-section-decisions">
         <h2 className="case-study-heading">
           {UI_COPY.caseStudy.sections.decisions}
         </h2>

@@ -117,17 +117,17 @@ const APPS_DEF = {
     desktopOnly: true,
     defaultRect: { x: 320, y: 140, w: 560, h: 520 },
   },
-  // Recruiter workspace: the visible face of the WebMCP tool surface — role
-  // context controls, the registered tool list, and the live agent activity
-  // log. Useful without WebMCP too (manual role-to-evidence comparison).
-  recruiter: {
-    id: "recruiter",
-    title: "/recruiter",
+  // Agent workspace: the visible face of the WebMCP tool surface — visit
+  // intent controls, the registered tool list, and the live agent activity
+  // log. Useful without WebMCP too (manual intent-to-evidence comparison).
+  agent: {
+    id: "agent",
+    title: "/agent",
     icon: "◫",
     dock: true,
     launchpad: true,
     defaultRect: { x: 360, y: 120, w: 560, h: 700 },
-    mobileLabel: "recruiter",
+    mobileLabel: "agent",
   },
   calculator: {
     id: "calculator",
@@ -159,6 +159,23 @@ const APPS_DEF = {
 export type AppId = keyof typeof APPS_DEF;
 
 export const APPS: Record<string, AppDef> = { ...APPS_DEF };
+
+// Historical app ids that shipped in shared deep links (`?app=<id>`) before
+// a rename. Resolution keeps those links working without keeping dead
+// registry entries around.
+export const APP_ID_ALIASES: Record<string, string> = {
+  // "Recruiter workspace" became the agent workspace once the tool surface
+  // outgrew its recruiting-only framing.
+  recruiter: "agent",
+};
+
+// Canonical id for a requested app id: passes registry ids through and maps
+// retired aliases to their current id. Unknown ids resolve to null.
+export function resolveAppId(requested: string | null): string | null {
+  if (!requested) return null;
+  const id = APPS[requested] ? requested : APP_ID_ALIASES[requested];
+  return id && APPS[id] ? id : null;
+}
 
 export function appDeepLink(id: string): string {
   return `/?app=${encodeURIComponent(id)}`;
